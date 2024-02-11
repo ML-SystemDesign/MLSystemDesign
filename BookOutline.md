@@ -30,7 +30,7 @@ Machine Learning System Design (MLSD) encompasses the integration of machine lea
 - Structured design processes are vital for scalable, maintainable systems.
 - Applying MLSD principles is crucial for project success.
 
-# 2nd chapter
+# Сhapter 2: Is there a problem?
 
 ### Introduction
 
@@ -82,7 +82,7 @@ This chapter emphasizes the critical importance of accurately identifying and ar
     4. ML system designers must balance the trade-offs between robustness and correctness, tailoring their approach to the specific context and requirements of the project.
 
 This outline provides a comprehensive framework for understanding and applying the principles discussed in the chapter, guiding readers through the critical early stages of machine learning system design.
-# 3rd chapter
+# Chapter 3: Priliminary research
 
 ### Introduction
 
@@ -127,7 +127,7 @@ This chapter transitions from identifying the problem to exploring the solution 
     4. The degree of innovation required for a machine learning system is context-dependent, influenced by business goals, competitive landscape, and resource availability. Designers must balance the desire for cutting-edge solutions with the practicalities of their specific situation.
 
 This outline provides a roadmap for the preliminary research phase of machine learning system design, highlighting the importance of a strategic approach to problem-solving and innovation.
-# 4th chapter
+# Chapter 4: Design document
 
 ### Introduction
 
@@ -172,9 +172,8 @@ This chapter emphasizes the critical role of a design document in the machine le
     4. A design document is never truly final; it must evolve with the project, reflecting changes, learnings, and improvements to remain a relevant and useful guide.
 
 This outline provides a comprehensive overview of the process and importance of creating, reviewing, and updating a design document in the context of machine learning system design, highlighting the iterative and collaborative nature of this foundational step.
-# 5th chapter
+# Chapter 5: Loss Functions and Metrics
 
-### Chapter 5: Loss Functions and Metrics
 
 ### Introduction
 
@@ -215,9 +214,7 @@ This chapter delves into the critical aspects of selecting appropriate metrics a
     4. The development of a machine learning system should include a thoughtful selection of both offline and online metrics, with a clear understanding of how these metrics relate to the system's ultimate goals. Proxy metrics and a well-defined hierarchy of metrics can facilitate this alignment, enabling more effective system evaluation and optimization.
 
 This structured outline encapsulates the essence of Chapter 5, highlighting the importance of carefully selecting metrics and loss functions in the design and evaluation of machine learning systems.
-# 6th chapter
-
-### Chapter 6: Gathering Datasets
+# Chapter 6: Gathering Datasets
 
 ### Introduction
 
@@ -273,9 +270,8 @@ This chapter emphasizes the foundational role of datasets in the development and
     5. Establishing a healthy data pipeline is foundational to the long-term success and scalability of ML systems, underscoring the importance of reproducibility, consistency, and availability in data management practices.
 
 This outline captures the essence of Chapter 6, providing a structured overview of the critical aspects of gathering and preparing datasets for machine learning systems.
-# 7th chapter
+# Chapter 7: Validation Schemas
 
-### Chapter 7: Validation Schemas
 
 ### Introduction
 
@@ -327,9 +323,7 @@ This chapter delves into the critical aspect of building a robust evaluation pro
     4. Detailed planning and documentation of the chosen validation schemas within the design document are vital for ensuring the evaluation process is aligned with the project's goals and constraints.
 
 This outline captures the essence of Chapter 7, providing a structured overview of the considerations and methodologies involved in selecting and implementing validation schemas for machine learning systems.
-# 8th chapter
-
-### Chapter 8: Baseline Solution
+# Chapter 8: Baseline Solution
 
 ### Introduction
 
@@ -381,9 +375,8 @@ This chapter emphasizes the importance of establishing a baseline solution in ma
     4. Continuous evaluation and comparison against the baseline are essential for guiding the development process, ensuring that complexity is added only when it yields proportional benefits in performance.
 
 This structured outline captures the essence of Chapter 8, highlighting the strategic role of baselines in the development of machine learning systems and providing a roadmap for their selection and implementation.
-# 9th chapter
+# Chapter 9: Error Analysis
 
-### Chapter 9: Error Analysis
 
 ### Introduction
 
@@ -429,9 +422,8 @@ Error analysis acts as a crucial compass in the iterative improvement of machine
     4. Identifying commonalities in residuals through various analytical approaches, including adversarial validation and group analysis, helps pinpoint specific areas for improvement, ensuring the model performs well across diverse scenarios and datasets.
 
 This structured outline encapsulates the essence of Chapter 9, underscoring the critical role of error analysis in the iterative process of machine learning system development and optimization.
-# 10th chapter
+# Chapter 10: Training Pipelines
 
-### Chapter 10: Training Pipelines
 
 ### Introduction
 
@@ -480,9 +472,8 @@ This chapter delves into the essence of training pipelines in machine learning p
     4. Comprehensive testing, including both smoke tests and unit tests, is essential for maintaining the integrity of training pipelines and ensuring the reliability of deployed models.
 
 This structured outline encapsulates the core themes of Chapter 10, providing a roadmap for designing and implementing robust training pipelines that are scalable, configurable, and thoroughly tested.
-# 11th chapter
+# Chapter 11: Features and Feature Engineering
 
-### Chapter 11: Features and Feature Engineering
 
 ### Introduction
 
@@ -536,9 +527,7 @@ This chapter emphasizes the pivotal role of features in machine learning systems
     5. Ultimately, the goal of feature engineering is to create a set of features that are not only predictive but also interpretable, manageable, and aligned with the business objectives of the machine learning system.
 
 This structured outline encapsulates the core themes of Chapter 11, providing a comprehensive guide to the critical role of features in the development and optimization of machine learning models.
-# 12th chapter
-
-### Chapter 12: Measuring and Reporting Results
+# Chapter 12: Measuring and Reporting Results
 
 ### Introduction
 
@@ -579,9 +568,7 @@ This chapter delves into the critical phase of evaluating and communicating the 
     4. The process of measuring and reporting results is iterative and should inform ongoing development and refinement of machine learning systems. It requires close collaboration between technical teams and business stakeholders to ensure that the insights gained drive actionable improvements.
 
 This structured outline encapsulates the essence of Chapter 12, offering a roadmap for effectively measuring, evaluating, and reporting the outcomes of machine learning systems in a way that aligns technical achievements with business goals.
-# 13th chapter
-
-### Chapter 13: Integration
+# Chapter 13: Integration
 
 ### Introduction
 
