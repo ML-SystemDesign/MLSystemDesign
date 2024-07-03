@@ -109,6 +109,8 @@ We don't control the data for the main LLM training (meaning that we're coping w
 
 #### i. Data to perform RAG on - description
 
+We don't distinguish between client roles for data access. Every client would have access to every document. So we basically have a shared dataset for the whole system.
+
 Includes a set of Documents available on the Platform. Documents can be in text format (Markdown) or scanned/image formats.
 
 1. For Markdown documents
