@@ -193,11 +193,52 @@ Platform integration
 Parallel processing
 SLAs
 
-- **Key Takeaways:**
-    1. Integration is a continuous and essential process that ensures the success and longevity of ML systems. It requires careful planning, from API design to deployment and operation.
-    2. API design should prioritize simplicity and predictability, with a focus on creating interfaces that hide complexity while allowing for necessary customization and ensuring deterministic behavior.
-    3. The release cycle of ML systems presents unique challenges, necessitating a balance between agility and stability. Techniques like blue-green and canary deployments can facilitate safer updates and minimize disruptions.
-    4. Operational robustness is achieved not only through technical means such as CI, logging, and monitoring but also by addressing non-technical aspects like compliance and user data management. Overrides and fallbacks are critical for maintaining service continuity and adapting to changes or failures in real-time.
+### **i. Embeddings Database**
+
+This integration component is required for efficient document search and retrival to prodive quick responces.
+
+- Original files along their embedings, document metadata and version history is stored in the database.
+- Converts new documents into embeddings using a pre-trained model and keeps them updated whenever the document version changes.
+- Converts client's query into embeddings for further processing within the database, by selecting nearest neighbours.
+- Data is encrypted to ensure security.
+
+### **ii. Documents Storage**
+
+To store and manage the physical files of documents uploaded by clients. This includes the original files and any subsequent versions.
+
+The storage service (AWS S3), provides API that allows backend to upload and retrive documents. The services returns a URL for the uploaded file, which is stored in embeddings database metadata.
+
+### **iii. Chat UI**
+
+User interface is intuitive and responsive interation instrument for clients to query and receive resutls.
+
+- Interface. It implies user-friendly error messages and provides guidance in case of unclear files or queries.
+- Interactive Features. Users can upload files, ask follow-up questions, provide feedback on answers.
+
+### **iv. Backend API Design**
+
+TBD
+
+### **v. Parallel processing**
+This component is required for efficient handling of large documents and multiple simultaneous queries from users. It implies queue of requests and pool of worker nodes, which are balanced dynamically, depending on workload. 
+
+### **vi. SLAs**
+
+In order to control system performance and meeting defined standards, the MagicSharepoint service is integrated with a monitoring tool.
+
+Key validated compontents
+- **Response Time.** Guarantee first token response within 1 minute.
+- **Uptime.** Ensure a high availability rate, defined in ? section.
+- **Data Privacy.** Data privacy standards are met, such as no training on client data, data is encrypted, no data leakage.  
+
+### **vii. Fallback Strategies**
+
+Fallbacks are crucial for maintaining operational efficiency in the face of unforeseen circumstances. MagicSharepoint uses a multi-tiered fallback system to ensure seamless service:
+
+- **Primary fallback.** The primary model is served by the chosen vendor. It is used unless negative user feedback on the model outcome and if the latency out of the accepted range, described in ? section.
+- **Secondary fallback.** Our next layer of fallback involves using a pretrained LLM from Hugging Face, installed locally. This approach addressed to adress both potential issues.
+
+The system has latency and feedback based switchings, which reroutes requests to the secondary model. Once conditions are improved, it switches to the primary model.
 
 ### **XI. Monitoring**
 
