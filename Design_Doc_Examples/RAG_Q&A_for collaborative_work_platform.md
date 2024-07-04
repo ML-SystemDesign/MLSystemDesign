@@ -141,7 +141,7 @@ Show to user highlighted parts of document
 
 **i. Learning Curve Analysis**
 
-During embeddings tuning, it’s a good idea to review loss curves for an overall understanding of training dynamics, hyperparameter tuning, etc. In the case of a composite loss, it’s a good idea to visualize each of the components separately. Beyond the loss curves, it’s also reasonable to have metric curves, as they help understand if the chosen metric and loss are connected.
+During embeddings tuning, it’s a good idea to review loss curves for an overall understanding of training dynamics, hyperparameter tuning, etc. In the case of a composite loss, it’s reasonable to visualize each of the components separately. Beyond the loss curves, it’s also reasonable to have metric curves, as they help understand if the chosen metric and loss are connected.
 
 To draw conclusions about the required amount of data and the potential benefit of data gathering, it is useful to plot the dependency of train dataset size versus the metric. Let’s fix a test dataset, and then train the model on subsamples of the train data to estimate how new data improves overall performance. However, this approach is resource-intensive.
 
@@ -152,22 +152,12 @@ For each error on the holdout dataset, analyze the query in the following way (e
 Corner-cases to check:
 
 - Queries with typos/documents with typos
-- Toxic behavior
-- Sharing sensitive information except document content
+- Toxic text generation
+- Data safety
 - Formulas/tables search support
 
 Ask an expert to test the process. Whenever the expert does not agree, ask them to provide a reason, explore the reason, and improve the system.
 
- 
-
-Corner-cases to check:
-
-- queries with typos/documents with typos
-- toxic behaviour
-- sharing sensitive information except documents content
-- formulas/tables search support
-
-Ask expert to test the process, whenever expert do not agree - ask him to provide reason explore the reason and improve the system
 
 ### **VII. Training Pipeline**
 
