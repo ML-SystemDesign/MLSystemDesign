@@ -187,40 +187,54 @@ If users keep using it after some time
 
 ### **X. Integration**
 
-Embeddings db
-Chat UI
-Platform integration
-Parallel processing
-SLAs
-
 ### **i. Embeddings Database**
 
-This integration component is required for efficient document search and retrival to prodive quick responces.
+This is one of the core components in the system for efficient document search and retrival.
 
-- Original files along their embedings, document metadata and version history is stored in the database.
-- Converts new documents into embeddings using a pre-trained model and keeps them updated whenever the document version changes.
-- Converts client's query into embeddings for further processing within the database, by selecting nearest neighbours.
-- Data is encrypted to ensure security.
+**i.i. Embeddings Generation**
+
+- **Query Embeddings:** Converts client's query into embeddings for further selecting nearest neighbours within the database.
+- **Document Embeddings:** Creates embeddings using a pre-trained BERT-based model for new documents. The model processes documents via API request, resulting in document ID, document metadata and embeddings. The original file is stored in Documents Storage with the same document ID to avoid overloading the vector DB.
+- **Updates:** Automatically updates embeddings when document version changes to maintain vectors relevance.
+
+**i.ii. Database Features**
+
+- A cloud and scalable database.
+- Supports nearest neighbor search, using cosine or Euclidean similarity.
+- The following fields are stored for further mapping with Documents Storage:
+  1. Document ID
+  2. Version number
+  3. Metadata storage (document title, author, creation date)
+  4. Embeddings representation 
+- Embeddings, metadata, and queries are encrypted to ensure security. Strict access control managment. 
 
 ### **ii. Documents Storage**
 
-To store and manage the physical files of documents uploaded by clients. This includes the original files and any subsequent versions.
-
-The storage service (AWS S3), provides API that allows backend to upload and retrive documents. The services returns a URL for the uploaded file, which is stored in embeddings database metadata.
+A scalable cloud service (e.g. AWS S3) for scalable storage and files managment for the following data types:
+1. Original files uploaded by clients, including their versions. The service returns a URL (Document ID) for each uploaded file, which is stored in the embeddings database metadata.
+2. Chat communications and response ratings, structured as JSON objects with fields for user queries, responses, timestamps and ratings.
 
 ### **iii. Chat UI**
 
-User interface is intuitive and responsive interation instrument for clients to query and receive resutls.
+An intuitive and responsive interface for clients to query and receive results.
 
-- Interface. It implies user-friendly error messages and provides guidance in case of unclear files or queries.
-- Interactive Features. Users can upload files, ask follow-up questions, provide feedback on answers.
+**Features.**
+  1. Clients can upload new documents, which automatically triggers embedding generation and storage.
+  2. Consists of a five star rating system for feedback on answers.
+  3. Clients can report offesnive or unproper responses, which triggers another LLM as a fallback scenario.
+  4. Allows to save a chat history and responses for future reference.
 
 ### **iv. Backend API Design**
 
 TBD
 
 ### **v. Parallel processing**
-This component is required for efficient handling of large documents and multiple simultaneous queries from users. It implies queue of requests and pool of worker nodes, which are balanced dynamically, depending on workload. 
+To efficiently handle simultanneous queries from users, the system uses queue of requests and pool of worker nodes.
+
+Worker Allocation:
+- **General Workers.** Handle initial document processing and embedding generation.
+- **Dedicated Workers.** Preserve workers for entire chat sessions to maintain context and improve response relevance.
+
 
 ### **vi. SLAs**
 
@@ -228,8 +242,7 @@ In order to control system performance and meeting defined standards, the MagicS
 
 Key validated compontents
 - **Response Time.** Guarantee first token response within 1 minute.
-- **Uptime.** Ensure a high availability rate, defined in ? section.
-- **Data Privacy.** Data privacy standards are met, such as no training on client data, data is encrypted, no data leakage.  
+- **Uptime.** Ensure a high availability rate, aiming to 99.9% uptime.
 
 ### **vii. Fallback Strategies**
 
