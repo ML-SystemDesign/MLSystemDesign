@@ -80,7 +80,17 @@ Use case examples:
 - Implemented 'smart' full-text search to help navigate faster and easier.
 - Cataloged frequent questions and used Mechanical Turk to get answers in advance.
 
-### **iv. Other issues & Risks**
+### **iv. Usage volumes and patterns**
+
+Every month:
+- Platform has ~1000 unique users.
+- Each user is having 10 document reading sessions.
+- Reading session lasts between 30 and 120 minutes.
+- Version is assigned to 500 documents.
+    - New documents or edited existing documents.
+- 10% of the documents are image based.
+
+### **v. Other issues & Risks**
 
 - Cloud Object Storage with automated version cataloging.
 - OCR is not implemented.
