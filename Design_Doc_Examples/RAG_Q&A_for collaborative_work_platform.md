@@ -302,7 +302,7 @@ While following parts of a solution are considered as external cloud services:
 
 On-premise services would be hosted as REST API services hosted in Docker containers and orchestrated by Kubernetes cluster.
 
-## **Embedding service**
+#### **Embedding service**
 
 Invoked upon every document receiving a version.
 Should pull required metadata from other databases to enrich embeddings with metadata upon saving.
@@ -315,7 +315,7 @@ For every document:
     - on different aggregations - from document down to sentence level.
 - Import embeddings with corresponding metadata into the Vector database.
 
-- **OCR service**
+#### **OCR service**
 
 Invoked from Embedding service.
 
@@ -323,7 +323,7 @@ For every image document:
 - Invoke OCR process.
 - Import text representation into the Document storage
 
-## **Chat service**
+#### **Chat service**
 
 Invoked on every question.
 
