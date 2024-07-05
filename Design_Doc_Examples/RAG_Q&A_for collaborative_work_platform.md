@@ -287,6 +287,40 @@ Time to first token
 
 ### **XII. Serving and inference**
 
+The inference part of a system would contain from 3 major on-premise services:
+- **Embedding service**
+- **OCR service**
+- **Chat service**
+
+While following parts of a solution are considered as external cloud services:
+- **Vector database**
+- **Document storage**
+- **Metadata database**
+- **LLM**
+
+### **i. Serving architecture**
+
+On-premise services would be hosted as REST API services hosted in Docker containers and orchestrated by Kubernetes cluster.
+
+## **Embedding service**
+
+Invoked upon every document receiving a version.
+Should pull required metadata from other databases to enrich embeddings with metadata upon saving.
+
+For every document Embedding service will generate embeddings on different aggregations - from document down to sentence level.
+
+Upon embeddings being generated, they will be imported into the Vector database with corresponding metadata.
+
+- **OCR service**
+
+## **Chat service**
+
+### **ii. Infrastructure**
+
+Depending on the consumption, number of containers may automatically scale accordingly by an external load balancer service.
+
+### **iii. Monitoring**
+
 Cloud Embedding DB
 Vendor API for LLM
 
