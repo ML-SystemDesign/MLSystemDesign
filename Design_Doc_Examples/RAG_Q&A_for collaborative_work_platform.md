@@ -307,24 +307,67 @@ On-premise services would be hosted as REST API services hosted in Docker contai
 Invoked upon every document receiving a version.
 Should pull required metadata from other databases to enrich embeddings with metadata upon saving.
 
-For every document Embedding service will generate embeddings on different aggregations - from document down to sentence level.
-
-Upon embeddings being generated, they will be imported into the Vector database with corresponding metadata.
+For every document:
+- Invoke OCD service.
+    - If document is Image based.
+- Pull text representation from Document storage.
+- Embedding service will generate embeddings.
+    - on different aggregations - from document down to sentence level.
+- Import embeddings with corresponding metadata into the Vector database.
 
 - **OCR service**
 
+Invoked from Embedding service.
+
+For every image document:
+- Invoke OCR process.
+- Import text representation into the Document storage
+
 ## **Chat service**
+
+Invoked on every question.
+
+For every question:
+- Retrieve scope metadata from Metadata database.
+- Confirm scope with user on Chat UI.
+    - If scope request was non-explicit.
+    - ~~Can start generating response before client would confirm it.~~
+- Retrieve chat history.
+    - If any.
+- Use internal cache.
+    - If scope, chat history and question match.
+    - No fuzzymatch
+- Context search in Vector database.
+- Construct Prompt & invoke LLM.
+- Receive response ~~and stream generated tokens to the Chat UI~~.
+- Invoke guardrails.
+- Calculate performance and consumption statistics.
+- Calculate automated quality metrics (if any).
+- Make decision and execute it: 
+    - Return answer to the Chat UI.
+    - Request more details from user on Chat UI.
+    - Adjust response according to standards.
+- Save record to the internal cache.
+- Save chat history to Metadata database.
 
 ### **ii. Infrastructure**
 
-Depending on the consumption, number of containers may automatically scale accordingly by an external load balancer service.
+**Embedding service** and **OCR service** should be hosted on GPU nodes.
+As we expect around 500 new document versions per month, they could be hosted on Spot machines or be start-stopped on demand (if it will take less than 2 minutes).
+Both services would be stopped if they won't receive new requests within 30 (??) minutes.
+
+No need in scaling services, unless bulk processing is expected. If so - then we may consider scaling by the number of machines or by GPU grade/size.
+
+**Chat service** could be hosted on non-GPU node. More focus on the RAM to manage the internal cache, then on CPU.
 
 ### **iii. Monitoring**
 
-Cloud Embedding DB
-Vendor API for LLM
-
-1. **Critical Balance of Factors**: Effective inference optimization requires a careful balance between competing factors such as latency, throughput, and cost. Understanding and prioritizing these based on specific application needs is key to successful deployment.
-2. **Choice of Tools and Frameworks**: Selecting the right tools and frameworks is crucial and should be guided by the specific requirements of the deployment environment and the nature of the machine learning tasks.
-3. **Continuous Monitoring and Optimization**: Continuous performance monitoring and iterative optimization are essential to maintain and improve the inference capabilities of machine learning systems in production.
-4. **Strategic Planning for Scalability**: Planning for scalability from the outset can mitigate future challenges and help manage costs effectively as system demand grows.
+Key **inference** metrics:
+- ~~Time to first token~~
+- Time to show full reponse.
+- % of questions covered by internal cache.
+- % of answers rejected by guardrail.
+- % of answers requested more details from user.
+- % of questions having empty context.
+- % of explicit 'we can not answer' answers. 
+- Average chat history lenght.
