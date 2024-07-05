@@ -136,16 +136,110 @@ No ideas
     3. Updating validation splits in response to new data or changing distributions is essential for maintaining the relevance and accuracy of performance estimates.
     4. Detailed planning and documentation of the chosen validation schemas within the design document are vital for ensuring the evaluation process is aligned with the project's goals and constraints.
 
-### **V. Baseline Solution**
 
-Regexp/full text search (Elasticsearch) to get Documents and Sentences
-Show to user highlighted parts of document
+### V. Baseline Solution
 
-- **Key Takeaways:**
-    1. Establishing a baseline is a critical first step in machine learning system design, serving as a simple, operational starting point for iterative improvement.
-    2. The choice of baseline should be guided by a trade-off between desired accuracy and the effort required for development, with simplicity often providing significant advantages in terms of robustness, scalability, and interpretability.
-    3. In deep learning applications, leveraging pretrained models or training simple models from scratch can provide effective baselines, with the choice influenced by the specific requirements and constraints of the project.
-    4. Continuous evaluation and comparison against the baseline are essential for guiding the development process, ensuring that complexity is added only when it yields proportional benefits in performance.
+#### Document Extraction Process
+
+Considering the minimal variability among the documents and the sufficient coverage of most cases within the current dataset, it is recommended to implement an in-house document extraction pipeline. This pipeline should consist of:
+
+1. File Type Handler: Differentiate and handle file types accordingly, as PDFs and images may require additional processing steps.
+2. Text Extraction: Deploy a customized OCR solution designed to handle non-text elements.
+3. Text Preprocessing: Remove unwanted characters, whitespace, or any artifacts.
+4. Markdown Formatting: Ensure that the extracted content is formatted correctly according to markdown standards.
+5. Error Management & Spell Checking: Integrate an error handler and a spell checker to maintain data quality.
+
+#### Retrieval-Augmented Generation Framework
+
+The Retrieval-Augmented Generation (RAG) framework can be broken down into two main components:
+
+- Retrieval
+- Augmented Generation
+
+Augmented Generation is a recent advancement, while the concept of document retrieval is something that has been with us since the emergine of web search. While there is little to no sense in building the second part using solutions other than LLMs, it might make sense to implement a simple baseline for the retrieval.
+
+#### Retrieval: Sparse Encoded Retrieval Baseline
+
+Objectives:
+- Create a robust baseline with minimal effort.
+- Validate the hypothesis that an enhanced search capability is beneficial.
+- Gather a dataset based on retrieval, incorporating both implicit and explicit feedback for future refinement.
+
+Applicability:
+This covers use case `1a`. The solution is not applicable to the use cases `1na` and `2na`, thus also addressed.
+
+The system enables content search within documents using the BM25 algorithm.
+
+Components:
+1. Preprocessing Layer
+    - Tokenizes input data
+    - Filters out irrelevant content
+    - Applies stemming / lemmatization
+2. Indexing Layer
+    - Maintains a DB-represented corpus
+    - Creates indexes for Term Frequency (TF) and Inverse Document Frequency (IDF)
+3. Inference Layer
+    - Executes parallelized scoring computations
+    - Manages ranking and retrieval of results
+4. Representation Layer
+    - Highlights the top-k results for the user
+    - Handles an explicit user feedback dialogue ("Have you found what you were looking for?")
+
+##### Pros & Cons
+
+Pros:
++ Simple to implement, debug, and analyze
++ Fast retrieval due to lightweight computation
++ Scalable, as computation jobs can process document segments independently
++ Popular, with many optimized implementations available
++ Low maintenance costs, suitable for junior engineers
+
+Cons:
+- No semantic understanding: snonyms are not supported by default
+- Bag-of-words approach: word order is not considered
+- Requires updates to accommodate new vocabulary
+
+#### RAG: Baseline Implementation
+
+A basic RAG system consists of the following components components:
+
+1. Ingestion Layer:
+    - Embedder
+    - DB-indexing
+2. Retrieval Layer:
+    - Embedder
+    - DB simularity search
+3. Chat Service:
+    - Manages chat context
+    - Prompt template constructor
+4. Synthesis Component:
+    - Utilizes an LLM for response generation
+6. Representation Layer:
+    - Provides a dialogue mode for user interaction.
+    - User Feedback: Collects user input to continuously refine the system.
+
+We have opted to develop an in-house embedder while utilizing API calls to vendor-based LLMs.
+
+In-house embedder:
+- Provides potential for improving this critical component without vendor lock-in
+- Offers deterministic behavior
+- Does not require us to provide per-token costs
+- Could potentially benefit from interaction data enhancements
+
+Drawbacks:
+- Development and maintenance costs.
+- Per-token costs may not be as optimized as those of larger companies.
+
+
+API-based LLMs:
+
+- LLMs are continually improving, particularly in few-shot learning capabilities. We don't want to invest in LLM traning.
+- Competitive market dynamics are driving down the cost of API calls over time
+- Switching vendors involves minimal effort since it only requires switching APIs, allowing for potential utilization of multiple vendors.
+
+Drawbacks:
+- Less control over the responses
+- Data privacy (though not a significant concern)
 
 ### **VI. Error analysis**
 
