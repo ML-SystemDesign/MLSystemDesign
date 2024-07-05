@@ -42,14 +42,13 @@ Client expect answers to be:
 - Fast
     - First token within 1 minute.
 - Trustfull
-    - No hallucinations or 'extended' answers.
+    - Limited hallucinations or 'extended' answers. At least 95% of the answers should not contain fact missmatching.
     - Do not proofread the entire document if there are doubts.
 - Interactive
     - Ability to provide more details/follow-up questions if the answer is insufficient.
     - Automatically be requested for more details if could not generate insufficient answer.
 - Direct
     - Indicate when an answer cannot be provided due to lack of context.
-    - Avoid hallucinating complete answers.
 
 Client need to get answers about:
 - A single document in its latest version.
@@ -62,18 +61,31 @@ Client wants to select documents:
 - Implicit, through dialogue.
 
 Use case examples:
-- Specific Question about Document Metadata
-    - e.g., author and date.
-- Specific Question about Document Content Available in the Document
+
+We will categorize the use cases as follows:
+
+- Addressable - The system's response must be useful and relevant.
+- Non-addressable - The system cannot provide an answer, or the question is beyond the scope of its capabilities. In such cases, the appropriate action is to implement a proper restriction. Although those questions might not bring benefits, it's very crucial to have a proper fallback.
+
+We will use split the use cases to better define the overall problem space for the solution.
+We will index the use cases as `Na` where `N` is a priority and `a/na` is an addressability flag.
+
+Addressable use cases:
+- `1a` Specific Question about Document Content Available in the Document
     - e.g., how the Attention mechanism works from 'Attention is All You Need'.
-- Specific Question about Document Content Not Available in the Document
-    - e.g., how the Attention mechanism works from 'Bible'.
-- Abstract/Not Relevant Question about Document Content
-    - e.g., how are you doing.
-- Specific Question about Document Version Changes
+- `2a` Specific Question about Document Version Changes
     - e.g., how section names changed between v2 and v12 from 'Machine Learning System Design'.
-- Specific Question about Multiple Document Version Changes
+- `3a` Specific Question about Multiple Document Version Changes
     - e.g., differences between the first available draft and the published version for all books in the 'Harry Potter' series.
+- `4a` Specific Question about Document Metadata (propose to remove - too litle data to use any algorithms)
+    - e.g., author and date.
+
+Non-addressable use cases
+- `1na` Abstract/Not Relevant Question about Document Content
+    - e.g., how are you doing.
+- `2na` Specific Question about Document Content Not Available in the Document
+    - e.g., how the Attention mechanism works from 'Bible'.
+
 
 ### **iiii. Previous work**
 
@@ -93,7 +105,7 @@ Every month:
 ### **v. Other issues & Risks**
 
 - Cloud Object Storage with automated version cataloging.
-- OCR is not implemented.
+- OCR is not implemented. `Artem: why?`
 - Documents could be sent to service vendors, provided they are not used for training as per SLA (e.g., OpenAI, Anthropic, etc.).
 
 
