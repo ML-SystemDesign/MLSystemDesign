@@ -226,7 +226,28 @@ An intuitive and responsive interface for clients to query and receive results.
 
 ### **iv. Backend API Design**
 
-TBD
+Below are provided events, when a corresponding API action gets triggered, while interacting with a user.
+
+**Documents Management.**
+- Upload a new document
+- Retrieve document metadata
+- Retrieve all versions of a document
+- Retrieve a specific version of a document
+- Query Processing Endpoints
+
+**User Queries Management.**
+- Retrieve a query result
+- Rate a query response
+- Report an inappropriate response
+
+**Embeddings Management.**
+- Generate embeddings for a new document
+- Update embeddings for a document version change
+
+**Chat Session Management.**
+- Start a new chat session
+- Retrieve chat history
+- Save chat history
 
 ### **v. Parallel processing**
 To efficiently handle simultanneous queries from users, the system uses queue of requests and pool of worker nodes.
