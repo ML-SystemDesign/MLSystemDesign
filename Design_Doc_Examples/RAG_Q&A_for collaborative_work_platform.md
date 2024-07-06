@@ -144,17 +144,92 @@ If users keep using it after some time
 
 ### **X. Integration**
 
-Embeddings db
-Chat UI
-Platform integration
-Parallel processing
-SLAs
+### **i. Embeddings Database**
 
-- **Key Takeaways:**
-    1. Integration is a continuous and essential process that ensures the success and longevity of ML systems. It requires careful planning, from API design to deployment and operation.
-    2. API design should prioritize simplicity and predictability, with a focus on creating interfaces that hide complexity while allowing for necessary customization and ensuring deterministic behavior.
-    3. The release cycle of ML systems presents unique challenges, necessitating a balance between agility and stability. Techniques like blue-green and canary deployments can facilitate safer updates and minimize disruptions.
-    4. Operational robustness is achieved not only through technical means such as CI, logging, and monitoring but also by addressing non-technical aspects like compliance and user data management. Overrides and fallbacks are critical for maintaining service continuity and adapting to changes or failures in real-time.
+This is one of the core components in the system for efficient document search and retrival.
+
+**i.i. Embeddings Generation**
+
+- **Query Embeddings:** Converts client's query into embeddings for further selecting nearest neighbours within the database.
+- **Document Embeddings:** Creates embeddings using a pre-trained BERT-based model for new documents. The model processes documents via API request, resulting in document ID, document metadata and embeddings. The original file is stored in Documents Storage with the same document ID to avoid overloading the vector DB.
+- **Updates:** Automatically updates embeddings when document version changes to maintain vectors relevance.
+
+**i.ii. Database Features**
+
+- A cloud and scalable database.
+- Supports nearest neighbor search, using cosine or Euclidean similarity.
+- The following fields are stored for further mapping with Documents Storage:
+  1. Document ID
+  2. Version number
+  3. Metadata storage (document title, author, creation date)
+  4. Embeddings representation 
+- Embeddings, metadata, and queries are encrypted to ensure security. Strict access control managment. 
+
+### **ii. Documents Storage**
+
+A scalable cloud service (e.g. AWS S3) for scalable storage and files managment for the following data types:
+1. Original files uploaded by clients, including their versions. The service returns a URL (Document ID) for each uploaded file, which is stored in the embeddings database metadata.
+2. Chat communications and response ratings, structured as JSON objects with fields for user queries, responses, timestamps and ratings.
+
+### **iii. Chat UI**
+
+An intuitive and responsive interface for clients to query and receive results.
+
+**Features.**
+  1. Clients can upload new documents, which automatically triggers embedding generation and storage.
+  2. Consists of a five star rating system for feedback on answers.
+  3. Clients can report offesnive or unproper responses, which triggers another LLM as a fallback scenario.
+  4. Allows to save a chat history and responses for future reference.
+
+### **iv. Backend API Design**
+
+Below are provided events, when a corresponding API action gets triggered, while interacting with a user.
+
+**Documents Management.**
+- Upload a new document
+- Retrieve document metadata
+- Retrieve all versions of a document
+- Retrieve a specific version of a document
+- Query Processing Endpoints
+
+**User Queries Management.**
+- Retrieve a query result
+- Rate a query response
+- Report an inappropriate response
+
+**Embeddings Management.**
+- Generate embeddings for a new document
+- Update embeddings for a document version change
+
+**Chat Session Management.**
+- Start a new chat session
+- Retrieve chat history
+- Save chat history
+
+### **v. Parallel processing**
+To efficiently handle simultanneous queries from users, the system uses queue of requests and pool of worker nodes.
+
+Worker Allocation:
+- **General Workers.** Handle initial document processing and embedding generation.
+- **Dedicated Workers.** Preserve workers for entire chat sessions to maintain context and improve response relevance.
+
+
+### **vi. SLAs**
+
+In order to control system performance and meeting defined standards, the MagicSharepoint service is integrated with a monitoring tool.
+
+Key validated compontents
+- **Response Time.** Guarantee first token response within 1 minute.
+- **Uptime.** Ensure a high availability rate, aiming to 99.9% uptime.
+
+### **vii. Fallback Strategies**
+
+Fallbacks are crucial for maintaining operational efficiency in the face of unforeseen circumstances. MagicSharepoint uses a multi-tiered fallback system to ensure seamless service:
+
+- **Primary fallback.** The primary model is served by the chosen vendor. It is used unless negative user feedback on the model outcome and if the latency out of the accepted range, described in ? section.
+- **Secondary fallback.** Our next layer of fallback involves using a pretrained LLM from Hugging Face, installed locally. This approach addressed to adress both potential issues.
+
+The system has latency and feedback based switchings, which reroutes requests to the secondary model. Once conditions are improved, it switches to the primary model.
 
 ### **XI. Monitoring**
 
