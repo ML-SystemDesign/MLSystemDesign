@@ -1,79 +1,41 @@
-# MagicSharepoint
+# Mega retail
 
 ### **I. Problem definition**
 
-### **i. Origin**
+**Draft**
+Business need:
+An interactive Q&A Chat System, which will allow platform operation to get insights about Documents content and changes dynamics.
 
-MagicSharepoint is a platform designed for collaborative work and document sharing among clients. Documents can be in text format (Markdown) or scanned/image formats.
+The Documents are already parsed and available in text format.
 
-- Expected Document Size: Up to 500 pages.
-- Structure: Documents larger than 10 pages typically include a table of contents and dedicated sections, such as introduction or glossary.
-- Content: Documents may include text with all Markdown features (e.g., quotes, headings, formulas, tables).
+*(OPTION) Documents are in physical form / in plain photos and they should be recognised and improted.*
+Operator may explicitly select Question Scope (ex.: filters) or non-explicit (specifying in chat).
+Expectations that the response would contain limited references/partial citations from Documents, supporting generated answers.
+If some questions are insufficient to provide a distinct and certain answer based on context, then Operator should receive interactive guidance to clarify the question.
 
-Clients can edit documents online via the platform or upload documents from their local machines. Each document receives a version number upon:
-
-- Saving
-- Uploading a new document
-- Uploading a version of the existing document
-
-Clients can access all versions of each document.
-
-The project's goal is to provide clients with a tool to get answers about document content and version changes more easily and quickly than by proofreading and comparing documents on their own.
-
-### **ii. Relevance & Reasons**
-
-**ii.i. Existing flow**
-
-To get answers about the content of a document, clients need to read through the document or use search functionality. 
-
-Since documents are domain-specific, clients must have relevant expertise depending on the nature of the question. Answers must be cataloged manually in an external tool. 
-
-Additionally, if another client has the same or a similar question, they have no way of knowing that the question was already asked and answered.
-
-**ii.ii. Other reasons**
-
-The proposed tool could be reused to support frequent questions or bulk inquiries.
-
-It has the potential to build a Knowledge Center for clients, allowing documents to be represented as a graph of facts or knowledge.
-
-### **iii. Expectations**
-
-Client expect answers to be:
-- Fast
-    - First token within 1 minute.
-- Trustfull
-    - No hallucinations or 'extended' answers.
-    - Do not proofread the entire document if there are doubts.
-- Interactive
-    - Ability to provide more details/follow-up questions if the answer is insufficient.
-    - Automatically be requested for more details if could not generate insufficient answer.
-- Direct
-    - Indicate when an answer cannot be provided due to lack of context.
-    - Avoid hallucinating complete answers.
-
-Client need to get answers about:
-- A single document in its latest version.
-- Multiple documents in their latest versions.
-- A single document and its various versions.
-- Multiple documents and their various versions.
-
-Client wants to select documents:
-- Explicit, using filters.
-- Implicit, through dialogue.
+Operator need to be able to get insights about:
+- Single Document in its most recent form
+- Multiple Documents in their most recent form
+- Single Document and its historical/temporal changes
+- Multiple Documents and their historical/temporal changes
 
 Use case examples:
-- Specific Question about Document Metadata
-    - e.g., author and date.
-- Specific Question about Document Content Available in the Document
-    - e.g., how the Attention mechanism works from 'Attention is All You Need'.
-- Specific Question about Document Content Not Available in the Document
-    - e.g., how the Attention mechanism works from 'Bible'.
-- Abstract/Not Relevant Question about Document Content
-    - e.g., how are you doing.
-- Specific Question about Document Version Changes
-    - e.g., how section names changed between v2 and v12 from 'Machine Learning System Design'.
-- Specific Question about Multiple Document Version Changes
-    - e.g., differences between the first available draft and the published version for all books in the 'Harry Potter' series.
+- Operation asking specific question about the Document metadata
+    - ex.: author and date
+- Operation asking specific question about the Document content which is available in the Document
+    - ex.: how does the Attention mechanism work;
+        - from 'Attention is All You Need'
+- Operation asking specific question about the Document content which is not available in the Document
+    - ex.: how does Attention mechanism work;
+    - from 'Bible'
+- Operation asking abstract/not relevant question about the Document content
+    - ex.: how are you doing
+- Operation asking specific question about the Document content version changes
+    - ex.: which how section names changed between v2 and v12
+        - from 'Machine Learning System Design'
+- Operation asking specific question about the Multiple Document content version changes
+    - ex.: what are the differences between the first available draft and the published version for all books in the series?
+        - from 'Harry Potter' series
 
 ### **iiii. Previous work**
 
@@ -96,6 +58,11 @@ Every month:
 - OCR is not implemented.
 - Documents could be sent to service vendors, provided they are not used for training as per SLA (e.g., OpenAI, Anthropic, etc.).
 
+- **Key Takeaways:**
+    1. A thorough understanding of the problem space is foundational to effective ML system design, ensuring that solutions are relevant and targeted.
+    2. Engaging deeply with the problem, through techniques like the "Five Whys" and the inverted pyramid scheme, enables designers to uncover essential insights and requirements for the ML system.
+    3. Considering the potential risks, limitations, and costs of mistakes early in the design process is crucial for developing robust, effective, and safe ML systems.
+    4. ML system designers must balance the trade-offs between robustness and correctness, tailoring their approach to the specific context and requirements of the project.
 
 ### **II. Metrics and losses**
 
@@ -299,17 +266,101 @@ If users keep using it after some time
 
 ### **X. Integration**
 
-Embeddings db
-Chat UI
-Platform integration
-Parallel processing
-SLAs
+### **i. Embeddings Database**
 
-- **Key Takeaways:**
-    1. Integration is a continuous and essential process that ensures the success and longevity of ML systems. It requires careful planning, from API design to deployment and operation.
-    2. API design should prioritize simplicity and predictability, with a focus on creating interfaces that hide complexity while allowing for necessary customization and ensuring deterministic behavior.
-    3. The release cycle of ML systems presents unique challenges, necessitating a balance between agility and stability. Techniques like blue-green and canary deployments can facilitate safer updates and minimize disruptions.
-    4. Operational robustness is achieved not only through technical means such as CI, logging, and monitoring but also by addressing non-technical aspects like compliance and user data management. Overrides and fallbacks are critical for maintaining service continuity and adapting to changes or failures in real-time.
+This is one of the core components in the system for efficient document search and retrival.
+
+**i.i. Embeddings Generation**
+
+- **Query Embeddings:** Converts client's query into embeddings for further selecting nearest neighbours within the database.
+- **Document Embeddings:** Creates embeddings using a pre-trained BERT-based model for new documents. The model processes documents via API request, resulting in document ID, document metadata and embeddings. The original file is stored in Documents Storage with the same document ID to avoid overloading the vector DB.
+- **Updates:** Automatically updates embeddings when document version changes to maintain vectors relevance.
+
+**i.ii. Database Features**
+
+- A cloud and scalable database.
+- Supports nearest neighbor search, using cosine or Euclidean similarity.
+- The following fields are stored for further mapping with Documents Storage:
+  1. Document ID
+  2. Version number
+  3. Metadata storage (document title, author, creation date)
+  4. Embeddings representation 
+- Embeddings, metadata, and queries are encrypted to ensure security. Strict access control managment. 
+
+### **ii. Documents Storage**
+
+A scalable cloud service (e.g. AWS S3) for scalable storage and files managment for the following data types:
+1. Original files uploaded by clients, including their versions. The service returns a URL (Document ID) for each uploaded file, which is stored in the embeddings database metadata.
+2. Chat communications and response ratings, structured as JSON objects with fields for user queries, responses, timestamps and ratings.
+
+### **iii. Chat UI**
+
+An intuitive and responsive interface for clients to query and receive results.
+
+**Features.**
+  1. Clients can upload new documents, which automatically triggers embedding generation and storage.
+  2. Consists of a five star rating system for feedback on answers.
+  3. Clients can report offesnive or unproper responses, which triggers another LLM as a fallback scenario.
+  4. Allows to save a chat history and responses for future reference.
+
+### **iv. OCR**
+
+MagicSharepoint utilizes Optical Character Recognition technology to convert text from image-based documents into machine-readable text. This offers users greater flexibility in input data formats. The algorithm takes an intermediate place between the user upload process and embeddings creation.
+
+**Features.**
+1. **Document upload.** The system automatically identifies the format of uploaded file and OCR gets triggered if image-based inputs.
+2. **Engine.** A cloud solution is used to be scalable enough to handle large volumes of documents simultaneously.
+3. **Storage.** Both the original image and the extracted text is stored in the Documents Storage, linked by the same Document ID.
+4. **Multi-language Support.**: The OCR engine supports multiple languages to cater to serve wide range of clients.
+
+### **v. Backend API Design**
+
+Below are provided events, when a corresponding API action gets triggered, while interacting with a user.
+
+**Documents Management.**
+- Upload a new document
+- Retrieve document metadata
+- Retrieve all versions of a document
+- Retrieve a specific version of a document
+- Apply OCR technology for image-basede documents, if required
+
+**User Queries Management.**
+- Retrieve a query result
+- Rate a query response
+- Report an inappropriate response
+
+**Embeddings Management.**
+- Generate embeddings for a new document
+- Update embeddings for a document version change
+
+**Chat Session Management.**
+- Start a new chat session
+- Retrieve chat history
+- Save chat history
+
+### **vi. Parallel processing**
+To efficiently handle simultanneous queries from users, the system uses queue of requests and pool of worker nodes.
+
+Worker Allocation:
+- **General Workers.** Handle initial document processing and embedding generation.
+- **Dedicated Workers.** Preserve workers for entire chat sessions to maintain context and improve response relevance.
+
+### **vii. SLAs**
+
+In order to control system performance and meeting defined standards, the MagicSharepoint service is integrated with a monitoring tool.
+
+Key validated compontents
+- **Response Time.** Guarantee first token response within 1 minute.
+- **Uptime.** Ensure a high availability rate, aiming to 99.9% uptime.
+
+### **viii. Fallback Strategies**
+
+Fallbacks are crucial for maintaining operational efficiency in the face of unforeseen circumstances. MagicSharepoint uses a multi-tiered fallback system to ensure seamless service:
+
+- **Primary fallback.** The primary model is served by the chosen vendor. It is used unless negative user feedback on the model outcome and if the latency out of the accepted range.
+- **Secondary fallback.** Our next layer of fallback involves using a pretrained LLM from Hugging Face, installed locally. This approach addressed to adress both potential issues.
+
+The system has latency and feedback based switchings, which reroutes requests to the secondary model. Once conditions are improved, it switches to the primary model.
 
 ### XI. Monitoring
 
@@ -348,10 +399,87 @@ SLAs
 
 ### **XII. Serving and inference**
 
-Cloud Embedding DB
-Vendor API for LLM
+The inference part of a system would contain from 3 major on-premise services:
+- **Embedding service**
+- **OCR service**
+- **Chat service**
 
-1. **Critical Balance of Factors**: Effective inference optimization requires a careful balance between competing factors such as latency, throughput, and cost. Understanding and prioritizing these based on specific application needs is key to successful deployment.
-2. **Choice of Tools and Frameworks**: Selecting the right tools and frameworks is crucial and should be guided by the specific requirements of the deployment environment and the nature of the machine learning tasks.
-3. **Continuous Monitoring and Optimization**: Continuous performance monitoring and iterative optimization are essential to maintain and improve the inference capabilities of machine learning systems in production.
-4. **Strategic Planning for Scalability**: Planning for scalability from the outset can mitigate future challenges and help manage costs effectively as system demand grows.
+While following parts of a solution are considered as external cloud services:
+- **Vector database**
+- **Document storage**
+- **Metadata database**
+- **LLM**
+
+### **i. Serving architecture**
+
+On-premise services would be hosted as REST API services hosted in Docker containers and orchestrated by Kubernetes cluster.
+
+#### **Embedding service**
+
+Invoked upon every document receiving a version.
+Should pull required metadata from other databases to enrich embeddings with metadata upon saving.
+
+For every document:
+- Invoke OCD service.
+    - If document is Image based.
+- Pull text representation from Document storage.
+- Embedding service will generate embeddings.
+    - on different aggregations - from document down to sentence level.
+- Import embeddings with corresponding metadata into the Vector database.
+
+#### **OCR service**
+
+Invoked from Embedding service.
+
+For every image document:
+- Invoke OCR process.
+- Import text representation into the Document storage
+
+#### **Chat service**
+
+Invoked on every question.
+
+For every question:
+- Retrieve scope metadata from Metadata database.
+- Confirm scope with user on Chat UI.
+    - If scope request was non-explicit.
+    - ~~Can start generating response before client would confirm it.~~
+- Retrieve chat history.
+    - If any.
+- Use internal cache.
+    - If scope, chat history and question match.
+    - No fuzzymatch
+- Context search in Vector database.
+- Construct Prompt & invoke LLM.
+- Receive response ~~and stream generated tokens to the Chat UI~~.
+- Invoke guardrails.
+- Calculate performance and consumption statistics.
+- Calculate automated quality metrics (if any).
+- Make decision and execute it: 
+    - Return answer to the Chat UI.
+    - Request more details from user on Chat UI.
+    - Adjust response according to standards.
+- Save record to the internal cache.
+- Save chat history to Metadata database.
+
+### **ii. Infrastructure**
+
+**Embedding service** and **OCR service** should be hosted on GPU nodes.
+As we expect around 500 new document versions per month, they could be hosted on Spot machines or be start-stopped on demand (if it will take less than 2 minutes).
+Both services would be stopped if they won't receive new requests within 30 (??) minutes.
+
+No need in scaling services, unless bulk processing is expected. If so - then we may consider scaling by the number of machines or by GPU grade/size.
+
+**Chat service** could be hosted on non-GPU node. More focus on the RAM to manage the internal cache, then on CPU.
+
+### **iii. Monitoring**
+
+Key **inference** metrics:
+- ~~Time to first token~~
+- Time to show full reponse.
+- % of questions covered by internal cache.
+- % of answers rejected by guardrail.
+- % of answers requested more details from user.
+- % of questions having empty context.
+- % of explicit 'we can not answer' answers. 
+- Average chat history lenght.
