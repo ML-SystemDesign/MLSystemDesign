@@ -218,15 +218,25 @@ We have also selected an open-source framework, LlamaIndex for RAG, which suppor
 
 ### **VI. Error analysis**
 
-Ask expert to test the process
-Whenever expert do not agree - ask him to provide reason
-explore the reason and improve the system
+**i. Learning Curve Analysis**
 
-- **Key Takeaways:**
-    1. Error analysis is an indispensable step in refining machine learning systems, providing a deeper understanding of model errors and guiding targeted improvements.
-    2. Learning curve analysis offers early insights into model adequacy, highlighting issues of convergence, overfitting, and underfitting that need addressing.
-    3. Residual analysis serves as a powerful tool for verifying model assumptions and identifying biases, enabling the detection of specific error patterns and guiding the development of more robust models.
-    4. Identifying commonalities in residuals through various analytical approaches, including adversarial validation and group analysis, helps pinpoint specific areas for improvement, ensuring the model performs well across diverse scenarios and datasets.
+During embeddings tuning, it’s a good idea to review loss curves for an overall understanding of training dynamics, hyperparameter tuning, etc. In the case of a composite loss, it’s reasonable to visualize each of the components separately. Beyond the loss curves, it’s also reasonable to have metric curves, as they help understand if the chosen metric and loss are connected.
+
+To draw conclusions about the required amount of data and the potential benefit of data gathering, it is useful to plot the dependency of train dataset size versus the metric. Let’s fix a test dataset, and then train the model on subsamples of the train data to estimate how new data improves overall performance. However, this approach is resource-intensive.
+
+**ii. Residual Analysis**
+
+For each error on the holdout dataset, analyze the query in the following way (e.g., query topic, is the answer presented in the document, is the query on document versions' differences, irrelevant queries, does the query require follow-up questions, etc.). Then, identify the most sensitive category and analyze if it is an expected result. If the metric is not binary, but a score from 0 to 5, consider only errors with the lowest relevance scores, for example, 0-3.
+
+Corner-cases to check:
+
+- Queries with typos/documents with typos
+- Toxic text generation
+- Data safety
+- Formulas/tables search support
+
+Ask an expert to test the process. Whenever the expert does not agree, ask them to provide a reason, explore the reason, and improve the system.
+
 
 ### **VII. Training Pipeline**
 
