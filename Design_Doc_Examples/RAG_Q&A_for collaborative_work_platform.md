@@ -118,7 +118,41 @@ For some Documents we do not know the diff. Only know how Document looked like a
 
 ### **IV. Validation Schema**
 
-No ideas
+For validation purposes, we will use a data set generated from the original documents using the RAGAS  functionality. This approach allows us to create a comprehensive validation set that closely mirrors the real-world usage of our system.
+
+#### i. Dataset Creation
+RAGAS takes the original documents and their associated metadata and generates a structured dataset with the following components
+
+* Question: Simulation of user queries
+* Context: Relevant parts of the document(s)
+* Answer: The expected answer
+
+This structure allows us to evaluate both the retrieval and generation aspects of our RAG system.
+
+#### ii. Dataset Composition
+To ensure comprehensive validation, our dataset should include:
+
+* Single document queries (latest version)
+* Multi-document queries
+* Version comparison queries
+* Queries that require implicit document selection
+
+#### iii. Periodic Updates
+The validation dataset will be updated periodically to maintain its relevance and comprehensiveness. This includes:
+
+* Addition of newly uploaded documents
+* Including new versions of existing documents
+* Updating the question set to reflect evolving user needs
+
+We recommend updating the validation set monthly or whenever there's a significant influx of new documents or versions.
+
+#### iv. Stratified Sampling
+To ensure balanced representation, we'll use stratified sampling when creating the validation set. Strata may include:
+
+* Document length (short, medium, long)
+* Document type (text, scanned image)
+* Topic areas
+* Query complexity (simple factual, multi-step reasoning, version comparison)
 
 - **Key Takeaways:**
     1. The selection of a validation schema is crucial for accurately measuring a model's performance on unseen data, requiring careful consideration of the specific characteristics of the dataset and the problem at hand.
