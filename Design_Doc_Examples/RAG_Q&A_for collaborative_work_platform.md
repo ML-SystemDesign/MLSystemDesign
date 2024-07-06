@@ -1,91 +1,48 @@
-# MagicSharepoint
+# Mega retail
 
 ### **I. Problem definition**
 
-### **i. Origin**
+**Draft**
+Business need:
+An interactive Q&A Chat System, which will allow platform operation to get insights about Documents content and changes dynamics.
 
-MagicSharepoint is a platform designed for collaborative work and document sharing among clients. Documents can be in text format (Markdown) or scanned/image formats.
+The Documents are already parsed and available in text format.
 
-- Expected Document Size: Up to 500 pages.
-- Structure: Documents larger than 10 pages typically include a table of contents and dedicated sections, such as introduction or glossary.
-- Content: Documents may include text with all Markdown features (e.g., quotes, headings, formulas, tables).
+*(OPTION) Documents are in physical form / in plain photos and they should be recognised and improted.*
+Operator may explicitly select Question Scope (ex.: filters) or non-explicit (specifying in chat).
+Expectations that the response would contain limited references/partial citations from Documents, supporting generated answers.
+If some questions are insufficient to provide a distinct and certain answer based on context, then Operator should receive interactive guidance to clarify the question.
 
-Clients can edit documents online via the platform or upload documents from their local machines. Each document receives a version number upon:
-
-- Saving
-- Uploading a new document
-- Uploading a version of the existing document
-
-Clients can access all versions of each document.
-
-The project's goal is to provide clients with a tool to get answers about document content and version changes more easily and quickly than by proofreading and comparing documents on their own.
-
-### **ii. Relevance & Reasons**
-
-**ii.i. Existing flow**
-
-To get answers about the content of a document, clients need to read through the document or use search functionality. 
-
-Since documents are domain-specific, clients must have relevant expertise depending on the nature of the question. Answers must be cataloged manually in an external tool. 
-
-Additionally, if another client has the same or a similar question, they have no way of knowing that the question was already asked and answered.
-
-**ii.ii. Other reasons**
-
-The proposed tool could be reused to support frequent questions or bulk inquiries.
-
-It has the potential to build a Knowledge Center for clients, allowing documents to be represented as a graph of facts or knowledge.
-
-### **iii. Expectations**
-
-Client expect answers to be:
-- Fast
-    - First token within 1 minute.
-- Trustfull
-    - No hallucinations or 'extended' answers.
-    - Do not proofread the entire document if there are doubts.
-- Interactive
-    - Ability to provide more details/follow-up questions if the answer is insufficient.
-    - Automatically be requested for more details if could not generate insufficient answer.
-- Direct
-    - Indicate when an answer cannot be provided due to lack of context.
-    - Avoid hallucinating complete answers.
-
-Client need to get answers about:
-- A single document in its latest version.
-- Multiple documents in their latest versions.
-- A single document and its various versions.
-- Multiple documents and their various versions.
-
-Client wants to select documents:
-- Explicit, using filters.
-- Implicit, through dialogue.
+Operator need to be able to get insights about:
+- Single Document in its most recent form
+- Multiple Documents in their most recent form
+- Single Document and its historical/temporal changes
+- Multiple Documents and their historical/temporal changes
 
 Use case examples:
-- Specific Question about Document Metadata
-    - e.g., author and date.
-- Specific Question about Document Content Available in the Document
-    - e.g., how the Attention mechanism works from 'Attention is All You Need'.
-- Specific Question about Document Content Not Available in the Document
-    - e.g., how the Attention mechanism works from 'Bible'.
-- Abstract/Not Relevant Question about Document Content
-    - e.g., how are you doing.
-- Specific Question about Document Version Changes
-    - e.g., how section names changed between v2 and v12 from 'Machine Learning System Design'.
-- Specific Question about Multiple Document Version Changes
-    - e.g., differences between the first available draft and the published version for all books in the 'Harry Potter' series.
+- Operation asking specific question about the Document metadata
+    - ex.: author and date
+- Operation asking specific question about the Document content which is available in the Document
+    - ex.: how does the Attention mechanism work;
+        - from 'Attention is All You Need'
+- Operation asking specific question about the Document content which is not available in the Document
+    - ex.: how does Attention mechanism work;
+    - from 'Bible'
+- Operation asking abstract/not relevant question about the Document content
+    - ex.: how are you doing
+- Operation asking specific question about the Document content version changes
+    - ex.: which how section names changed between v2 and v12
+        - from 'Machine Learning System Design'
+- Operation asking specific question about the Multiple Document content version changes
+    - ex.: what are the differences between the first available draft and the published version for all books in the series?
+        - from 'Harry Potter' series
 
-### **iiii. Previous work**
 
-- Implemented 'smart' full-text search to help navigate faster and easier.
-- Cataloged frequent questions and used Mechanical Turk to get answers in advance.
-
-### **iv. Other issues & Risks**
-
-- Cloud Object Storage with automated version cataloging.
-- OCR is not implemented.
-- Documents could be sent to service vendors, provided they are not used for training as per SLA (e.g., OpenAI, Anthropic, etc.).
-
+- **Key Takeaways:**
+    1. A thorough understanding of the problem space is foundational to effective ML system design, ensuring that solutions are relevant and targeted.
+    2. Engaging deeply with the problem, through techniques like the "Five Whys" and the inverted pyramid scheme, enables designers to uncover essential insights and requirements for the ML system.
+    3. Considering the potential risks, limitations, and costs of mistakes early in the design process is crucial for developing robust, effective, and safe ML systems.
+    4. ML system designers must balance the trade-offs between robustness and correctness, tailoring their approach to the specific context and requirements of the project.
 
 ### **II. Metrics and losses**
 
@@ -139,25 +96,15 @@ Show to user highlighted parts of document
 
 ### **VI. Error analysis**
 
-**i. Learning Curve Analysis**
+Ask expert to test the process
+Whenever expert do not agree - ask him to provide reason
+explore the reason and improve the system
 
-During embeddings tuning, it’s a good idea to review loss curves for an overall understanding of training dynamics, hyperparameter tuning, etc. In the case of a composite loss, it’s reasonable to visualize each of the components separately. Beyond the loss curves, it’s also reasonable to have metric curves, as they help understand if the chosen metric and loss are connected.
-
-To draw conclusions about the required amount of data and the potential benefit of data gathering, it is useful to plot the dependency of train dataset size versus the metric. Let’s fix a test dataset, and then train the model on subsamples of the train data to estimate how new data improves overall performance. However, this approach is resource-intensive.
-
-**ii. Residual Analysis**
-
-For each error on the holdout dataset, analyze the query in the following way (e.g., query topic, is the answer presented in the document, is the query on document versions' differences, irrelevant queries, does the query require follow-up questions, etc.). Then, identify the most sensitive category and analyze if it is an expected result. If the metric is not binary, but a score from 0 to 5, consider only errors with the lowest relevance scores, for example, 0-3.
-
-Corner-cases to check:
-
-- Queries with typos/documents with typos
-- Toxic text generation
-- Data safety
-- Formulas/tables search support
-
-Ask an expert to test the process. Whenever the expert does not agree, ask them to provide a reason, explore the reason, and improve the system.
-
+- **Key Takeaways:**
+    1. Error analysis is an indispensable step in refining machine learning systems, providing a deeper understanding of model errors and guiding targeted improvements.
+    2. Learning curve analysis offers early insights into model adequacy, highlighting issues of convergence, overfitting, and underfitting that need addressing.
+    3. Residual analysis serves as a powerful tool for verifying model assumptions and identifying biases, enabling the detection of specific error patterns and guiding the development of more robust models.
+    4. Identifying commonalities in residuals through various analytical approaches, including adversarial validation and group analysis, helps pinpoint specific areas for improvement, ensuring the model performs well across diverse scenarios and datasets.
 
 ### **VII. Training Pipeline**
 
