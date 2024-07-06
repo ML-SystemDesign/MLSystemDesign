@@ -179,7 +179,7 @@ Components:
     - Maintains a DB-represented corpus
     - Creates indexes for Term Frequency (TF) and Inverse Document Frequency (IDF)
 3. Inference Layer
-    - Executes parallelized scoring computations
+    - Given query passed trough the preprocessing layer, Executes parallelized scoring computations
     - Manages ranking and retrieval of results
 4. Representation Layer
     - Highlights the top-k results for the user
@@ -211,7 +211,8 @@ A basic RAG system consists of the following components components:
     - DB simularity search
 3. Chat Service:
     - Manages chat context
-    - Prompt template constructor
+    - Prompt template constructor: supports diaologs for clarification
+    - Stores chat history
 4. Synthesis Component:
     - Utilizes an LLM for response generation
 6. Representation Layer:
@@ -230,7 +231,6 @@ Drawbacks:
 - Development and maintenance costs.
 - Per-token costs may not be as optimized as those of larger companies.
 
-
 API-based LLMs:
 
 - LLMs are continually improving, particularly in few-shot learning capabilities. We don't want to invest in LLM traning.
@@ -240,6 +240,14 @@ API-based LLMs:
 Drawbacks:
 - Less control over the responses
 - Data privacy (though not a significant concern)
+
+We have also selected an open-source framework, LlamaIndex for RAG, which supports the aforementioned design choice and offers many capabilities out of the box, including:
+
+1. Document storage
+2. Index storage
+3. Chat service
+4. Modular design for document extraction that supports custom modules
+5. Built-in logging and monitoring capabilities
 
 ### **VI. Error analysis**
 
@@ -303,16 +311,40 @@ SLAs
     3. The release cycle of ML systems presents unique challenges, necessitating a balance between agility and stability. Techniques like blue-green and canary deployments can facilitate safer updates and minimize disruptions.
     4. Operational robustness is achieved not only through technical means such as CI, logging, and monitoring but also by addressing non-technical aspects like compliance and user data management. Overrides and fallbacks are critical for maintaining service continuity and adapting to changes or failures in real-time.
 
-### **XI. Monitoring**
+### XI. Monitoring
 
-Time to get answer
-Time to first token
-???
+#### Logging
 
-1. **Monitoring is Essential**: Without proper monitoring, even the most sophisticated ML models can fail, highlighting the need for robust monitoring frameworks that include software health, data quality, and model performance.
-2. **Proactive Maintenance**: Proactive strategies in monitoring can mitigate risks associated with data drift and model decay, ensuring that ML systems continue to perform optimally over time.
-3. **Integrated Approach**: Effective monitoring combines traditional software monitoring techniques with new approaches tailored to the nuances of ML systems, integrating data quality checks, performance benchmarks, and business KPIs to create a holistic view of system health.
-4. **Continuous Improvement**: The field of ML monitoring is evolving, necessitating ongoing adjustments to monitoring practices as new challenges and technological advancements arise.
+1. **Ingestion Layer**: Every step of the ETL pipeline for document extraction must be fully logged to ensure the process is reproducible and help issue resolution.
+
+2. **Retrieval**: Logging should save the details of each query, including the tokenizer used, the document context found within a particular document version, and any other relevant metadata that could aid in future analyses.
+
+3. **Chat History**: Storing all chat history is crucial for a thorough analysis and debugging process, providing valuable insights into user interactions and system performance
+
+#### Monitoring
+
+1. **Ingestion Layer**: statistics for documents during ingestion should be monitored, including word count, character distribution, document length, paragraph length, detected languages, and the percentage of tables or images
+
+2. **Retirement**:
+   - **Embedder**: Monitor preprocessing time, embedding model time, and utilization instances of the embedding model
+   - **Database (DB)**: Keep track of the indixes found, similarity scores, and the time taken for each retrieval operation
+
+3. **Augmented Generation**: Quality of generated content through user feedback, cost and latency. Furthermore, monitor the volume of generated content to predict scaling needs.
+
+4. **System Health Metrics**: Implement continuous monitoring of system health metrics such as CPU usage, memory usage, disk I/O, network I/O, error rates, and uptime to ensure the system is functioning optimally.
+
+5. **Alerting Mechanisms**: Build an alerting mechanisms for any anomalies or exceeded thresholds based on the metrics being monitored.
+
+
+#### Tooling
+
+1. **For RAG operations - Langfuse callback**. 
+
+2. **For System Health Metrics, Ingestion Layer - Prometheus & Grafana**: Prometheus is an open-source system monitoring and alerting toolkit. Grafana is used to visualize the data collected by Prometheus.
+
+3. **Code error reports - Sentry.io**: Sentry is a widely-used error tracking tool that helps developers monitor, fix, and optimize application performance.
+
+4. **For alerting mechanism - Prometheus Alertmanager**: Alertmanager handles alerts sent by Prometheus servers and takes care of deduplicating, grouping, and routing them to the correct receiver.
 
 ### **XII. Serving and inference**
 
