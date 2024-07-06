@@ -148,16 +148,118 @@ No ideas
     3. Updating validation splits in response to new data or changing distributions is essential for maintaining the relevance and accuracy of performance estimates.
     4. Detailed planning and documentation of the chosen validation schemas within the design document are vital for ensuring the evaluation process is aligned with the project's goals and constraints.
 
-### **V. Baseline Solution**
 
-Regexp/full text search (Elasticsearch) to get Documents and Sentences
-Show to user highlighted parts of document
+### V. Baseline Solution
 
-- **Key Takeaways:**
-    1. Establishing a baseline is a critical first step in machine learning system design, serving as a simple, operational starting point for iterative improvement.
-    2. The choice of baseline should be guided by a trade-off between desired accuracy and the effort required for development, with simplicity often providing significant advantages in terms of robustness, scalability, and interpretability.
-    3. In deep learning applications, leveraging pretrained models or training simple models from scratch can provide effective baselines, with the choice influenced by the specific requirements and constraints of the project.
-    4. Continuous evaluation and comparison against the baseline are essential for guiding the development process, ensuring that complexity is added only when it yields proportional benefits in performance.
+#### Document Extraction Process
+
+Considering the minimal variability among the documents and the sufficient coverage of most cases within the current dataset, it is recommended to implement an in-house document extraction pipeline. This pipeline should consist of:
+
+1. File Type Handler: Differentiate and handle file types accordingly, as PDFs and images may require additional processing steps.
+2. Text Extraction: Deploy a customized OCR solution designed to handle non-text elements.
+3. Text Preprocessing: Remove unwanted characters, whitespace, or any artifacts.
+4. Markdown Formatting: Ensure that the extracted content is formatted correctly according to markdown standards.
+5. Error Management & Spell Checking: Integrate an error handler and a spell checker to maintain data quality.
+
+#### Retrieval-Augmented Generation Framework
+
+The Retrieval-Augmented Generation (RAG) framework can be broken down into two main components:
+
+- Retrieval
+- Augmented Generation
+
+Augmented Generation is a recent advancement, while the concept of document retrieval is something that has been with us since the emergine of web search. While there is little to no sense in building the second part using solutions other than LLMs, it might make sense to implement a simple baseline for the retrieval.
+
+#### Retrieval: Sparse Encoded Retrieval Baseline
+
+Objectives:
+- Create a robust baseline with minimal effort.
+- Validate the hypothesis that an enhanced search capability is beneficial.
+- Gather a dataset based on retrieval, incorporating both implicit and explicit feedback for future refinement.
+
+Applicability:
+This covers use case `1a`. The solution is not applicable to the use cases `1na` and `2na`, thus also addressed.
+
+The system enables content search within documents using the BM25 algorithm.
+
+Components:
+1. Preprocessing Layer
+    - Tokenizes input data
+    - Filters out irrelevant content
+    - Applies stemming / lemmatization
+2. Indexing Layer
+    - Maintains a DB-represented corpus
+    - Creates indexes for Term Frequency (TF) and Inverse Document Frequency (IDF)
+3. Inference Layer
+    - Given query passed trough the preprocessing layer, Executes parallelized scoring computations
+    - Manages ranking and retrieval of results
+4. Representation Layer
+    - Highlights the top-k results for the user
+    - Handles an explicit user feedback dialogue ("Have you found what you were looking for?")
+
+##### Pros & Cons
+
+Pros:
++ Simple to implement, debug, and analyze
++ Fast retrieval due to lightweight computation
++ Scalable, as computation jobs can process document segments independently
++ Popular, with many optimized implementations available
++ Low maintenance costs, suitable for junior engineers
+
+Cons:
+- No semantic understanding: snonyms are not supported by default
+- Bag-of-words approach: word order is not considered
+- Requires updates to accommodate new vocabulary
+
+#### RAG: Baseline Implementation
+
+A basic RAG system consists of the following components components:
+
+1. Ingestion Layer:
+    - Embedder
+    - DB-indexing
+2. Retrieval Layer:
+    - Embedder
+    - DB simularity search
+3. Chat Service:
+    - Manages chat context
+    - Prompt template constructor: supports diaologs for clarification
+    - Stores chat history
+4. Synthesis Component:
+    - Utilizes an LLM for response generation
+6. Representation Layer:
+    - Provides a dialogue mode for user interaction.
+    - User Feedback: Collects user input to continuously refine the system.
+
+We have opted to develop an in-house embedder while utilizing API calls to vendor-based LLMs.
+
+In-house embedder:
+- Provides potential for improving this critical component without vendor lock-in
+- Offers deterministic behavior
+- Does not require us to provide per-token costs
+- Could potentially benefit from interaction data enhancements
+
+Drawbacks:
+- Development and maintenance costs.
+- Per-token costs may not be as optimized as those of larger companies.
+
+API-based LLMs:
+
+- LLMs are continually improving, particularly in few-shot learning capabilities. We don't want to invest in LLM traning.
+- Competitive market dynamics are driving down the cost of API calls over time
+- Switching vendors involves minimal effort since it only requires switching APIs, allowing for potential utilization of multiple vendors.
+
+Drawbacks:
+- Less control over the responses
+- Data privacy (though not a significant concern)
+
+We have also selected an open-source framework, LlamaIndex for RAG, which supports the aforementioned design choice and offers many capabilities out of the box, including:
+
+1. Document storage
+2. Index storage
+3. Chat service
+4. Modular design for document extraction that supports custom modules
+5. Built-in logging and monitoring capabilities
 
 ### **VI. Error analysis**
 
@@ -221,16 +323,40 @@ SLAs
     3. The release cycle of ML systems presents unique challenges, necessitating a balance between agility and stability. Techniques like blue-green and canary deployments can facilitate safer updates and minimize disruptions.
     4. Operational robustness is achieved not only through technical means such as CI, logging, and monitoring but also by addressing non-technical aspects like compliance and user data management. Overrides and fallbacks are critical for maintaining service continuity and adapting to changes or failures in real-time.
 
-### **XI. Monitoring**
+### XI. Monitoring
 
-Time to get answer
-Time to first token
-???
+#### Logging
 
-1. **Monitoring is Essential**: Without proper monitoring, even the most sophisticated ML models can fail, highlighting the need for robust monitoring frameworks that include software health, data quality, and model performance.
-2. **Proactive Maintenance**: Proactive strategies in monitoring can mitigate risks associated with data drift and model decay, ensuring that ML systems continue to perform optimally over time.
-3. **Integrated Approach**: Effective monitoring combines traditional software monitoring techniques with new approaches tailored to the nuances of ML systems, integrating data quality checks, performance benchmarks, and business KPIs to create a holistic view of system health.
-4. **Continuous Improvement**: The field of ML monitoring is evolving, necessitating ongoing adjustments to monitoring practices as new challenges and technological advancements arise.
+1. **Ingestion Layer**: Every step of the ETL pipeline for document extraction must be fully logged to ensure the process is reproducible and help issue resolution.
+
+2. **Retrieval**: Logging should save the details of each query, including the tokenizer used, the document context found within a particular document version, and any other relevant metadata that could aid in future analyses.
+
+3. **Chat History**: Storing all chat history is crucial for a thorough analysis and debugging process, providing valuable insights into user interactions and system performance
+
+#### Monitoring
+
+1. **Ingestion Layer**: statistics for documents during ingestion should be monitored, including word count, character distribution, document length, paragraph length, detected languages, and the percentage of tables or images
+
+2. **Retirement**:
+   - **Embedder**: Monitor preprocessing time, embedding model time, and utilization instances of the embedding model
+   - **Database (DB)**: Keep track of the indixes found, similarity scores, and the time taken for each retrieval operation
+
+3. **Augmented Generation**: Quality of generated content through user feedback, cost and latency. Furthermore, monitor the volume of generated content to predict scaling needs.
+
+4. **System Health Metrics**: Implement continuous monitoring of system health metrics such as CPU usage, memory usage, disk I/O, network I/O, error rates, and uptime to ensure the system is functioning optimally.
+
+5. **Alerting Mechanisms**: Build an alerting mechanisms for any anomalies or exceeded thresholds based on the metrics being monitored.
+
+
+#### Tooling
+
+1. **For RAG operations - Langfuse callback**. 
+
+2. **For System Health Metrics, Ingestion Layer - Prometheus & Grafana**: Prometheus is an open-source system monitoring and alerting toolkit. Grafana is used to visualize the data collected by Prometheus.
+
+3. **Code error reports - Sentry.io**: Sentry is a widely-used error tracking tool that helps developers monitor, fix, and optimize application performance.
+
+4. **For alerting mechanism - Prometheus Alertmanager**: Alertmanager handles alerts sent by Prometheus servers and takes care of deduplicating, grouping, and routing them to the correct receiver.
 
 ### **XII. Serving and inference**
 
