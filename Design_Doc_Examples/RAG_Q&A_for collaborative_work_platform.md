@@ -127,20 +127,112 @@ As the task consists of several steps, the loss function shall consider all of t
 
 ### **III. Dataset**
 
-Documents available on the Platform
-Some documents are in Image form
-Some document are in Text form
-Each document have origination metadata
-Documents may have v1-v2-v3-... versions
-For some Documents we know the diff between vX and vY
-For some Documents we do not know the diff. Only know how Document looked like at each version
+We have two types of data:
+* data that was used to train the main LLM model;
+* data to perform RAG on.
 
-- **Key Takeaways:**
-    1. The success of an ML system is heavily dependent on the quality and relevance of its underlying datasets. Identifying and utilizing the right data sources is crucial for system effectiveness.
-    2. Data preparation is a critical step in ML system development, requiring a thoughtful balance between automation and manual oversight to ensure data quality and relevance.
-    3. Metadata plays a vital role in maintaining data consistency and supporting effective data management throughout the lifecycle of an ML system.
-    4. Addressing the cold start problem requires creative approaches to data acquisition and utilization, emphasizing the need for flexibility and innovation in early system development stages.
-    5. Establishing a healthy data pipeline is foundational to the long-term success and scalability of ML systems, underscoring the importance of reproducibility, consistency, and availability in data management practices.
+We don't control the data for the main LLM training (meaning that we're coping with the LLM limitations and don't influence this until the moment we realize that we could really benefit from fine-tuning, which will become completely different project).
+
+#### i. Data to perform RAG on - description
+
+We don't distinguish between client roles for data access. Every client would have access to every document. So we basically have a shared dataset for the whole system.
+
+Includes a set of Documents available on the Platform. Documents can be in text format (Markdown) or scanned/image formats.
+
+1. For Markdown documents
+    - Expected Document Size: Up to 500 pages.
+    - Structure: Documents larger than 10 pages typically include a table of contents and dedicated sections, such as introduction or glossary.
+    - Content: Documents may include text with all Markdown features (e.g., quotes, headings, formulas, tables).
+2. For documents in Image form (scans/images): no additional description available. They are just files that contain image/scan inside.
+3. Each document have origination metadata
+4. Documents may have v1-v2-v3-... versions. For some Documents we know the diff between vX and vY. For some Documents we do not know the diff, and only know how Document looked like at each version.
+
+Clients can edit documents online via the platform or upload documents from their local machines. Each document receives a version number upon:
+
+- Saving
+- Uploading a new document
+- Uploading a version of the existing document
+
+Clients can access all versions of each document.
+
+#### ii. Data cleaning
+
+Data cleaning process should be automatized with reproducible scripts. Script runs once for each new document that gets uploaded to the system and then for each new version of that document.
+
+**1. Markdown Documents:**
+- Inter-document links (links that reference another part of the same document or another document in the system): enrich such links with aliases before using them for RAG purposes, i.e. add a descriptive label or name to the link that makes it more meaningful. This helps RAG to understand the context and content of the link. Example: "Section 2" -> "Section 2: Data Cleaning Procedures"
+- Plain URLs (links to external web resources): don't modify, keep them as-is for LLM consumption.
+- Table of Contents (ToC): Generate or validate the presence of a ToC for documents longer than 10 pages.
+
+**2. Scanned/Image Documents:**
+- Enhance the quality of scans (e.g., adjusting brightness/contrast, removing noise).
+- Perform Optical Character Recognition (OCR) for scans. Store both initial scan and its recognized content.
+
+We don't perform duplicate removal neither for markdown nor for images.scans, considering that if the client uploaded several duplicating documents, he has the reason to do this, and this is as it should be.
+
+Cleaned documents and images should be stored separately from the original files in a `cleaned_data` directory. This ensures keeping the original versions for reference and debugging.
+
+#### iii. Metadata
+
+**Document Metadata:**
+- Document title
+- Author
+- Creation date
+- Last modified date
+- Table of Contents (for text documents)
+- Summary (need to discuss whether it's necessary)
+- Version history
+   - Version number
+   - Editor
+   - Version creation date
+   - Changes made in the version (if available)
+   - Diff information (if available)
+
+**Handling Metadata:**
+
+For Markdown documents, embed metadata in a YAML format at the top of each document. For images, metadata can be stored in a separate JSON file with the same name as the image.
+
+#### Example Metadata Structure for a Markdown Document:
+
+```yaml
+---
+title: "Sample Document"
+author: "John Doe"
+created_at: "2023-01-01"
+last_modified: "2024-06-30"
+toc:
+  - chapter: Introduction
+    page_start: 2
+    starts_with: In this article we're about to introduce RAG implementation system for high-load cases.
+    chapter_summary: Introduction to RAG implementation system for high-load cases with author's motivation and real-world examples
+  - chapter: Chapter 1
+    page_start: 3
+    starts_with: Let's consider a situation where we have a platform designed for collaborative work and document sharing among clients.
+    chapter_summary: Problem statement and available data are described.
+  - chapter: Chapter 2
+    page_start: 6
+    starts_with: In order to perform quality RAG, we need the data to be prepared for this.
+    chapter_summary: Data cleaning schema and other aspects.
+  - chapter: Conclusion
+    page_start: 10
+    starts_with: Now let's move on to conclusion.
+    chapter_summary: Conclusion about the ways we can built a system
+summary: "This document provides an overview of..."
+version_info:
+  - version: "v1"
+    editor: "Jane Smith"
+    change_date: "2023-02-01"
+    diff: "Initial creation of the document."
+  - version: "v2"
+    editor: "John Doe"
+    change_date: "2023-06-15"
+    diff: "Added new chapter on advanced topics."
+  - version: "v3"
+    editor: "Jane Smith"
+    change_date: "2024-06-30"
+    diff: "Updated the introduction and conclusion sections."
+---
+```
 
 ### **IV. Validation Schema**
 
