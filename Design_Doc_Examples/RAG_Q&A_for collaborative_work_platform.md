@@ -670,7 +670,7 @@ MagicSharepoint utilizes Optical Character Recognition technology to convert tex
 1. **Document upload.** The system automatically identifies the format of uploaded file and OCR gets triggered if image-based inputs.
 2. **Engine.** A cloud solution is used to be scalable enough to handle large volumes of documents simultaneously.
 3. **Storage.** Both the original image and the extracted text is stored in the Documents Storage, linked by the same Document ID.
-4. **Multi-language Support.**: The OCR engine supports multiple languages to cater to serve wide range of clients.
+4. **Multi-language Support.** The OCR engine supports multiple languages to serve wide range of clients.
 
 ### **v. Backend API Design**
 
