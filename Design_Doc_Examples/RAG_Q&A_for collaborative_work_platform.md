@@ -131,19 +131,18 @@ Clients can access all versions of each document.
 
 #### ii. Data cleaning
 
-Data cleaning process should be automatized with reproducible scripts. They need to run with some schedule, regularly + on huge new document upload.
-Question: is version control needed? We already have one in the system. How to deal with that?
+Data cleaning process should be automatized with reproducible scripts. Script runs once for each new document that gets uploaded to the system and then for each new version of that document.
 
 **1. Markdown Documents:**
-- Links: do we need to save links? If yes, check that links within the document are not broken. Update or remove broken links.
-- Duplicate removal. Need to ensure that different versions of one document are not treated as duplicates despite being very similar.
-- Table of Contents (ToC): Generate or validate the presence of a ToC for documents longer than 10 pages. Tools like Pandoc or custom scripts can automate this.
-- Extract and clean the text from Markdown files, removing any Markdown syntax.
+- Inter-document links (links that reference another part of the same document or another document in the system): enrich such links with aliases before using them for RAG purposes, i.e. add a descriptive label or name to the link that makes it more meaningful. This helps RAG to understand the context and content of the link. Example: "Section 2" -> "Section 2: Data Cleaning Procedures"
+- Plain URLs (links to external web resources): don't modify, keep them as-is for LLM consumption.
+- Table of Contents (ToC): Generate or validate the presence of a ToC for documents longer than 10 pages.
 
 **2. Scanned/Image Documents:**
 - Enhance the quality of scans (e.g., adjusting brightness/contrast, removing noise).
-- Optical Character Recognition (OCR) for scans. Is it necessary? If yes, convert scans into text with OCR (Tesseract).
-- Duplicate removal
+- Perform Optical Character Recognition (OCR) for scans. Store both initial scan and its recognized content.
+
+We don't perform duplicate removal neither for markdown nor for images.scans, considering that if the client uploaded several duplicating documents, he has the reason to do this, and this is as it should be.
 
 Cleaned documents and images should be stored separately from the original files in a `cleaned_data` directory. This ensures keeping the original versions for reference and debugging.
 
@@ -167,8 +166,6 @@ Cleaned documents and images should be stored separately from the original files
 
 For Markdown documents, embed metadata in a YAML format at the top of each document. For images, metadata can be stored in a separate JSON file with the same name as the image.
 
-Do we need to add cleaning scripts information into the yaml?
-
 #### Example Metadata Structure for a Markdown Document:
 
 ```yaml
@@ -178,10 +175,22 @@ author: "John Doe"
 created_at: "2023-01-01"
 last_modified: "2024-06-30"
 toc:
-  - Introduction
-  - Chapter 1
-  - Chapter 2
-  - Conclusion
+  - chapter: Introduction
+    page_start: 2
+    starts_with: In this article we're about to introduce RAG implementation system for high-load cases.
+    chapter_summary: Introduction to RAG implementation system for high-load cases with author's motivation and real-world examples
+  - chapter: Chapter 1
+    page_start: 3
+    starts_with: Let's consider a situation where we have a platform designed for collaborative work and document sharing among clients.
+    chapter_summary: Problem statement and available data are described.
+  - chapter: Chapter 2
+    page_start: 6
+    starts_with: In order to perform quality RAG, we need the data to be prepared for this.
+    chapter_summary: Data cleaning schema and other aspects.
+  - chapter: Conclusion
+    page_start: 10
+    starts_with: Now let's move on to conclusion.
+    chapter_summary: Conclusion about the ways we can built a system
 summary: "This document provides an overview of..."
 version_info:
   - version: "v1"
@@ -196,9 +205,6 @@ version_info:
     editor: "Jane Smith"
     change_date: "2024-06-30"
     diff: "Updated the introduction and conclusion sections."
-cleaning_info:
-  cleaned_at: "2024-07-03"
-  tools_used: ["Markdown Linter", "Link Checker"]
 ---
 ```
 
