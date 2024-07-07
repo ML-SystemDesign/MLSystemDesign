@@ -487,13 +487,61 @@ Ask an expert to test the process. Whenever the expert does not agree, ask them 
 
 ### **VII. Training Pipeline**
 
-For RAG the most important - to have Embeddings for documents as soon as documents are available on the platform and saved to a specific version
+### **i. Overview**
 
-- **Key Takeaways:**
-    1. Training pipelines are foundational to the success of ML projects, ensuring that models are not only trained but also prepared, evaluated, and deployed in a consistent and reproducible manner.
-    2. The choice of tools and platforms for training pipelines should be guided by the project's scale, infrastructure, and specific needs, with an emphasis on flexibility and future growth.
-    3. Scalability and configurability are critical attributes of effective training pipelines, enabling them to handle large datasets and adapt to changing requirements without excessive complexity.
-    4. Comprehensive testing, including both smoke tests and unit tests, is essential for maintaining the integrity of training pipelines and ensuring the reliability of deployed models.
+For Chat and RAG system built on external APIs the most important:
+- **Stable Data Preprocessing.** Should be executed regularly upon new document being submitted. 
+- **Stable context selection.** Enabling robust Prompt Engineering.
+
+As we are planning to use external/pretrained solution for Embedding generation, OCR and LLM, we won't cover such aspects in this section for now.
+
+### **ii. Toolset**
+
+The suggested tools for the pipeline are:
+- Python
+- Cloud Vector DB service (Pinecone, Azure AI Search, etc.)
+- On-premise out-of-the-box OCR / Cloud OCR service
+- Docker
+- LLM service (OpenAI / Azure OpenAI)
+
+### **iii. Data Preprocessing**
+
+The data preprocessing should include:
+
+- **Text recognition.** OCR module to convert image documents into text representation.
+- **Metadata extraction.** Store explicit information and statistics.
+- **Feature engineering.** Extract required features on different levels.
+- **Feature storage.** Make features accessible and searchable.
+
+The main goal - document should be preprocessed withint 1-2 hours after submition/new version being assigned.
+
+### **iv. Context Evaluation**
+
+For evaluating the context selection, we would use RAGAS tool and previously mentioned metrics over generic Prompts.
+The process is automated and allowing to evaluate quality of features and expected response.
+
+### **v. Prompt Evaluation**
+
+To evaluating the Prompt engineering approaches, we would use RAGAS tool and previously mentioned metrics over generic Contexts.
+The process is automated and allowing to evaluate quality of features and expected response.
+
+### **v. Chat E2E Evaluation**
+
+To evaluate the Chat functionality E2E, we would use RAGAS tool and previously mentioned.
+Thou the process is automated and robust, it does not support evaluation of series of questions and back-to-back questions.
+
+### **vi. Continuous Integration and Deployment**
+
+The pipeline should be integrated into the existing CI/CD infrastructure. This includes setting up automated evaluation on a regular basis, ensuring that the latest data is used and pulled, and releasing changes to production with minimal manual intervention.
+
+### **viii. Monitoring and Maintenance**
+
+We should monitor the model's performance in production and set up alerts for significant deviations from expected performance. This will enable us to catch issues early and trigger retraining or model updates when necessary. (See *Monitoring* chapter.)
+
+### **ix. Future Work and Experimentation**
+
+Considering we would like more customised and/or on-premise models, we will need to extend this section to cover training for in-house models.
+The section lacks of testing approaches for the specific user needs, such as asking for more details.
 
 ### **VIII. Features**
 
