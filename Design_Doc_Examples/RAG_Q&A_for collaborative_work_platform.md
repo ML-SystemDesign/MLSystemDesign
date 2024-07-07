@@ -350,12 +350,6 @@ To ensure balanced representation, we'll use stratified sampling when creating t
 * Topic areas
 * Query complexity (simple factual, multi-step reasoning, version comparison)
 
-- **Key Takeaways:**
-    1. The selection of a validation schema is crucial for accurately measuring a model's performance on unseen data, requiring careful consideration of the specific characteristics of the dataset and the problem at hand.
-    2. Standard validation schemas provide a solid foundation for most machine learning applications, but non-trivial schemas may be necessary to address unique challenges or specific data characteristics.
-    3. Updating validation splits in response to new data or changing distributions is essential for maintaining the relevance and accuracy of performance estimates.
-    4. Detailed planning and documentation of the chosen validation schemas within the design document are vital for ensuring the evaluation process is aligned with the project's goals and constraints.
-
 
 ### V. Baseline Solution
 
