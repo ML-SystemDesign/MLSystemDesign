@@ -66,15 +66,64 @@ Every month:
 
 ### **II. Metrics and losses**
 
-Original idea to use RAG approach over vendor LLMs.
-Metrics targeting Document Extraction and Answer Generation.
-Optional idea to evaluate how good system is at not-clear questions with requesting for additional information.
+**i. Metrics**
 
-- **Key Takeaways:**
-    1. The choice of loss functions and metrics is pivotal in guiding a machine learning system towards achieving its intended objectives. These choices directly influence the model's learning focus and evaluation criteria.
-    2. While every loss function can serve as a metric, not all metrics are suitable as loss functions due to requirements for continuity and differentiability.
-    3. Consistency metrics play a crucial role in practical applications, ensuring that models remain stable and reliable across varying inputs and retraining cycles.
-    4. The development of a machine learning system should include a thoughtful selection of both offline and online metrics, with a clear understanding of how these metrics relate to the system's ultimate goals. Proxy metrics and a well-defined hierarchy of metrics can facilitate this alignment, enabling more effective system evaluation and optimization.
+The task could be split into independent subtasks: data extraction (OCR) and data retrieval and answer generation. These parts can be evaluated independently to prioritize improvements based on the source of errors as well as overall solution performance.
+
+***Data Extraction Metrics:***
+It’s reasonable to measure OCR quality separately, as in the case of poor OCR quality, an accurate result can’t be reached.
+
+**a. Word Error Rate**
+
+It operates on the word level and shows the percentage of words that are misspelled in the OCR output compared to the ground truth. LLMs usually cope well with misprints; however, there still could be errors in important data, so WER could be used as a quick check of OCR quality. The lower the better. It could be replaced with the Character Error Rate.
+
+**b. Formula Error Rate**
+
+Formulas could be presented in the document as well. They are not a typical OCR problem, so if they are not recognized well, it degrades the system performance. The formula error rate could be measured as the percentage of incorrect OCRed formulas to the total amount of formulas.
+
+**c. Cell Error Rate**
+
+As it is important to extract table-structured data as well, the percentage of incorrectly detected table cells compared to the ground truth could be used as one of the metrics.
+
+***Retrieval Metrics:***
+
+**d. Recall@k**
+
+It determines how many relevant results from all existing relevant results for the query are returned in the retrieval step, where K is the number of results considered, a hyperparameter of the model. If the answer will be generated based only on one document, Mean Reciprocal Rank (MRR) could be used.
+
+***Answer Generation Metrics:***
+
+**e. Answer Relevance Score**
+
+Measures how well the generated answers match the context and query. It could be a binary value (relevant/irrelevant) or a score from 1 to 5.
+
+**f. Hallucination Rate**
+
+As one of the requirements is to avoid hallucinating, it is possible to calculate the percentage of incorrect or fabricated information in the generated answers.
+
+**g. Clarification Capability**
+
+As one of the requirements is the ability to automatically request more details if an insufficient answer is generated, the average number of interactions or follow-up questions needed to clarify or correct an answer could be calculated to measure clarification capability. This metric helps to check the system’s ability to provide comprehensive answers initially or minimize the number of interactions needed for detalization.
+
+**h. Consistency**
+
+Measures the consistency of answers across different versions of the same or related document/same or related query. Consistent answers indicate reliability and stability of the information provided.
+
+Metrics to pick:
+
+A lot of metrics were provided, but it’s a good idea to go in the reverse direction: start from the more general and dive deeper into partial ones only when necessary.
+
+~~Online metrics of interest during A/B tests are:~~
+
+- ~~Click-through Rate: The ratio of users who click on a retrieved document to the total number of users who view the retrieval results. Higher CTR indicates more relevant retrievals.~~
+- ~~Time to Retrieve (TTR)~~
+- ~~User Satisfaction~~
+
+**ii. Loss Functions**
+
+As the task consists of several steps, the loss function shall consider all of them. An appropriate loss function that combines both retrieval and generation objectives might involve a combination of retrieval loss (e.g., ranking loss for retrieval) and generation loss (e.g., language modeling loss for generation). For example, it could be the sum of Cross Entropy Loss and Contrastive Loss.
+
+
 
 ### **III. Dataset**
 
