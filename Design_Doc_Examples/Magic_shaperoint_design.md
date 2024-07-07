@@ -497,15 +497,106 @@ For RAG the most important - to have Embeddings for documents as soon as documen
 
 ### **VIII. Features**
 
-Sentence-paragraph-document level Embeddings
-Document structure
+Our key criterias to select features:
+1. **Context selection flexibility.** Users may ask a variety of questions and features needs to ba adaptive enough to ensure that context may be selected for any question.
+2. **Context selection relevance.** Besides supporting a variety of questions, we need to ensure that whenever context is selected - it is relevant for the question.
+3. **Computational time.** We are not working with online data and not very time-restricted and features could be generated in some lag within several hours. However, as we may encounter pretty long documents (up to 500 pages long) some features could be expensive at such scale.
 
-- **Key Takeaways:**
-    1. Effective feature engineering is crucial for enhancing the performance and interpretability of machine learning models. It involves not only the generation of new features but also the careful selection and analysis of these features to ensure they contribute positively to the model's predictions.
-    2. The process of feature engineering requires a balance between creativity, domain knowledge, and technical skills. It's an iterative process that often involves collaboration across teams to identify and implement the most impactful features.
-    3. Feature importance analysis is essential for understanding the contribution of each feature to the model's predictions. This analysis aids in model transparency and can guide further feature engineering efforts.
-    4. Implementing a feature store can offer significant benefits in terms of feature management, reusability, and collaboration across teams. However, it requires careful consideration of the specific needs and infrastructure of the organization.
-    5. Ultimately, the goal of feature engineering is to create a set of features that are not only predictive but also interpretable, manageable, and aligned with the business objectives of the machine learning system.
+Adding new features should be formulated as new hypothesis, which should originate from covering specific corner cases or improving metrics.
+
+The idea is not to execute any automated feature selection, rather then focusing on providing the most complete and relevant context in the prompt for LLM.
+
+Features are met in the following services, by their components and areas:
+- Metadata enriching service
+    - Document-level enriching component
+        - Storage and accessing the features
+    - Text-level enriching component
+        - Training
+        - Inference
+        - Storage and accessing the features
+    - Token-level enriching component
+        - Training
+        - Inference
+        - Storage and accessing the features
+- OCR service
+    - OCR component
+        - Training - out of scope, as the current goal to use external/out of the box solution.
+        - Inference - out of scope, as the current goal to use external/out of the box solution.
+        - Storage and accessing the features
+- Embedding service
+    - Embedder component
+        - Training - out of scope, as the current goal to use external/out of the box solution.
+        - Inference
+        - Storage and accessing the features
+- Chat service
+    - Vector search component
+        - Search & access the existing features
+    - LLM component
+        - Out of scope, as the current goal to use external/out of the box solution.
+    - Prompt Engineering component
+        - Access the existing features
+
+On the high level, all features could be classified into:
+- Document level
+- Text level
+- Token level
+
+**i. Document level features**
+
+The purpose of this features is to enable easier selection of documents by users.
+Either by using filters, or non-explicit mentioning in the chat.
+Such features are not explictly extracted or crafted, rather then translating the state of a document from other sources.
+
+As a side effect, they could be usefull for Prompt Engineering to represent some structure to the LLM.
+
+Those features represent general state of a document, such as:
+- Creation author
+- Creation time
+- Version number
+- Version assignment time
+- Version author
+- Total number of versions
+- Document version name
+- Document version size
+- etc.
+
+**ii. Text level features**
+
+Such features are targeting context selection for the Prompt.
+They are split into 3 high level groups:
+1. **Metadata.** 
+    - Not extracted features. Represents high level state/statistics of text.
+    - Ex.: 
+        - (do not have example for now)
+2. **Explicit enriching.**
+    - Features which are not explicitly available and should be extracted by models / regexp / other approaches.
+    - Ex.:
+        - Table of Content
+        - Sections start-end
+        - Sentiment
+        - Overall summary
+        - Section summary
+        - etc.
+3. **Embeddings.**
+    - Focusing the ability to properly extract the context from the Vector DB.
+    - Ex.:
+        - Document embedding
+        - Section embedding
+        - Summary embedding
+        etc.
+
+**iii. Token level features**
+
+This set of features further focusing the ability to select context and document selection.
+Examples including:
+- NER
+- Custom NER
+- Links identification
+- Cross-reference mappings
+    - ex.: 'Section 1' -> 'Section 1: Problem definition'
+- Semantic Role Labeling
+- etc.
+
 
 ### **IX. Measuring and reporting**
 
