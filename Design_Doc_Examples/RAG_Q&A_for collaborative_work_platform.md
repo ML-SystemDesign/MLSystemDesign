@@ -95,7 +95,75 @@ For some Documents we do not know the diff. Only know how Document looked like a
 
 ### **IV. Validation Schema**
 
-No ideas
+For validation purposes, we will use a data set generated from the original documents using the RAGAS  functionality. This approach allows us to create a comprehensive validation set that closely mirrors the real-world usage of our system.
+
+#### i. Question Selection and Dataset Creation
+RAGAS takes the original documents and their associated metadata and generates a structured dataset with the following components
+
+* Question: Simulation of user queries
+* Context: Relevant parts of the document(s)
+* Answer: The expected answer
+
+This structure allows us to evaluate both the retrieval and generation aspects of our RAG system.
+
+To create a comprehensive and representative validation dataset, we'll employ a multi-faceted approach to question selection:
+
+1. Automated Question Generation
+    * Use natural language processing (NLP) techniques to automatically generate questions from the documents.
+    * Apply techniques such as named entity recognition, key phrase extraction and syntactic parsing to identify potential question targets.
+    * Use question generation models (e.g. T5 or BART fine-tuned for question generation) to create different types of questions.
+
+2. Human-in-the-Loop Curation
+    * Engage subject matter experts to review and refine auto-generated questions.
+    * Have experts create additional questions, especially for complex scenarios or edge cases that automated systems might miss.
+    * Ensure questions cover various difficulty levels and reasoning types.
+
+3.  Real User Query Mining
+    * Analyse logs of actual user queries (if available) to identify common question patterns and topics.
+    * Include anonymised versions of real user questions in the dataset to ensure relevance to actual use cases.
+
+4. Question Diversity. Ensure a balanced distribution of question types:
+    * Factual questions (e.g. "Who is the author of this document?")
+    * Inferential questions (e.g. "What are the implications of the findings in section 3?)
+    * Comparative questions (e.g. "How does the methodology in version 2 differ from that in version 1?)
+    * Multi-document questions (e.g. "Summarise the common themes across these three related documents.)
+    * Version-specific questions (e.g. "What changes have been made to the conclusion between versions 3 and 4?)
+
+5. Context Selection
+    * For each question, select a relevant context from the document(s).
+    * Include both perfectly matching contexts and partially relevant contexts to test the system's ability to handle nuanced scenarios.
+
+6. Answer Generation
+    * Generate a gold standard answer for each question-context pair.
+    * Use a combination of automated methods and human expert review to ensure answer quality
+
+7. Metadata Inclusion
+    * Include relevant metadata for each question-context-answer triplet, such as document version, page numbers or section headings.
+
+8. Edge Case Scenarios
+    * Deliberately include edge cases, such as questions about rare document types or extremely long documents.
+    * Create questions that require an understanding of document structure, such as tables of contents or footnotes.
+
+9. Negative Examples
+    * Include some questions that cannot be answered from the given context to test the system's ability to recognise when it doesn't have sufficient information.
+
+
+#### ii. Periodic Updates
+The validation dataset will be updated periodically to maintain its relevance and comprehensiveness. This includes:
+
+* Addition of newly uploaded documents
+* Including new versions of existing documents
+* Updating the question set to reflect evolving user needs
+
+We recommend updating the validation set monthly or whenever there's a significant influx of new documents or versions.
+
+#### iii. Stratified Sampling
+To ensure balanced representation, we'll use stratified sampling when creating the validation set. Strata may include:
+
+* Document length (short, medium, long)
+* Document type (text, scanned image)
+* Topic areas
+* Query complexity (simple factual, multi-step reasoning, version comparison)
 
 - **Key Takeaways:**
     1. The selection of a validation schema is crucial for accurately measuring a model's performance on unseen data, requiring careful consideration of the specific characteristics of the dataset and the problem at hand.
