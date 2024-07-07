@@ -262,17 +262,113 @@ Document structure
 
 ### **IX. Measuring and reporting**
 
-Time to get response
-Time to first token
-% of new Q&A sessions
-If users keep using it after some time
-% of positive/negative feedbacks
+#### i. Measuring Results
 
-- **Key Takeaways:**
-    1. Effective measurement and reporting are foundational to translating machine learning advancements into business value. They ensure that technical improvements are accurately assessed and communicated in terms of their impact on key business metrics.
-    2. A/B testing serves as a critical tool for validating the real-world effectiveness of machine learning systems. Properly designed and executed A/B tests provide a reliable basis for making data-driven decisions about deploying new models or system changes.
-    3. Reporting results goes beyond stating statistical significance; it involves a comprehensive analysis of how changes affect various metrics, the potential for scaling these changes, and their implications for future strategies.
-    4. The process of measuring and reporting results is iterative and should inform ongoing development and refinement of machine learning systems. It requires close collaboration between technical teams and business stakeholders to ensure that the insights gained drive actionable improvements.
+**Purpose of the Experiment**
+
+We’ve already deployed a baseline API-based LLM solution. While the baseline shows satisfying results, we have devised a new approach with an in-house solution and will compare the two approaches.
+
+**Why the New Approach is Better than the Previous One**
+
+The main reason for this experiment is that the baseline doesn’t meet the following requirements:
+
+- Full control over the responses.
+- Data privacy (though not a significant concern).
+- Limited hallucinations or 'extended' answers.
+
+The new approach has full control over responses, doesn’t share any data, and was trained specially to reduce hallucinating answers.
+
+**Offline Experiment and Offline Metrics**
+
+We have trained a transformer model on a document dataset. Assessors were then provided with a series of prompts and answers to evaluate their relevance. The assessors used a 5-point scale where 5 is a full match, and 0 indicates no relevance. They also evaluated how offensive, discriminatory, or inappropriate the answers were. Based on these assessments, we calculated the following statistics:
+
+- **Average Relevance Score:** 4.2
+    - Trustful (Percent of answers without made-up facts): 95%
+    - Interactive (Percent of correct interactive elaborations): 70%
+    - Direct (Percent of correct unprovided answers due to lack of context): 98%
+- **Offensive/Discriminatory/Inappropriate Responses:** 0.2%
+- **Average Latency of a First Token:** 1 minute
+- **Number of Assessors:** 200
+- **Number of Query-Answer Pairs:** 1000
+
+**Baseline Solution Metrics**
+
+The same experiment was conducted using the baseline solution with the same assessors. Prompts and answers were shuffled to ensure assessors were unaware of the approach used.
+
+- **Average Relevance Score:** 2.0
+    - Trustful (Percent of answers without made-up facts): 80%
+    - Interactive (Percent of correct interactive elaborations): 60%
+    - Direct (Percent of correct unprovided answers due to lack of context): 90%
+- **Offensive/Discriminatory/Inappropriate Responses:** 0.01%
+- **Average Latency:** 1 second
+- **Number of Assessors:** 200
+- **Number of Query-Answer Pairs:** 1000
+
+**Correlation Between Offline and Online Metrics**
+
+Based on offline testing, we anticipate similar results in the online A/B testing.
+
+**Online Metrics**
+
+The online metrics should correlate with revenue, assuming that higher user satisfaction leads to increased profits. We will use the same metrics as offline, with additional ones:
+
+- **Percentage of Negative Reports**
+- **Percentage of Positive Reports**
+
+#### ii. A/B Tests
+
+**Hypothesis**
+
+- Based on offline metrics, we expect to improve the **Average Relevance Score**.
+
+**Termination Criteria**
+
+- The approach must respond to the user within an average of 5 minutes.
+- The percentage of reports with offending answers must be below 1%.
+
+If any termination criteria are met, the experiment will be paused and resumed after corrections.
+
+**Key Metrics**
+
+- Average Relevance Score
+- Number of Insufficient Answer Reports
+
+Auxiliary metrics:
+
+- A total number of documents.
+- A daily number of new documents.
+- A total number of users.
+- A daily number of new users.
+- A daily number of sessions.
+
+**Splitting Strategy**
+
+Users will be split into two groups by their IDs. Groups will be swapped after a certain period.
+
+**Statistical Criteria**
+
+Welch’s t-test will be used for statistical analysis.
+
+**Experiment Duration**
+
+The experiment will last two weeks. In the first week, Group A will use the baseline solution, and Group B will use the new solution. In the second week, Group A will use the new solution and Group B the baseline solution.
+
+**Future Steps for Experiment Improvement**
+
+Consider adding an A/A test phase
+
+#### iii. Reporting Results
+
+A main report will be generated at the end of the experiment. An interim report may be created mid-experiment for preliminary conclusions for stakeholders.
+
+The report should include:
+
+- Results with a 95% confidence interval for key and auxiliary metrics.
+- Distribution plots for key and auxiliary metrics over time.
+- Absolute numbers.
+- A brief description of each approach with a link to the full description.
+- Conclusion.
+- Further steps.
 
 ### **X. Integration**
 
