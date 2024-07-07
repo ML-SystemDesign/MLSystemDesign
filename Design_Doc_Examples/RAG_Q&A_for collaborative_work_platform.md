@@ -105,7 +105,7 @@ Every month:
 ### **v. Other issues & Risks**
 
 - Cloud Object Storage with automated version cataloging.
-- OCR is not implemented. `Artem: why?`
+- OCR is not implemented.
 - Documents could be sent to service vendors, provided they are not used for training as per SLA (e.g., OpenAI, Anthropic, etc.).
 
 ### **II. Metrics and losses**
@@ -280,7 +280,7 @@ version_info:
 
 ### **IV. Validation Schema**
 
-For validation purposes, we will use a data set generated from the original documents using the RAGAS  functionality. This approach allows us to create a comprehensive validation set that closely mirrors the real-world usage of our system.
+For validation purposes, we will use a data set generated from the original documents using the [RAGAS](https://docs.ragas.io/en/stable/)  functionality. This approach allows us to create a comprehensive validation set that closely mirrors the real-world usage of our system.
 
 #### i. Question Selection and Dataset Creation
 RAGAS takes the original documents and their associated metadata and generates a structured dataset with the following components
