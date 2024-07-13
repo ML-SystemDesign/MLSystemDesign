@@ -897,6 +897,10 @@ The inference part of a system would contain from 3 major on-premise services:
 - **OCR service**
 - **Chat service**
 
+Also on-remise we should have the following infrastructure services:
+- **Load Balancer service**
+- **Cacher service** 
+
 While following parts of a solution are considered as external cloud services:
 - **Vector database**
 - **Document storage**
@@ -906,6 +910,7 @@ While following parts of a solution are considered as external cloud services:
 ### **i. Serving architecture**
 
 On-premise services would be hosted as REST API services hosted in Docker containers and orchestrated by Kubernetes cluster.
+Chat service should support an option to stream a responce via https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events (default OpenAI tool to stream response).
 
 #### **Embedding service**
 
@@ -957,13 +962,15 @@ For every question:
 
 ### **ii. Infrastructure**
 
+**Load Balancer service** should be hosted on a regular node. It should be responsible for routing requests and start-stopping for **Embedding service** and **OCR service**.
+
+**Cacher service** would have Redis under the hood, and to be hosted on a regular node. 
+
 **Embedding service** and **OCR service** should be hosted on GPU nodes.
 As we expect around 500 new document versions per month, they could be hosted on Spot machines or be start-stopped on demand (if it will take less than 2 minutes).
 Both services would be stopped if they won't receive new requests within 30 (??) minutes.
 
-No need in scaling services, unless bulk processing is expected. If so - then we may consider scaling by the number of machines or by GPU grade/size.
-
-**Chat service** could be hosted on non-GPU node. More focus on the RAM to manage the internal cache, then on CPU.
+**Chat service** could be hosted on non-GPU node. More focus on the RAM to manage retrieved contexts and assemble prompts, then on CPU. Minimal RAM should be 4 gb. Will be connected with **Cacher service** to manage cached/frequently similar requests.
 
 ### **iii. Monitoring**
 
