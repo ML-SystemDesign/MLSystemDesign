@@ -116,7 +116,10 @@ Every month:
 The task could be split into independent subtasks: data extraction (OCR) and data retrieval and answer generation. These parts can be evaluated independently to prioritize improvements based on the source of errors as well as overall solution performance.
 
 ***Data Extraction Metrics:***
-It’s reasonable to measure OCR quality separately, as in the case of poor OCR quality, an accurate result can’t be reached.
+
+Pre-requirements: Dataset of scanned documents and appropriate them texts. (As a work around: readable documents could be scanned manually, which gives both - scanned image and ground truth text values)
+
+It’s reasonable to measure OCR quality separately, as in the case of poor OCR quality, an accurate result can’t be reached. On the first stage of project let’s skip this metrics step, calculate high-level metrics on markup docs vs scanned images, only in case of significant difference in numbers data extraction metrics are calculated. 
 
 **a. Word Error Rate**
 
@@ -132,41 +135,55 @@ As it is important to extract table-structured data as well, the percentage of i
 
 ***Retrieval Metrics:***
 
+Pre-requirements: Dataset of queries collected from experts and list of N most relevant chunks for each of the query. 
+
 **d. Recall@k**
 
-It determines how many relevant results from all existing relevant results for the query are returned in the retrieval step, where K is the number of results considered, a hyperparameter of the model. If the answer will be generated based only on one document, Mean Reciprocal Rank (MRR) could be used.
+It determines how many relevant results from all existing relevant results for the query are returned in the retrieval step, where K is the number of results considered, a hyperparameter of the model. 
+
+**e. Normalized discounted cumulative gain (NDCG)**
+NDCG is a metric that calculates the average of DCGs for a given set of results, which is a measure of the sum of relevance scores taken from the first N results divided by the ideal DCG. In its turn, DCG is the sum of relevance scores among the first N results in the order of decreasing relevance. 
 
 ***Answer Generation Metrics:***
 
-**e. Answer Relevance Score**
+**f. Average Relevance Score**
 
-Measures how well the generated answers match the context and query. It could be a binary value (relevant/irrelevant) or a score from 1 to 5.
+Measures how well the generated answers match the context and query. 
+There are several approaches to calculate that metric:
+- automatically with framework (detailed description provided in section IV. Validation Schema)
+- with other llms paper to consider https://arxiv.org/pdf/2305.06311
+- manually based on experts output (approach is provided in section IX. Measuring and reporting)
 
-**f. Hallucination Rate**
+  
+**g. Hallucination Rate**
 
-As one of the requirements is to avoid hallucinating, it is possible to calculate the percentage of incorrect or fabricated information in the generated answers.
+As one of the requirements is to avoid hallucinating, it is possible to calculate the percentage of incorrect or fabricated information in the generated answers. 
 
-**g. Clarification Capability**
+How to calculate: 
 
-As one of the requirements is the ability to automatically request more details if an insufficient answer is generated, the average number of interactions or follow-up questions needed to clarify or correct an answer could be calculated to measure clarification capability. This metric helps to check the system’s ability to provide comprehensive answers initially or minimize the number of interactions needed for detalization.
+- Manually: prepare dataset of queries (including queries without answer in dataset)  + expected responses; calculate by comparing expected response to provided
+- Finetune smaller llms to detect hallucination
+- Add guardrails  https://github.com/NVIDIA/NeMo-Guardrails - it will not only improve reponse, but also helps to calculate amount of times, model attempts to hallucinate
 
-**h. Consistency**
+**h. Clarification Capability**
 
-Measures the consistency of answers across different versions of the same or related document/same or related query. Consistent answers indicate reliability and stability of the information provided.
+Pre-requirements: Dataset of queries (ideally with unambiguous answer) + expected response, domain experts to evaluate the metric manually.
 
-Metrics to pick:
+As one of the requirements is the ability to automatically request more details if an insufficient answer is generated, the average number of interactions or follow-up questions needed to clarify or correct an answer could be calculated to measure clarification capability and average relevance of follow-up questions. This metric helps to check the system’s ability to provide comprehensive answers initially or minimise the number of interactions needed for detalization.
+
+
+
+*Metrics to pick:*
 
 A lot of metrics were provided, but it’s a good idea to go in the reverse direction: start from the more general and dive deeper into partial ones only when necessary.
+*TODO*: build hierarchy of metrics
 
-~~Online metrics of interest during A/B tests are:~~
+*Online metrics of interest during A/B tests are (more details are provided in section IX. Measuring and reporting):*
+- Time to Retrieve (TTR)
+- Average Relevance score
+- Average amount of clarification questions
+- Average time of dialogue
 
-- ~~Click-through Rate: The ratio of users who click on a retrieved document to the total number of users who view the retrieval results. Higher CTR indicates more relevant retrievals.~~
-- ~~Time to Retrieve (TTR)~~
-- ~~User Satisfaction~~
-
-**ii. Loss Functions**
-
-As the task consists of several steps, the loss function shall consider all of them. An appropriate loss function that combines both retrieval and generation objectives might involve a combination of retrieval loss (e.g., ranking loss for retrieval) and generation loss (e.g., language modeling loss for generation). For example, it could be the sum of Cross Entropy Loss and Contrastive Loss.
 
 
 
