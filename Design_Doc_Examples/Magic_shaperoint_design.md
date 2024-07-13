@@ -6,7 +6,7 @@
 
 MagicSharepoint is a platform designed for collaborative work and document sharing among clients. Documents can be in text format (Markdown) or scanned/image formats.
 
-- Expected Document Size: Up to 500 pages.
+- Expected Document Size: Up to 500 pages (system restriction).
 - Structure: Documents larger than 10 pages typically include a table of contents and dedicated sections, such as introduction or glossary.
 - Content: Documents may include text with all Markdown features (e.g., quotes, headings, formulas, tables).
 
@@ -34,7 +34,7 @@ Additionally, if another client has the same or a similar question, they have no
 
 The proposed tool could be reused to support frequent questions or bulk inquiries.
 
-It has the potential to build a Knowledge Center for clients, allowing documents to be represented as a graph of facts or knowledge.
+In the future, we may reuse some components of Q&A solutions as a starting point for building a Knowledge Center for clients, allowing documents to be represented as a graph of facts or knowledge.
 
 ### **iii. Expectations**
 
@@ -43,7 +43,7 @@ Client expect answers to be:
     - First token within 1 minute.
 - Trustfull
     - Limited hallucinations or 'extended' answers. At least 95% of the answers should not contain fact missmatching.
-    - Do not proofread the entire document if there are doubts.
+    - In case if clients would have any doubts, they won't need to proofread whole document to resolve the uncertainty. 
 - Interactive
     - Ability to provide more details/follow-up questions if the answer is insufficient.
     - Automatically be requested for more details if could not generate insufficient answer.
@@ -90,6 +90,7 @@ Non-addressable use cases
 ### **iiii. Previous work**
 
 - Implemented 'smart' full-text search to help navigate faster and easier.
+    - Similar to the "match" query available in the Elasticsearch out of the box.
 - Cataloged frequent questions and used Mechanical Turk to get answers in advance.
 
 ### **iv. Usage volumes and patterns**
@@ -102,7 +103,7 @@ Every month:
     - New documents or edited existing documents.
 - 10% of the documents are image based.
 
-### **v. Other issues & Risks**
+### **v. Other details**
 
 - Cloud Object Storage with automated version cataloging.
 - OCR is not implemented.
