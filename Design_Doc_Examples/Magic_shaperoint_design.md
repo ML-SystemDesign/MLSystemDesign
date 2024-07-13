@@ -816,6 +816,9 @@ The report should include:
 ### **i. Embeddings Database**
 
 This is one of the core components in the system for efficient document search and retrival.
+It consists of
+1. Vector representations of uploaded/created by users files.
+2. Chat communications and response ratings, structured with fields of user queries, responses, timestamps, ratings and session id.
 
 **i.i. Embeddings Generation**
 
@@ -825,20 +828,24 @@ This is one of the core components in the system for efficient document search a
 
 **i.ii. Database Features**
 
-- A cloud and scalable database.
+A cloud and scalable database, e.g. Pinecone. It is designed to scale horizontally to handle large volumes of embeddings.
 - Supports nearest neighbor search, using cosine or Euclidean similarity.
+- Supports filtering based on metadata.
 - The following fields are stored for further mapping with Documents Storage:
   1. Document ID
   2. Version number
-  3. Metadata storage (document title, author, creation date)
-  4. Embeddings representation 
-- Embeddings, metadata, and queries are encrypted to ensure security. Strict access control managment. 
+  3. Document's Metadata (document title, author, creation date)
+  4. Model's Metadata (Baseline / Main embedding tool, model's realease version)
+  5. Embeddings representation
+- Embeddings, metadata, and queries are encrypted to ensure security. Strict access control managment.
+
+**Database quantified requirements:**
+- Should return top-10 nearest neighbors within 100ms for up to 1 million vectors.
+- Should support at least 1000 Queries Per Second for nearest neighbor searches on a dataset of 1 million vectors.
 
 ### **ii. Documents Storage**
 
-A scalable cloud service (e.g. AWS S3) for scalable storage and files managment for the following data types:
-1. Original files uploaded by clients, including their versions. The service returns a URL (Document ID) for each uploaded file, which is stored in the embeddings database metadata.
-2. Chat communications and response ratings, structured as JSON objects with fields for user queries, responses, timestamps and ratings.
+A scalable cloud service (e.g. AWS S3) for scalable storage and files managment for original files uploaded by clients, including their versions. The service returns a URL (Document ID) for each uploaded file, which is stored in the embeddings database metadata.
 
 ### **iii. Chat UI**
 
@@ -846,7 +853,7 @@ An intuitive and responsive interface for clients to query and receive results.
 
 **Features.**
   1. Clients can upload new documents, which automatically triggers embedding generation and storage.
-  2. Consists of a five star rating system for feedback on answers.
+  2. Consists of a positive/negative feedback on answers.
   3. Clients can report offesnive or unproper responses, which triggers another LLM as a fallback scenario.
   4. Allows to save a chat history and responses for future reference.
 
@@ -878,7 +885,7 @@ Below are provided events, when a corresponding API action gets triggered, while
 
 **Embeddings Management.**
 - Generate embeddings for a new document
-- Update embeddings for a document version change
+- Update embeddings for a document version change, keeping previous embiddings, corresponding to the same session id.
 
 **Chat Session Management.**
 - Start a new chat session
