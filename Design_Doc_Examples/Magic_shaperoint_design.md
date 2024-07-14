@@ -690,10 +690,12 @@ The **Sparse Encoded Retrieval Baseline** serves as a straightforward search eng
 
 **Evaluation approach**
 
-Evaluating the relevance of responses to user queries can be challenging. For this purpose, we could use a crowdsourcing platform. Assessors will be provided with a series of prompts and answers to evaluate their relevance. The assessors will use a 5-point scale where 5 is a full match, and 1 indicates no relevance. The following metrics should be proxy metrics for **User Satisfaction** in an online test:
+Evaluating the relevance of responses to user queries can be challenging. For this purpose, we could use a crowdsourcing platform. Assessors will be provided with a series of prompts and answers to evaluate their relevance. The assessors will use a 5-point scale where 5 is a full match, and 1 indicates no relevance. We consider the following metrics:
 
 - **Average Relevance Score** of the direct questions.
 - **Average Relevance Score** of following-up questions.
+
+For example, let’s say we use Yandex.Toloka (or Amazon Mechanical Turk, etc.) as a crowdsourcing platform.
 
 Approximate settings for the crowdsourcing platform:
 
@@ -701,8 +703,7 @@ Approximate settings for the crowdsourcing platform:
 - **Query-Answer Pairs for Direct Questions:** 500
 - **Query-Answer Pairs for Follow-up Questions:** 500
 
-For example, let’s say we use Yandex.Toloka (or Amazon Mechanical Turk, etc.) as a crowdsourcing platform.
-
+Terminology:
  - **Task**: Defined as one Query-Answer Pair, which is a single item for assessment.
  - **Pool**: Described as a page with multiple tasks for assessors to evaluate.
  - **Overlap**: Indicates how many different assessors evaluate the same task, ensuring accurate data by having multiple reviewers.
@@ -710,16 +711,17 @@ For example, let’s say we use Yandex.Toloka (or Amazon Mechanical Turk, etc.) 
 Cost Calculation Example:
 
 - **Pool Price:** $0.05
+- **Total Tasks**: 1000 (500 for direct questions and 500 for following-up questions)
 - **Tasks Per Pool:** 5
 - **Overlap:** 5
 
-pool_price*(total_tasks/tasks_per_pool)*overlap=spend
+Expense formula: pool_price*(total_tasks/tasks_per_pool)*overlap=expense
 
 Cost of direct questions: 0.05*(500/5)*5=$25
 
 Cost of following-up questions: 0.05*(500/5)*5=$25
 
-**Total Cost for Direct and Follow-up Questions**: $50
+**Total Cost of Direct and Follow-up Questions**: $50
 
 The settings can be adjusted according to a budget.
 
@@ -729,18 +731,21 @@ The settings can be adjusted according to a budget.
 
 **Hypothesis**
 
-Based on offline metrics and evaluation with a crowdsourcing platform, we expect to improve **User Satisfaction**.
+Based on offline metrics and evaluation with a crowdsourcing platform, we expect to improve **Average Relevance Score**.
 
 **Termination Criteria.** 
 
-The system must deliver answers within an average of 1 minutes. If the termination criteria are met, the experiment will be paused and resumed after corrections.
+ - The system must deliver responses within an average of 1 minutes. 
+ - The percentage of reports with offensive or improper responses must be below 1%.
+ 
+ If the termination criteria are met, the experiment will be paused and resumed after corrections.
 
 **Key Metrics**
 
-- User Satisfaction
-- Time to Retrieve (TTR)
-- Average amount of clarification questions
-- Average length of dialogue
+- **Time to Retrieve (TTR)**: Measures the average time taken by the system to fetch and display results after a query is submitted.
+- **Average Relevance Score**: Calculates the mean score of how relevant the answers provided by the system are to the queries (positive/negative feedback). 
+- **Average amount of clarification questions**: Tracks the average number of additional questions the system needs to ask users to clarify their initial queries.
+- **Average time of dialogue**:  Measures the average duration of an interaction session between the user and the system. This includes the time from the initial query to the final response.
 
 **Additional metrics**
 
@@ -749,6 +754,7 @@ The system must deliver answers within an average of 1 minutes. If the terminati
 - Total User Count
 - New Users per Day
 - Session Count per Day
+- Offensive or Improper Responses
 
 **Splitting Strategy.** Users will be split into two groups by their IDs. Groups will be swapped after a certain period of time.
 
