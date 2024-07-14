@@ -462,6 +462,23 @@ A basic RAG system consists of the following components components:
 
 ###### Embedder
 
+** Granularity of embeddings**
+
+There are multiple options for embeddings granularity, i.e., a vector could represent:
+- a document `[level 0]`
+- an article `[level 1]`
+- a paragraph `[level 2]`
+- a sentence `[level 3]`
+
+Surely enough, we could cover all the layers by having separate embeddings for each layer and deciding which one to use based on the context, for example:
+- search without specifying a particular document -> `[level 0]`
+- user selects a document and asks if there is a particular section in it -> `[level 1]`
+... 
+
+This approach might bring high accuracy, but it's complex and costly to implement. For the baseline solution, we would like to start with a single embedding representation. Based on the most common use case, this would be a paragraph encoding. Because according to our analysis, most of the problems' answers could be found given the context of a single paragraph.
+
+** Embedder: design choice ** 
+
 A good embedder should define the retrieval layer's ability to:
 
 - Store content representations efficiently
@@ -482,6 +499,7 @@ Drawbacks:
 - Development and maintenance costs.
 - Per-token costs may not be as optimized as those of larger companies.
 
+
 When it comes to generation levels, considering the number of users and the app economy, there is no clear evidence that the company would like to invest in training or fine-tuning custom LLMs. Therefore, it might be beneficial to keep in mind the use of vendor-based API-accessible LLMs.
 
 Here are the potential benefits:
@@ -493,6 +511,43 @@ Drawbacks:
 - Less control over the responses
 - Data privacy (though not a significant concern)
 - There is a possibility of service denial from a vendor on account of policy-related issues, such as content restrictions or economic sanctions
+
+#### Bridging the Qualitative Gap
+
+Currently, the baseline description lacks modules to ensure the solution meets quality criteria, specifically in areas such as hallucination mitigation and tolerance against misuse. To address these gaps, we propose using guardrails for quality assurance. This includes a retry strategy and a fallback mechanism designed to enhance reliability and robustness.
+
+##### Baseline QA Framework
+
+Here is an example of an alogirthm we might utilise. 
+The fallback strategy could involve calling multiple LLMs simultaneously. The Guardrails would then evaluate these parallel answers to select the best one that meets quality standards. This approach increases the likelihood of obtaining a satisfactory response without significant delay.
+
+The complexity might be increased or decreased depending on the metrics we obtain for the baseline, but this is something we need to keep in mind while choosing the framework in advance.
+
+*** Algorithm ***
+
+**Input:** Request from user
+**Output:** Response to user
+
+1. **Primary Answer Generation**
+    1.1 `main_answer` ← obtain answer from main process
+
+2. **Guardrails Evaluation**
+    2.1 `guardrail_result` ← evaluate `main_answer` with Guardrails
+    2.2 If `guardrail_result` is satisfactory:
+        2.2.1 Return `main_answer` to user
+    2.3 Else:
+        2.3.1 `time_remaining` ← check remaining response time
+        2.3.2 If `time_remaining` is sufficient to invoke fallback model:
+            2.3.2.1 `fallback_answer` ← obtain answer from fallback pipeline
+            2.3.2.2 `fallback_guardrail_result` ← evaluate `fallback_answer` with Guardrails
+            2.3.2.3 If `fallback_guardrail_result` is satisfactory:
+                2.3.2.3.1 Return `fallback_answer` to user
+            2.3.2.4 Else:
+                2.3.2.4.1 Return `override_response` to user
+        2.3.3 Else:
+            2.3.3.1 Return `override_response` to user
+
+**End Algorithm**
 
 #### Framework Selection
 
@@ -516,7 +571,7 @@ Here are some resources that summarize the differences between the two framework
 | **Main Purpose**        | Various tasks                                    | Querying and retrieving information using LLMs  |
 | **Modularity**          | High, allows swapping of components              | Average, yet sufficient for our current design  |
 | **Workflow Management** | High, supports managing chains of models/prompts | Average, primarily focused on querying          |
-| **Integration**         | High: APIs, databases, etc.                      | Average: APIs, data sources, but customizable   |
+| **Integration**         | High: APIs, databases, guardrails,  etc.         | Average: APIs, data sources, guardrails         |
 | **Tooling**             | Debugging, monitoring, optimization              | Debugging, monitoring                           |
 | **LLM Flexibility**     | Supports various LLMs (local/APIs)               | Supports various LLMs (local/APIs)              |
 | **Indexing**            | No primary focus on indexing                     | Core feature, creates indices for data          |
@@ -525,6 +580,7 @@ Here are some resources that summarize the differences between the two framework
 | **Ease of Use**         | Challenging                                      | Easy                                            |
 
 Given the pros and cons listed above, it appears that LlamaIndex provides all the features we are looking for, combined with an ease of use that could reduce development and maintenance costs. Additionally, LlamaIndex offers enterprise cloud versions of the platform. If our solution evolves towards a simpler design, we might want to move to the paid cloud version if it makes economical sense.
+
 
 ### **VI. Error analysis**
 
