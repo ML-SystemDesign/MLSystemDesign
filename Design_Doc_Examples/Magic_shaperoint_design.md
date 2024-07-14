@@ -676,111 +676,97 @@ Examples including:
 
 #### i. Measuring Results
 
-**Purpose of the Experiment**
+Understanding how to measure the system's performance precisely is essential for validating the effectiveness of the machine learning solution. Experiments must be well-designed to capture meaningful metrics that reflect real-world utility.
 
-We’ve already deployed a baseline API-based LLM solution. While the baseline shows satisfying results, we have devised a new approach with an in-house solution and will compare the two approaches.
+In the **V. Baseline Solution** section, we highlighted several reasonable approaches, each with unique advantages and drawbacks. The challenge lies in determining which approach is most suitable for specific scenarios, particularly when the trade-offs impact performance unpredictably.
 
-**Why the New Approach is Better than the Previous One**
+**Previous work**
 
-The main reason for this experiment is that the baseline doesn’t meet the following requirements:
+The **Sparse Encoded Retrieval Baseline** serves as a straightforward search engine. While functional, it presents several limitations that new methodologies aim to overcome:
 
-- Full control over the responses.
-- Data privacy (though not a significant concern).
-- Limited hallucinations or 'extended' answers.
+- No semantic understanding: synonyms are not supported by default
+- Bag-of-words approach: word order is not considered
+- Requires updates to accommodate new vocabulary
 
-The new approach has full control over responses, doesn’t share any data, and was trained specially to reduce hallucinating answers.
+**Evaluation approach**
 
-**Offline Experiment and Offline Metrics**
+Evaluating the relevance of responses to user queries can be challenging. For this purpose, we could use a crowdsourcing platform. Assessors will be provided with a series of prompts and answers to evaluate their relevance. The assessors will use a 5-point scale where 5 is a full match, and 1 indicates no relevance. The following metrics should be proxy metrics for **User Satisfaction** in an online test:
 
-We have trained a transformer model on a document dataset. Assessors were then provided with a series of prompts and answers to evaluate their relevance. The assessors used a 5-point scale where 5 is a full match, and 0 indicates no relevance. They also evaluated how offensive, discriminatory, or inappropriate the answers were. Based on these assessments, we calculated the following statistics:
+- **Average Relevance Score** of the direct questions.
+- **Average Relevance Score** of following-up questions.
 
-- **Average Relevance Score:** 4.2
-    - Trustful (Percent of answers without made-up facts): 95%
-    - Interactive (Percent of correct interactive elaborations): 70%
-    - Direct (Percent of correct unprovided answers due to lack of context): 98%
-- **Offensive/Discriminatory/Inappropriate Responses:** 0.2%
-- **Average Latency of a First Token:** 1 minute
-- **Number of Assessors:** 200
-- **Number of Query-Answer Pairs:** 1000
+Approximate settings for the crowdsourcing platform:
 
-**Baseline Solution Metrics**
+- **Total Assessors:** 100
+- **Query-Answer Pairs for Direct Questions:** 500
+- **Query-Answer Pairs for Follow-up Questions:** 500
 
-The same experiment was conducted using the baseline solution with the same assessors. Prompts and answers were shuffled to ensure assessors were unaware of the approach used.
+For example, let’s say we use the Yandex.Toloka as a crowdsourcing platform.
 
-- **Average Relevance Score:** 2.0
-    - Trustful (Percent of answers without made-up facts): 80%
-    - Interactive (Percent of correct interactive elaborations): 60%
-    - Direct (Percent of correct unprovided answers due to lack of context): 90%
-- **Offensive/Discriminatory/Inappropriate Responses:** 0.01%
-- **Average Latency:** 1 second
-- **Number of Assessors:** 200
-- **Number of Query-Answer Pairs:** 1000
+Cost Calculation Example:
 
-**Correlation Between Offline and Online Metrics**
+- **Cost Per Page:** $0.05
+- **Pairs Per Page:** 5
+- **Overlap:** 5
 
-Based on offline testing, we anticipate similar results in the online A/B testing.
+price*(pairs/pairs_per_page)*overlap=spend
 
-**Online Metrics**
+Cost of direct questions: 0.05*(500/5)*5=$25
 
-The online metrics should correlate with revenue, assuming that higher user satisfaction leads to increased profits. We will use the same metrics as offline, with additional ones:
+Cost of following-up questions: 0.05*(500/5)*5=$25
 
-- **Percentage of Negative Reports**
-- **Percentage of Positive Reports**
+**Total Cost for Direct and Follow-up Questions**: $50
+
+The settings can be adjusted according to a budget.
+
+**Special Considerations for Niche Domains**: The evaluation approach works well for well-known domains. For specific domains, we can use local experts who are familiar with the context.
 
 #### ii. A/B Tests
 
 **Hypothesis**
 
-- Based on offline metrics, we expect to improve the **Average Relevance Score**.
+Based on offline metrics and evaluation with a crowdsourcing platform, we expect to improve **User Satisfaction**.
 
-**Termination Criteria**
+**Termination Criteria.** 
 
-- The approach must respond to the user within an average of 5 minutes.
-- The percentage of reports with offending answers must be below 1%.
-
-If any termination criteria are met, the experiment will be paused and resumed after corrections.
+The system must deliver answers within an average of 5 minutes. If the termination criteria are met, the experiment will be paused and resumed after corrections.
 
 **Key Metrics**
 
-- Average Relevance Score
-- Number of Insufficient Answer Reports
+- User Satisfaction
+- Time to Retrieve (TTR)
+- Average amount of clarification questions
+- Average length of dialogue
 
-Auxiliary metrics:
+**Additional metrics**
 
-- A total number of documents.
-- A daily number of new documents.
-- A total number of users.
-- A daily number of new users.
-- A daily number of sessions.
+- Total Document Count
+- Daily New Documents
+- Total User Count
+- New Users per Day
+- Session Count per Day
 
-**Splitting Strategy**
+**Splitting Strategy.** Users will be split into two groups by their IDs. Groups will be swapped after a certain period of time.
 
-Users will be split into two groups by their IDs. Groups will be swapped after a certain period.
+**Statistical Criteria.** Statistical significance will be determined using Welch’s t-test, with a significance level set at 5% and the type II error at 10%.
 
-**Statistical Criteria**
+**Experiment Duration.** 
 
-Welch’s t-test will be used for statistical analysis.
+The experiment will last two weeks. Each group will experience both the baseline and the new solution for one week.
 
-**Experiment Duration**
+**Future Steps for Experiment Improvement.** 
 
-The experiment will last two weeks. In the first week, Group A will use the baseline solution, and Group B will use the new solution. In the second week, Group A will use the new solution and Group B the baseline solution.
-
-**Future Steps for Experiment Improvement**
-
-Consider adding an A/A test phase
+To further validate our experimental setup, we propose incorporating an A/A testing phase to ensure the reliability of our measurements, followed by A/B/C testing to compare multiple new solutions simultaneously.
 
 #### iii. Reporting Results
 
-A main report will be generated at the end of the experiment. An interim report may be created mid-experiment for preliminary conclusions for stakeholders.
+At the end of the experiment, a comprehensive report will be generated. This will include:
 
-The report should include:
-
-- Results with a 95% confidence interval for key and auxiliary metrics.
-- Distribution plots for key and auxiliary metrics over time.
-- Absolute numbers.
-- A brief description of each approach with a link to the full description.
-- Conclusion.
-- Further steps.
+- Key and auxiliary metric results with a 95% confidence interval.
+- Distribution plots showing metric trends over time.
+- Absolute numbers for all collected data.
+- Detailed descriptions of each tested approach with links to full documentation.
+- Conclusive summary and recommendations for further steps.
 
 ### **X. Integration**
 
