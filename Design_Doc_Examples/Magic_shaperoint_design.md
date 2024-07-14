@@ -42,7 +42,7 @@ Client expect answers to be:
 - Fast
     - First token within 1 minute.
 - Trustfull
-    - Limited hallucinations or 'extended' answers. At least 95% of the answers should not contain fact missmatching.
+    - Limited hallucinations or 'extended' answers. At least 95% of the answers should not contain fact missmatching of level 1 and level 2 (described below).
     - In case if clients would have any doubts, they won't need to proofread whole document to resolve the uncertainty. 
 - Interactive
     - Ability to provide more details/follow-up questions if the answer is insufficient.
@@ -59,6 +59,14 @@ Client need to get answers about:
 Client wants to select documents:
 - Explicit, using filters.
 - Implicit, through dialogue.
+
+Fact missmatching levels:
+1. Fact Presence
+- Numbers / Terms / Facts in the answer were not present in the document
+2. Fact Integrity
+- Numbers / Terms / Facts in the answer were present in the document but had different context and meaning
+3. Reasoning
+- Numbers / Terms / Facts in the answer were correct and had the same context and meaning, but the conclusion was off
 
 Use case examples:
 
