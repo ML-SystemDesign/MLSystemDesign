@@ -701,15 +701,19 @@ Approximate settings for the crowdsourcing platform:
 - **Query-Answer Pairs for Direct Questions:** 500
 - **Query-Answer Pairs for Follow-up Questions:** 500
 
-For example, let’s say we use the Yandex.Toloka as a crowdsourcing platform.
+For example, let’s say we use Yandex.Toloka (or Amazon Mechanical Turk, etc.) as a crowdsourcing platform.
+
+ - **Task**: Defined as one Query-Answer Pair, which is a single item for assessment.
+ - **Pool**: Described as a page with multiple tasks for assessors to evaluate.
+ - **Overlap**: Indicates how many different assessors evaluate the same task, ensuring accurate data by having multiple reviewers.
 
 Cost Calculation Example:
 
-- **Cost Per Page:** $0.05
-- **Pairs Per Page:** 5
+- **Pool Price:** $0.05
+- **Tasks Per Pool:** 5
 - **Overlap:** 5
 
-price*(pairs/pairs_per_page)*overlap=spend
+pool_price*(total_tasks/tasks_per_pool)*overlap=spend
 
 Cost of direct questions: 0.05*(500/5)*5=$25
 
@@ -729,7 +733,7 @@ Based on offline metrics and evaluation with a crowdsourcing platform, we expect
 
 **Termination Criteria.** 
 
-The system must deliver answers within an average of 5 minutes. If the termination criteria are met, the experiment will be paused and resumed after corrections.
+The system must deliver answers within an average of 1 minutes. If the termination criteria are met, the experiment will be paused and resumed after corrections.
 
 **Key Metrics**
 
