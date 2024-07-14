@@ -519,7 +519,7 @@ Currently, the baseline description lacks modules to ensure the solution meets q
 ##### Baseline QA Framework
 
 Here is an example of an alogirthm we might utilise. 
-The fallback strategy could involve calling multiple LLMs simultaneously. The Guardrails would then evaluate these parallel answers to select the best one that meets quality standards. This approach increases the likelihood of obtaining a satisfactory response without significant delay.
+The fallback strategy could involve calling another or multiple LLMs. The Guardrails would evaluate these answers to select the best one that meets quality standards. This approach increases the likelihood of obtaining a satisfactory response.
 
 The complexity might be increased or decreased depending on the metrics we obtain for the baseline, but this is something we need to keep in mind while choosing the framework in advance.
 
