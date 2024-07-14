@@ -385,9 +385,8 @@ Considering the minimal variability among the documents and the sufficient cover
 
 1. File Type Handler: Differentiate and handle file types accordingly, as PDFs and images may require additional processing steps.
 2. Text Extraction: Deploy a customized OCR solution designed to handle non-text elements.
-3. Text Preprocessing: Remove unwanted characters, whitespace, or any artifacts.
-4. Markdown Formatting: Ensure that the extracted content is formatted correctly according to markdown standards.
-5. Error Management & Spell Checking: Integrate an error handler and a spell checker to maintain data quality.
+3. Markdown Formatting: Ensure that the extracted content is formatted correctly according to markdown standards.
+4. Error Management & Spell Checking: This part ensures extraction logging and raises awareness for the maintainer that some documents might not be reliable.
 
 #### Retrieval-Augmented Generation Framework
 
@@ -448,7 +447,7 @@ A basic RAG system consists of the following components components:
     - DB-indexing
 2. Retrieval Layer:
     - Embedder
-    - DB simularity search
+    - DB simularity search. This part is usually provided by the same tools utilized for indexing.
 3. Chat Service:
     - Manages chat context
     - Prompt template constructor: supports diaologs for clarification
@@ -459,11 +458,40 @@ A basic RAG system consists of the following components components:
     - Provides a dialogue mode for user interaction.
     - User Feedback: Collects user input to continuously refine the system.
 
-We have opted to develop an in-house embedder while utilizing API calls to vendor-based LLMs.
+##### Locating the components
 
-In-house embedder:
+###### Embedder
+
+** Granularity of embeddings**
+
+There are multiple options for embeddings granularity, i.e., a vector could represent:
+- a document `[level 0]`
+- an article `[level 1]`
+- a paragraph `[level 2]`
+- a sentence `[level 3]`
+
+Surely enough, we could cover all the layers by having separate embeddings for each layer and deciding which one to use based on the context, for example:
+- search without specifying a particular document -> `[level 0]`
+- user selects a document and asks if there is a particular section in it -> `[level 1]`
+... 
+
+This approach might bring high accuracy, but it's complex and costly to implement. For the baseline solution, we would like to start with a single embedding representation. Based on the most common use case, this would be a paragraph encoding. Because according to our analysis, most of the problems' answers could be found given the context of a single paragraph.
+
+** Embedder: design choice ** 
+
+A good embedder should define the retrieval layer's ability to:
+
+- Store content representations efficiently
+- Encode the content and queries to be semantically similar
+- Capture nuanced details due to domain-specific content
+
+Considering that the retrieval layer is the first step in the pipeline, we do believe it could become a bottleneck in performance. This is because if the context is provided incorrectly, there is less ability for the upstream generation model to improve upon the irrelevant context.
+
+Taking these factors into account, we might be ready to explore and evaluate the performance of various encoders at our disposal. We seek to avoid being restricted by any particular design solution, ensuring that there is room for continuous enhancement over time. With this perspective, we will consider the potential of implementing an in-house embedding solution.
+
+Here are the benefits we highlight:
 - Provides potential for improving this critical component without vendor lock-in
-- Offers deterministic behavior
+- Provides control over versioning, determinism, availability (not going to be depricated)
 - Does not require us to provide per-token costs
 - Could potentially benefit from interaction data enhancements
 
@@ -471,23 +499,88 @@ Drawbacks:
 - Development and maintenance costs.
 - Per-token costs may not be as optimized as those of larger companies.
 
-API-based LLMs:
 
-- LLMs are continually improving, particularly in few-shot learning capabilities. We don't want to invest in LLM traning.
+When it comes to generation levels, considering the number of users and the app economy, there is no clear evidence that the company would like to invest in training or fine-tuning custom LLMs. Therefore, it might be beneficial to keep in mind the use of vendor-based API-accessible LLMs.
+
+Here are the potential benefits:
+- LLMs are continually improving, particularly in few-shot learning capabilities
 - Competitive market dynamics are driving down the cost of API calls over time
 - Switching vendors involves minimal effort since it only requires switching APIs, allowing for potential utilization of multiple vendors.
 
 Drawbacks:
 - Less control over the responses
 - Data privacy (though not a significant concern)
+- There is a possibility of service denial from a vendor on account of policy-related issues, such as content restrictions or economic sanctions
 
-We have also selected an open-source framework, LlamaIndex for RAG, which supports the aforementioned design choice and offers many capabilities out of the box, including:
+#### Bridging the Qualitative Gap
 
+Currently, the baseline description lacks modules to ensure the solution meets quality criteria, specifically in areas such as hallucination mitigation and tolerance against misuse. To address these gaps, we propose using guardrails for quality assurance. This includes a retry strategy and a fallback mechanism designed to enhance reliability and robustness.
+
+##### Baseline QA Framework
+
+Here is an example of an alogirthm we might utilise. 
+The fallback strategy could involve calling another or multiple LLMs. The Guardrails would evaluate these answers to select the best one that meets quality standards. This approach increases the likelihood of obtaining a satisfactory response.
+
+The complexity might be increased or decreased depending on the metrics we obtain for the baseline, but this is something we need to keep in mind while choosing the framework in advance.
+
+*** Algorithm ***
+
+**Input:** Request from user
+**Output:** Response to user
+
+1. **Primary Answer Generation**
+    1.1 `main_answer` ← obtain answer from main process
+
+2. **Guardrails Evaluation**
+    2.1 `guardrail_result` ← evaluate `main_answer` with Guardrails
+    2.2 If `guardrail_result` is satisfactory:
+        2.2.1 Return `main_answer` to user
+    2.3 Else:
+        2.3.1 `time_remaining` ← check remaining response time
+        2.3.2 If `time_remaining` is sufficient to invoke fallback model:
+            2.3.2.1 `fallback_answer` ← obtain answer from fallback pipeline
+            2.3.2.2 `fallback_guardrail_result` ← evaluate `fallback_answer` with Guardrails
+            2.3.2.3 If `fallback_guardrail_result` is satisfactory:
+                2.3.2.3.1 Return `fallback_answer` to user
+            2.3.2.4 Else:
+                2.3.2.4.1 Return `override_response` to user
+        2.3.3 Else:
+            2.3.3.1 Return `override_response` to user
+
+**End Algorithm**
+
+#### Framework Selection
+
+When considering a framework, we would like it to support the following features:
 1. Document storage
 2. Index storage
 3. Chat service
 4. Modular design for document extraction that supports custom modules
-5. Built-in logging and monitoring capabilities
+5. Modular design for retrieval and generation that can utilize both local and vendor-based solutions
+6. Built-in logging and monitoring capabilities
+
+We will compare a couple of popular frameworks that might suit our needs: LlamaIndex and LangChain.
+
+Here are some resources that summarize the differences between the two frameworks:
+1. [LlamaIndex vs LangChain: Haystack – Choosing the Right One](https://www.linkedin.com/pulse/llamaindex-vs-langchain-haystack-choosing-right-one-subramaniam-yvere/)
+2. [LlamaIndex vs LangChain: Key Differences](https://softwaremind.com/blog/llamaindex-vs-langchain-key-differences/)
+3. [LangChain vs LlamaIndex: Main Differences](https://addepto.com/blog/langchain-vs-llamaindex-main-differences/)
+
+| Feature/Aspect          | LangChain                                        | LlamaIndex                                      |
+|-------------------------|--------------------------------------------------|-------------------------------------------------|
+| **Main Purpose**        | Various tasks                                    | Querying and retrieving information using LLMs  |
+| **Modularity**          | High, allows swapping of components              | Average, yet sufficient for our current design  |
+| **Workflow Management** | High, supports managing chains of models/prompts | Average, primarily focused on querying          |
+| **Integration**         | High: APIs, databases, guardrails,  etc.         | Average: APIs, data sources, guardrails         |
+| **Tooling**             | Debugging, monitoring, optimization              | Debugging, monitoring                           |
+| **LLM Flexibility**     | Supports various LLMs (local/APIs)               | Supports various LLMs (local/APIs)              |
+| **Indexing**            | No primary focus on indexing                     | Core feature, creates indices for data          |
+| **Query Interface**     | Complex workflows                                | Straightforward                                 |
+| **Optimization**        | Optimization of LLM applications                 | Optimized for the retrieval of relevant data    |
+| **Ease of Use**         | Challenging                                      | Easy                                            |
+
+Given the pros and cons listed above, it appears that LlamaIndex provides all the features we are looking for, combined with an ease of use that could reduce development and maintenance costs. Additionally, LlamaIndex offers enterprise cloud versions of the platform. If our solution evolves towards a simpler design, we might want to move to the paid cloud version if it makes economical sense.
+
 
 ### **VI. Error analysis**
 
@@ -885,38 +978,81 @@ The system has latency and feedback based switchings, which reroutes requests to
 
 ### XI. Monitoring
 
-#### Logging
+#### Engineering Logging & Monitoring
 
-1. **Ingestion Layer**: Every step of the ETL pipeline for document extraction must be fully logged to ensure the process is reproducible and help issue resolution.
+1. **Ingestion Layer**: 
+    - Process and I/O timings 
+    - Code errors
 
-2. **Retrieval**: Logging should save the details of each query, including the tokenizer used, the document context found within a particular document version, and any other relevant metadata that could aid in future analyses.
+2. **Retrieval**:
+   - **Embedder**: Monitor preprocessing time, embedding model time, and utilization instances of the embedding model.
+   - **Database (DB)**: Monitor the time taken for each retrieval operation and DB utilization.
+   
+3. **Generation**:
+   - **LLM**: Monitor latency, cost, error rates, uptime, and the volume of generated content to predict scaling needs.
+
+#### ML Logging & Monitoring
+
+1. **Ingestion Layer** 
+    - Every step of the ETL pipeline for document extraction must be fully logged to ensure the process is reproducible and help issue resolution
+    - Statistics for documents during ingestion should be monitored, including word count, character distribution, document length, paragraph length, detected languages, and the percentage of tables or images
+    - Monitor the preprocessing layer to bring awareness of not ingested documetns or documents with too many errors
+
+2. **Retrieval**: 
+    - Logging the details of each query, including the tokenizer used, the document context found within a particular document version, and other relevant metadata for future analyses
+    - Keep track of the indexes found, similarity scores
 
 3. **Chat History**: Storing all chat history is crucial for a thorough analysis and debugging process, providing valuable insights into user interactions and system performance
 
-#### Monitoring
+4. **Augmented Generation**: 
+    - Quality of generated content through user feedback
 
-1. **Ingestion Layer**: statistics for documents during ingestion should be monitored, including word count, character distribution, document length, paragraph length, detected languages, and the percentage of tables or images
-
-2. **Retirement**:
-   - **Embedder**: Monitor preprocessing time, embedding model time, and utilization instances of the embedding model
-   - **Database (DB)**: Keep track of the indixes found, similarity scores, and the time taken for each retrieval operation
-
-3. **Augmented Generation**: Quality of generated content through user feedback, cost and latency. Furthermore, monitor the volume of generated content to predict scaling needs.
-
-4. **System Health Metrics**: Implement continuous monitoring of system health metrics such as CPU usage, memory usage, disk I/O, network I/O, error rates, and uptime to ensure the system is functioning optimally.
-
-5. **Alerting Mechanisms**: Build an alerting mechanisms for any anomalies or exceeded thresholds based on the metrics being monitored.
-
+5. **Alerting Mechanisms**: Have an alerting mechanisms for any anomalies or exceeded thresholds based on the metrics being monitored.
 
 #### Tooling
 
-1. **For RAG operations - Langfuse callback**. 
+1. **For RAG Operations - Langfuse Callback**:
+    - Integrates with LlamaIndex
+    - Supports measuring the quality of the model through user feedback, both explicit and implicit
+    - Calculates costs, latency, and total volume
+    - For more information about analytics capabilities, see: [Langfuse Analytics Overview](https://langfuse.com/docs/analytics/overview)
 
-2. **For System Health Metrics, Ingestion Layer - Prometheus & Grafana**: Prometheus is an open-source system monitoring and alerting toolkit. Grafana is used to visualize the data collected by Prometheus.
+2. **For System Health Metrics, Ingestion Layer, Alerting - Prometheus & Grafana**: 
+    - Prometheus is an open-source system monitoring and alerting toolkit
+    - Grafana is used to visualize the data collected by Prometheus
+    - Since LLMs logging is stored within Langfuse, there is no need to build additional solutions for this
 
-3. **Code error reports - Sentry.io**: Sentry is a widely-used error tracking tool that helps developers monitor, fix, and optimize application performance.
+    **Why not a standard ELK stack?**
 
-4. **For alerting mechanism - Prometheus Alertmanager**: Alertmanager handles alerts sent by Prometheus servers and takes care of deduplicating, grouping, and routing them to the correct receiver.
+    For more details, please read this great blogpost [Prometheus-vs-ELK](https://www.metricfire.com/blog/prometheus-vs-elk/)
+
+    | Feature/Aspect                 | Prometheus                                        | ELK (Elasticsearch, Logstash, Kibana)              |
+    |-------------------------------|---------------------------------------------|---------------------------------------------------|
+    | **Primary Use Case**          | Metrics collection and monitoring           | Log management, analysis, and visualization       |
+    | **Data Type**                 | Numeric time series data                    | Various data types (numeric, string, boolean, etc.)|
+    | **Database Model**            | Time-series DB                              | Search engine with inverted index                 |
+    | **Data Ingestion Method**     | Pull-based metrics collection via HTTP      | Log collection from various sources using Beats and Logstash |
+    | **Data Retention**            | Short-term (default 15 days, configurable)  | Long-term                                          |
+    | **Visualization Tool**        | Grafana                                     | Kibana                                             |
+    | **Alerting**                  | Integrated with Prometheus                  | Extensions                                         |
+    | **Operational Complexity**    | Lower (single-node)                         | Higher (clustering)                               |
+    | **Scalability**               | Limited horizontal scaling                  | High horizontal and vertical scalability           |
+    | **Setup and Configuration**   | Simple                                      | Complex                                            |
+
+    **Pros for this solution:**
+    1. Metric-Focused Monitoring: Prometheus is optimized for collecting and analyzing time-series data, making it ideal for tracking metrics
+    2. Ease of Setup and Configuration: Prometheus's pull-based model simplifies the setup process
+    3. Operational Simplicity: It is advantageous without needing a large, dedicated team to manage it
+    4. Real-Time Alerts and Querying: Prometheus provides a powerful query language (PromQL) and supports real-time alerting
+
+    **Cons:**
+    1. No vertical scaling.
+    2. Limited logs data retention. This might become a problem if we change the RAG framework and want to store ML logs elsewhere
+
+3. **Code error reports - Sentry.io**:
+    - Sentry is a widely-used error tracking tool that helps developers monitor, fix, and optimize application performance
+    - We may choose between self-hosted versions and the paid cloud version in the future.
+
 
 ### **XII. Serving and inference**
 
