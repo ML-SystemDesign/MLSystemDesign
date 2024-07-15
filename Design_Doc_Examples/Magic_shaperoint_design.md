@@ -240,6 +240,11 @@ Data cleaning process should be automatized with reproducible scripts. Script ru
 
 We don't perform duplicate removal neither for markdown nor for images.scans, considering that if the client uploaded several duplicating documents, he has the reason to do this, and this is as it should be.
 
+#### ii. Data chunking strategy
+
+Since our documents may be of a very different size, we need to split them into chunks for later [embedding](#Embedder) creation. Embeddings will cover a document, an article, a paragraph and a sentence.
+A paragraph and a sentence are usually good to go without chunking. For articles - we'll chunk them by sections or other semantical parts, if possible. If that's not applicable (there's no sections in the document), then we apply chunking by 1k tokens (rougly 1-2 pages of text) with 20% overlap. Whole documents are to be chunked by articles and inside article - the same strategy as for article applies. This process will give us a hierarchical structure with chunked documents.
+
 Cleaned documents and images should be stored separately from the original files in a `cleaned_data` directory. This ensures keeping the original versions for reference and debugging.
 
 #### iii. Metadata
