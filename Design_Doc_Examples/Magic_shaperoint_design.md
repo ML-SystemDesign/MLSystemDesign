@@ -7,7 +7,7 @@
 MagicSharepoint is a platform designed for collaborative work and document sharing among clients. Documents can be in text format (Markdown) or scanned/image formats.
 
 - Expected Document Size: Up to 500 pages (system restriction).
-- Structure: Documents larger than 10 pages typically include a table of contents and dedicated sections, such as introduction or glossary.
+- Structure: Documents typically include a table of contents and dedicated sections, such as introduction or glossary.
 - Content: Documents may include text with all Markdown features (e.g., quotes, headings, formulas, tables).
 
 Clients can edit documents online via the platform or upload documents from their local machines. Each document receives a version number upon:
@@ -211,7 +211,7 @@ Includes a set of Documents available on the Platform. Documents can be in text 
 
 1. For Markdown documents
     - Expected Document Size: Up to 500 pages.
-    - Structure: Documents larger than 10 pages typically include a table of contents and dedicated sections, such as introduction or glossary.
+    - Structure: Documents typically include a table of contents and dedicated sections, such as introduction or glossary.
     - Content: Documents may include text with all Markdown features (e.g., quotes, headings, formulas, tables).
 2. For documents in Image form (scans/images): no additional description available. They are just files that contain image/scan inside.
 3. Each document have origination metadata
@@ -232,13 +232,18 @@ Data cleaning process should be automatized with reproducible scripts. Script ru
 **1. Markdown Documents:**
 - Inter-document links (links that reference another part of the same document or another document in the system): enrich such links with aliases before using them for RAG purposes, i.e. add a descriptive label or name to the link that makes it more meaningful. This helps RAG to understand the context and content of the link. Example: "Section 2" -> "Section 2: Data Cleaning Procedures"
 - Plain URLs (links to external web resources): don't modify, keep them as-is for LLM consumption.
-- Table of Contents (ToC): Generate or validate the presence of a ToC for documents longer than 10 pages.
+- Table of Contents (ToC): Generate or validate the presence of a ToC for documents.
 
 **2. Scanned/Image Documents:**
 - Enhance the quality of scans (e.g., adjusting brightness/contrast, removing noise).
 - Perform Optical Character Recognition (OCR) for scans. Store both initial scan and its recognized content.
 
 We don't perform duplicate removal neither for markdown nor for images.scans, considering that if the client uploaded several duplicating documents, he has the reason to do this, and this is as it should be.
+
+#### ii. Data chunking strategy
+
+Since our documents may be of a very different size, we need to split them into chunks for later [embedding](#Embedder) creation. Embeddings will cover a document, an article, a paragraph and a sentence.
+A paragraph and a sentence are usually good to go without chunking. For articles - we'll chunk them by sections or other semantical parts, if possible. If that's not applicable (there's no sections in the document), then we apply chunking by 1k tokens (rougly 1-2 pages of text) with 20% overlap. Whole documents are to be chunked by articles and inside article - the same strategy as for article applies. This process will give us a hierarchical structure with chunked documents.
 
 Cleaned documents and images should be stored separately from the original files in a `cleaned_data` directory. This ensures keeping the original versions for reference and debugging.
 
@@ -272,19 +277,15 @@ created_at: "2023-01-01"
 last_modified: "2024-06-30"
 toc:
   - chapter: Introduction
-    page_start: 2
     starts_with: In this article we're about to introduce RAG implementation system for high-load cases.
     chapter_summary: Introduction to RAG implementation system for high-load cases with author's motivation and real-world examples
   - chapter: Chapter 1
-    page_start: 3
     starts_with: Let's consider a situation where we have a platform designed for collaborative work and document sharing among clients.
     chapter_summary: Problem statement and available data are described.
   - chapter: Chapter 2
-    page_start: 6
     starts_with: In order to perform quality RAG, we need the data to be prepared for this.
     chapter_summary: Data cleaning schema and other aspects.
   - chapter: Conclusion
-    page_start: 10
     starts_with: Now let's move on to conclusion.
     chapter_summary: Conclusion about the ways we can built a system
 summary: "This document provides an overview of..."
@@ -349,7 +350,7 @@ To create a comprehensive and representative validation dataset, we'll employ a 
     * Use a combination of automated methods and human expert review to ensure answer quality
 
 7. Metadata Inclusion
-    * Include relevant metadata for each question-context-answer triplet, such as document version, page numbers or section headings.
+    * Include relevant metadata for each question-context-answer triplet, such as document version or section headings.
 
 8. Edge Case Scenarios
     * Deliberately include edge cases, such as questions about rare document types or extremely long documents.
