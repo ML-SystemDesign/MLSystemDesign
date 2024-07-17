@@ -772,7 +772,7 @@ Each Prompt template would consist out of following component templates (not ord
 Some component templates would be pre-created. 
 Some - constructed on the go from selected relevent documents according to the component template.
 
-In the beggining component templates should be able to cover following conditions:
+In the beggining component templates should be able to cover following conditions (from [**Expectations**](#iii-expectations)):
 - General domain questions
 - Addressable questions
 - Non-addressable questions
