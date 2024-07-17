@@ -609,56 +609,44 @@ Ask an expert to test the process. Whenever the expert does not agree, ask them 
 
 ### **i. Overview**
 
-For Chat and RAG system built on external APIs the most important:
+We are planning to use external/pretrained solution for Embedding generation, OCR and LLM components.
+Because of this, our Training Pipeline should focused on:
 - **Stable Data Preprocessing.** Should be executed regularly upon new document being submitted. 
-- **Stable context selection.** Enabling robust Prompt Engineering.
-
-As we are planning to use external/pretrained solution for Embedding generation, OCR and LLM, we won't cover such aspects in this section for now.
+- **Stable Context Selection.** Enabling robust Prompt Engineering.
 
 ### **ii. Toolset**
 
-The suggested tools for the pipeline are:
+The suggested tools are:
 - Python
 - Cloud Vector DB service (Pinecone, Azure AI Search, etc.)
 - On-premise out-of-the-box OCR / Cloud OCR service
 - Docker
-- LLM service (OpenAI / Azure OpenAI)
+- Cloud LLM service (OpenAI / Azure OpenAI)
 
 ### **iii. Data Preprocessing**
 
 The data preprocessing should include:
 
-- **Text recognition.** OCR module to convert image documents into text representation.
-- **Metadata extraction.** Store explicit information and statistics.
-- **Feature engineering.** Extract required features on different levels.
-- **Feature storage.** Make features accessible and searchable.
+- **Text Recognition.** OCR module to convert image documents into text representation.
+- **Text Metadata Extraction.** Store explicit information and statistics about documents.
+- **Feature Engineering.** Extract required features on different levels.
+- **Preprocessing Metadata Storage.** Store explicit information about tools and their versions used for preprocessing.
+- **Feature Storage.** Make features accessible and searchable.
 
 The main goal - document should be preprocessed withint 1-2 hours after submition/new version being assigned.
 
-### **iv. Context Evaluation**
+### **iv. Evaluations**
+For Context, Prompt, and Chat E2E evaluations we would be using RAGAS tool as described in [**IV. Validation Schema**](#iv-validation-schema)
 
-For evaluating the context selection, we would use RAGAS tool and previously mentioned metrics over generic Prompts.
-The process is automated and allowing to evaluate quality of features and expected response.
-
-### **v. Prompt Evaluation**
-
-To evaluating the Prompt engineering approaches, we would use RAGAS tool and previously mentioned metrics over generic Contexts.
-The process is automated and allowing to evaluate quality of features and expected response.
-
-### **v. Chat E2E Evaluation**
-
-To evaluate the Chat functionality E2E, we would use RAGAS tool and previously mentioned.
-Thou the process is automated and robust, it does not support evaluation of series of questions and back-to-back questions.
-
-### **vi. Continuous Integration and Deployment**
+### **v. Continuous Integration and Deployment**
 
 The pipeline should be integrated into the existing CI/CD infrastructure. This includes setting up automated evaluation on a regular basis, ensuring that the latest data is used and pulled, and releasing changes to production with minimal manual intervention.
 
-### **viii. Monitoring and Maintenance**
+### **vi. Monitoring and Maintenance**
 
-We should monitor the model's performance in production and set up alerts for significant deviations from expected performance. This will enable us to catch issues early and trigger retraining or model updates when necessary. (See *Monitoring* chapter.)
+We should monitor the model's performance in production and set up alerts for significant deviations from expected performance. This will enable us to catch issues early and trigger retraining or model updates when necessary. [**XI. Monitoring**](#xi-monitoring)
 
-### **ix. Future Work and Experimentation**
+### **vii. Future Work and Experimentation**
 
 Considering we would like more customised and/or on-premise models, we will need to extend this section to cover training for in-house models.
 The section lacks of testing approaches for the specific user needs, such as asking for more details.
@@ -703,11 +691,13 @@ Features are met in the following services, by their components and areas:
         - Out of scope, as the current goal to use external/out of the box solution.
     - Prompt Engineering component
         - Access the existing features
+        - System Prompt
 
 On the high level, all features could be classified into:
 - Document level
 - Text level
 - Token level
+- Prompt templates
 
 **i. Document level features**
 
@@ -764,6 +754,32 @@ Examples including:
     - ex.: 'Section 1' -> 'Section 1: Problem definition'
 - Semantic Role Labeling
 - etc.
+
+**ix. Prompt templates**
+
+Set of Prompt templates which would be able to cover different question types and intents.
+Each Prompt template would consist out of following component templates (not ordered):
+- Agent Role & Knowledge
+- Agent Task
+- Output Formating
+- Output Restrictions
+- Input Metadata Context
+- Input Document Context
+- Input Documents Relations 
+- (Optional) Task Knowledge Context
+- (Optional) Task & Role Examples
+
+Some component templates would be pre-created. 
+Some - constructed on the go from selected relevent documents according to the component template.
+
+In the beggining component templates should be able to cover following conditions:
+- General domain questions
+- Addressable questions
+- Non-addressable questions
+- Questions for 1 Document
+- Questions for multiple different Documents
+- Questions for 1 Document in multiple historical versions
+- Questions for multiple different Documents in their multiple historical versions 
 
 
 ### **IX. Measuring and reporting**
