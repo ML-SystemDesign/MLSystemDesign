@@ -800,40 +800,44 @@ The **Sparse Encoded Retrieval Baseline** serves as a straightforward search eng
 
 **Evaluation approach**
 
-Evaluating the relevance of responses to user queries can be challenging. For this purpose, we could use a crowdsourcing platform. Assessors will be provided with a series of prompts and answers to evaluate their relevance. The assessors will use a 5-point scale where 5 is a full match, and 1 indicates no relevance. We consider the following metrics:
+Evaluating the relevance of responses to user queries can be challenging. For this purpose, we could use a crowdsourcing platform. Assessors will be provided with a series of prompts and answers not only to assess relevance but also to detect hallucinations. We consider the following metrics:
 
 - **Average Relevance Score** of the direct questions.
 - **Average Relevance Score** of following-up questions.
+- **Hallucination Rate**: This new metric quantifies the percentage of responses that contain hallucinated content. Responses are considered hallucinated if they include information not supported by facts or the input prompt.
 
-For example, let’s say we use Yandex.Toloka (or Amazon Mechanical Turk, etc.) as a crowdsourcing platform.
+**Assessment Method**:
+- Assessors will be provided with a series of prompts and answers to evaluate both their relevance and accuracy. Alongside the 5-point scale for relevance, assessors will use a binary scale (Yes/No) to indicate whether each response contains hallucinated information.
+- For nuanced analysis, we can further categorize hallucinations by severity, with minor inaccuracies noted separately from outright fabrications.
 
-Approximate settings for the crowdsourcing platform:
+**Platform and Settings**:
 
+- **Platform Choice**: Yandex.Toloka or Amazon Mechanical Turk, etc.
 - **Total Assessors:** 100
 - **Query-Answer Pairs for Direct Questions:** 500
 - **Query-Answer Pairs for Follow-up Questions:** 500
 
-Terminology:
+**Terminology**:
  - **Task**: Defined as one Query-Answer Pair, which is a single item for assessment.
  - **Pool**: Described as a page with multiple tasks for assessors to evaluate.
  - **Overlap**: Indicates how many different assessors evaluate the same task, ensuring accurate data by having multiple reviewers.
 
-Cost Calculation Example:
+**Cost Calculation**:
 
 - **Pool Price:** $0.05
 - **Total Tasks**: 1000 (500 for direct questions and 500 for following-up questions)
 - **Tasks Per Pool:** 5
 - **Overlap:** 5
 
-Expense formula: pool_price*(total_tasks/tasks_per_pool)*overlap=expense
+**Expense Formula**: `expense = pool_price * (total_tasks / tasks_per_pool) * overlap`
 
-Cost of direct questions: 0.05*(500/5)*5=$25
+- Cost of direct questions: $25
+- Cost of following-up questions: $25
+- Total Cost with Hallucination Assessment: $50
 
-Cost of following-up questions: 0.05*(500/5)*5=$25
+**Budget Adjustments**:
 
-**Total Cost of Direct and Follow-up Questions**: $50
-
-The settings can be adjusted according to a budget.
+The settings can be adapted based on the budget, with potential increases to accommodate the additional complexity of assessing hallucinations.
 
 **Special Considerations for Niche Domains**: The evaluation approach works well for well-known domains. For specific domains, we can use local experts who are familiar with the context.
 
@@ -841,38 +845,42 @@ The settings can be adjusted according to a budget.
 
 **Hypothesis**
 
-Based on offline metrics and evaluation with a crowdsourcing platform, we expect to improve **Average Relevance Score**.
+ - **Primary Hypothesis**: Based on offline metrics and evaluation with a crowdsourcing platform, we expect to improve **Average Relevance Score**.
+ - **Secondary Hypothesis**: The system will deliver responses within an average of 1 minute, supporting efficient user interaction without sacrificing quality or accuracy.
 
 **Termination Criteria.** 
 
- - The system must deliver responses within an average of 1 minutes. 
+ - The system must deliver responses within an average of 1.5 minutes. 
  - The percentage of reports with offensive or improper responses must be below 1%.
  
  If the termination criteria are met, the experiment will be paused and resumed after corrections.
 
 **Key Metrics**
 
-- **Time to Retrieve (TTR)**: Measures the average time taken by the system to fetch and display results after a query is submitted.
 - **Average Relevance Score**: Calculates the mean score of how relevant the answers provided by the system are to the queries (positive/negative feedback). 
+- **Offensive or Improper Responses**: This metric tracks the rate at which the system produces inappropriate or offensive content (offesnive or improper responses reports). 
+
+**Control metrics**
+
+- **Time to Retrieve (TTR)**: Measures the average time taken by the system to fetch and display results after a query is submitted.
 - **Average amount of clarification questions**: Tracks the average number of additional questions the system needs to ask users to clarify their initial queries.
 - **Average time of dialogue**:  Measures the average duration of an interaction session between the user and the system. This includes the time from the initial query to the final response.
 
-**Additional metrics**
+**Auxiliary metrics**
 
 - Total Document Count
 - Daily New Documents
 - Total User Count
 - New Users per Day
 - Session Count per Day
-- Offensive or Improper Responses
 
-**Splitting Strategy.** Users will be split into two groups by their IDs. Groups will be swapped after a certain period of time.
-
-**Statistical Criteria.** Statistical significance will be determined using Welch’s t-test, with a significance level set at 5% and the type II error at 10%.
+**Splitting Strategy.** Users will be split into two groups by their IDs.
 
 **Experiment Duration.** 
 
-The experiment will last two weeks. Each group will experience both the baseline and the new solution for one week.
+The experiment will last two weeks. After one week, groups will swap configurations to mitigate any biases introduced by variable user experiences and external factors.
+
+**Statistical Criteria.** Statistical significance will be determined using Welch’s t-test, with a significance level set at 5% and the type II error at 10%.
 
 **Future Steps for Experiment Improvement.** 
 
@@ -882,7 +890,7 @@ To further validate our experimental setup, we propose incorporating an A/A test
 
 At the end of the experiment, a comprehensive report will be generated. This will include:
 
-- Key and auxiliary metric results with a 95% confidence interval.
+- Key, control and auxiliary metric results with a 95% confidence interval.
 - Distribution plots showing metric trends over time.
 - Absolute numbers for all collected data.
 - Detailed descriptions of each tested approach with links to full documentation.
