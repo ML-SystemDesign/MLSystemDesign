@@ -121,7 +121,7 @@ Every month:
 
 **i. Metrics**
 
-The task could be split into independent subtasks: data extraction (OCR) and data retrieval and answer generation. These parts can be evaluated independently to prioritize improvements based on the source of errors as well as overall solution performance.
+The task could be split into independent subtasks: OCR, Intent classification -> Search/Retrieval -> answer generation. These parts can be evaluated independently to prioritize improvements based on the source of errors as well as overall solution performance.
 
 
 ***Question Intent Classification Metrics:***
