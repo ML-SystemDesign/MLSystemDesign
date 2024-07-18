@@ -123,6 +123,18 @@ Every month:
 
 The task could be split into independent subtasks: data extraction (OCR) and data retrieval and answer generation. These parts can be evaluated independently to prioritize improvements based on the source of errors as well as overall solution performance.
 
+
+***Question Intent Classification Metrics:***
+
+Pre-requirements: Define all possible labels (intents). Prepare dataset of questions/sentences and appropriate labels.
+
+It shows how accurately a model can classify the intent of questions, which is crucial for the whole processing pipeline. Below metrics could be used for QIC (macro + per class): 
+
+1. Precision
+2. Recall
+3. F1
+
+   
 ***Data Extraction Metrics:***
 
 Pre-requirements: Dataset of scanned documents and appropriate them texts. (As a work around: readable documents could be scanned manually, which gives both - scanned image and ground truth text values)
@@ -133,13 +145,20 @@ It’s reasonable to measure OCR quality separately, as in the case of poor OCR 
 
 It operates on the word level and shows the percentage of words that are misspelled in the OCR output compared to the ground truth. LLMs usually cope well with misprints; however, there still could be errors in important data, so WER could be used as a quick check of OCR quality. The lower the better. It could be replaced with the Character Error Rate.
 
+$`word\_error\_rate = \frac{amount\_of\_misspelled\_words}{total\_amount\_of\_words}`$
+
 **b. Formula Error Rate**
 
 Formulas could be presented in the document as well. They are not a typical OCR problem, so if they are not recognized well, it degrades the system performance. The formula error rate could be measured as the percentage of incorrect OCRed formulas to the total amount of formulas.
 
+$`formula\_error\_rate = \frac{amount\_of\_misspelled\_formulas}{total\_amount\_of\_formulas}`$
+
 **c. Cell Error Rate**
 
 As it is important to extract table-structured data as well, the percentage of incorrectly detected table cells compared to the ground truth could be used as one of the metrics.
+
+$`cell\_error\_rate = \frac{amount\_of\_incorrectly\_detected\_cells}{total\_amount\_of\_cells}`$
+
 
 ***Retrieval Metrics:***
 
@@ -158,8 +177,8 @@ NDCG is a metric that calculates the average of DCGs for a given set of results,
 
 Measures how well the generated answers match the context and query. 
 There are several approaches to calculate that metric:
-- automatically with framework (detailed description provided in section IV. Validation Schema)
-- with other llms paper to consider https://arxiv.org/pdf/2305.06311
+- automatically with framework ragas [https://docs.ragas.io/en/stable/] (detailed description provided in section IV. Validation Schema)
+- with other llms (paper to consider "Automatic Evaluation of Attribution by Large Language Models" [https://arxiv.org/pdf/2305.06311])
 - manually based on experts output (approach is provided in section IX. Measuring and reporting)
 
   
@@ -171,7 +190,10 @@ How to calculate:
 
 - Manually: prepare dataset of queries (including queries without answer in dataset)  + expected responses; calculate by comparing expected response to provided
 - Finetune smaller llms to detect hallucination
-- Add guardrails  https://github.com/NVIDIA/NeMo-Guardrails - it will not only improve reponse, but also helps to calculate amount of times, model attempts to hallucinate
+- Add guardrails [https://github.com/NVIDIA/NeMo-Guardrails] - it will not only improve reponse, but also helps to calculate amount of times, model attempts to hallucinate
+
+$`hallucination\_rate = \frac{amount\_of\_hallucinated\_responses}{total\_amount\_of\_responses}`$
+
 
 **h. Clarification Capability**
 
@@ -179,6 +201,7 @@ Pre-requirements: Dataset of queries (ideally with unambiguous answer) + expecte
 
 As one of the requirements is the ability to automatically request more details if an insufficient answer is generated, the average number of interactions or follow-up questions needed to clarify or correct an answer could be calculated to measure clarification capability and average relevance of follow-up questions. This metric helps to check the system’s ability to provide comprehensive answers initially or minimise the number of interactions needed for detalization.
 
+$`clarification\_capability = \frac{number\_of\_clarification\_questions}{total\_amount\_of\_queries}`$
 
 
 *Metrics to pick:*
