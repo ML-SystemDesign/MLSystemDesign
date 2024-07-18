@@ -585,24 +585,39 @@ Given the pros and cons listed above, it appears that LlamaIndex provides all th
 
 ### **VI. Error analysis**
 
-**i. Learning Curve Analysis**
+**TODO**: update this part after the project'll start and data will be shared.
 
-During embeddings tuning, it’s a good idea to review loss curves for an overall understanding of training dynamics, hyperparameter tuning, etc. In the case of a composite loss, it’s reasonable to visualize each of the components separately. Beyond the loss curves, it’s also reasonable to have metric curves, as they help understand if the chosen metric and loss are connected.
+Given the multi-step nature of the solution, consider potential isuues on each of the steps:
 
-To draw conclusions about the required amount of data and the potential benefit of data gathering, it is useful to plot the dependency of train dataset size versus the metric. Let’s fix a test dataset, and then train the model on subsamples of the train data to estimate how new data improves overall performance. However, this approach is resource-intensive.
+**0. Intent classification**
+- “under” filtering: Irrelevant questions are treated as meaningful, pipeline’s running for  nothing
+- “over” filtering: Filtering out relevant questions ⇒ the response won’t be provided
 
-**ii. Residual Analysis**
+**1. Embeddings**
+- Poor Quality Embeddings: If the embeddings do not accurately capture the semantic meaning of the input text, the entire pipeline is compromised.
+- Embedding Drift: The embeddings may become less effective over time due to adding docs from specific domain / terminology.
 
-For each error on the holdout dataset, analyze the query in the following way (e.g., query topic, is the answer presented in the document, is the query on document versions' differences, irrelevant queries, does the query require follow-up questions, etc.). Then, identify the most sensitive category and analyze if it is an expected result. If the metric is not binary, but a score from 0 to 5, consider only errors with the lowest relevance scores, for example, 0-3.
+**2. Retrieval**
+- Ineffective Retrieval Algorithm: If the retrieval mechanism fails to fetch relevant documents, even the best embeddings won't help.
+- Outdated Index: The new versions of documents may not be indexed, which could lead to providing irrelevant/out-of-date information.
 
-Corner-cases to check:
+**3. Generation:**
+- Model Hallucination: The generative model might produce  incorrect fabricated information, which looks believable.
+- Lack of Context Understanding: The model might fail to catch a relevant information from context and instead of providing clarification question generate incomplete responses.
 
-- Queries with typos/documents with typos
-- Toxic text generation
-- Data safety
-- Formulas/tables search support
+**4. Guardrails**
+- “under” filtering:  filtering out inappropriate or harmful content might fail, leading to problematic outputs.
+- “over” filtering: guardrails might filter out correct, useful information, reducing the system's performance.
 
-Ask an expert to test the process. Whenever the expert does not agree, ask them to provide a reason, explore the reason, and improve the system.
+
+As errors are inharitated from one stage to another. Use following approaches to diagnose them:
+
+1. *Isolate Components:*
+    - Test each component individually. For embeddings, manually inspect a sample of embeddings to check their quality. For retrieval, evaluate the retrieved documents separately from the generation step. Use metrics from Section 2.
+2. *Step-by-Step Analysis:*
+    - Follow a query through the entire pipeline to catch where the first major difference from expected behaviour occurs.
+
+Corner-cases to check are mentioned in section 4. Validation Schema.
 
 
 ### **VII. Training Pipeline**
