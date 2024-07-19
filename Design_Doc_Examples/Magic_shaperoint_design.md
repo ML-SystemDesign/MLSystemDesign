@@ -397,8 +397,33 @@ The Retrieval-Augmented Generation (RAG) framework can be broken down into two m
 - Augmented Generation
 
 Augmented Generation is a recent advancement, while the concept of document retrieval is something that has been with us since the emergine of web search. While there is little to no sense in building the second part using solutions other than LLMs, it might make sense to implement a simple baseline for the retrieval.
+The high-level flow is depicted in the image below.
 
-#### Retrieval: Sparse Encoded Retrieval Baseline
+![Retrieval Baseline](docs/retrieval_baseline.png)
+
+Considering the solution that covers both Retrieval and Generation, we might divide the scope in terms of functionality into three parts:
+
+- Basic solution: Raw generation from the model given a context.
+- Reliable solution: Queries are checked to be correct, outputs are only generated when the context is considered relevant, the outputs are checked on correctness.
+- Reliable and interactive solution: Reliable, with a context constructed by taking into account the dialogue interaction. The solution is expected to ask for clarification if the context is not clear or the output is ambiguous.
+The idea here is that although the interactive mode brings value and covers the use cases described in Section 1, it comes with the cost of creating, managing, and monitoring a complex workflow.
+
+
+Below you will find the schemas describing trhee options of increased complexity during implementation. The description is available further in the chapter.
+
+**RAG: Basic solution**
+
+![RAG Baseline](docs/rag_simple.png)
+
+**RAG: Reliable solution**
+
+![RAG Reliable](docs/rag_reliable.png)
+
+**RAG: Reliable & Interactive**
+
+![RAG Reliable & Interactive](docs/rag_reliable_interactive.png)
+
+#### Retrieval Baseline: Sparse Encoded Solution
 
 Objectives:
 - Create a robust baseline with minimal effort.
@@ -439,7 +464,9 @@ Cons:
 - Bag-of-words approach: word order is not considered
 - Requires updates to accommodate new vocabulary
 
-#### RAG: Baseline Implementation
+#### RAG
+
+##### RAG: common functionality 
 
 A basic RAG system consists of the following components components:
 
@@ -458,6 +485,58 @@ A basic RAG system consists of the following components components:
 6. Representation Layer:
     - Provides a dialogue mode for user interaction.
     - User Feedback: Collects user input to continuously refine the system.
+
+
+##### RAG: Bridging the Qualitative Gap
+
+Currently, the common functionality lacks modules to ensure the solution meets quality criteria, specifically in areas such as hallucination mitigation and tolerance against misuse. To address these gaps, we propose using guardrails for quality assurance. This includes a retry strategy and a fallback mechanism designed to enhance reliability and robustness.
+
+NeMo guardrails provide the following levels of checks that are relevant to our project:
+
+- Input rails
+- Dialogue rails
+- Retrieval rails
+- Output rails
+
+The first two are simple use cases with fallback: just determine if a query needs to be executed.
+
+The retrieval rails are designed to help reject non-relevant chunks or alter them. Although this part might be crucial, it's hard to design the specific implementation in advance.
+
+The output rails are used to check the correctness of the answer. This is probably the right place where we might consider additional designs for tackling hallucination issues.
+
+###### Output rails example
+
+Here is an example of an alogirthm we might utilise. 
+The fallback strategy could involve calling another or multiple LLMs. The Guardrails would evaluate these answers to select the best one that meets quality standards. This approach increases the likelihood of obtaining a satisfactory response.
+
+The complexity might be increased or decreased depending on the metrics we obtain for the baseline, but this is something we need to keep in mind while choosing the framework in advance.
+
+*** Algorithm ***
+
+**Input:** Request from user
+**Output:** Response to user
+
+1. **Primary Answer Generation**
+    1.1 `main_answer` ← obtain answer from main process
+
+2. **Guardrails Evaluation**
+    2.1 `guardrail_result` ← evaluate `main_answer` with Guardrails
+    2.2 If `guardrail_result` is satisfactory:
+        2.2.1 Return `main_answer` to user
+    2.3 Else:
+        2.3.1 `time_remaining` ← check remaining response time
+        2.3.2 If `time_remaining` is sufficient to invoke fallback model:
+            2.3.2.1 `fallback_answer` ← obtain answer from fallback pipeline
+            2.3.2.2 `fallback_guardrail_result` ← evaluate `fallback_answer` with Guardrails
+            2.3.2.3 If `fallback_guardrail_result` is satisfactory:
+                2.3.2.3.1 Return `fallback_answer` to user
+            2.3.2.4 Else:
+                2.3.2.4.1 Return `override_response` to user
+        2.3.3 Else:
+            2.3.3.1 Return `override_response` to user
+
+**End Algorithm**
+
 
 ##### Locating the components
 
@@ -478,7 +557,7 @@ Surely enough, we could cover all the layers by having separate embeddings for e
 
 This approach might bring high accuracy, but it's complex and costly to implement. For the baseline solution, we would like to start with a single embedding representation. Based on the most common use case, this would be a paragraph encoding. Because according to our analysis, most of the problems' answers could be found given the context of a single paragraph.
 
-** Embedder: design choice ** 
+**Embedder: design choice**
 
 A good embedder should define the retrieval layer's ability to:
 
@@ -512,43 +591,6 @@ Drawbacks:
 - Less control over the responses
 - Data privacy (though not a significant concern)
 - There is a possibility of service denial from a vendor on account of policy-related issues, such as content restrictions or economic sanctions
-
-#### Bridging the Qualitative Gap
-
-Currently, the baseline description lacks modules to ensure the solution meets quality criteria, specifically in areas such as hallucination mitigation and tolerance against misuse. To address these gaps, we propose using guardrails for quality assurance. This includes a retry strategy and a fallback mechanism designed to enhance reliability and robustness.
-
-##### Baseline QA Framework
-
-Here is an example of an alogirthm we might utilise. 
-The fallback strategy could involve calling another or multiple LLMs. The Guardrails would evaluate these answers to select the best one that meets quality standards. This approach increases the likelihood of obtaining a satisfactory response.
-
-The complexity might be increased or decreased depending on the metrics we obtain for the baseline, but this is something we need to keep in mind while choosing the framework in advance.
-
-*** Algorithm ***
-
-**Input:** Request from user
-**Output:** Response to user
-
-1. **Primary Answer Generation**
-    1.1 `main_answer` ← obtain answer from main process
-
-2. **Guardrails Evaluation**
-    2.1 `guardrail_result` ← evaluate `main_answer` with Guardrails
-    2.2 If `guardrail_result` is satisfactory:
-        2.2.1 Return `main_answer` to user
-    2.3 Else:
-        2.3.1 `time_remaining` ← check remaining response time
-        2.3.2 If `time_remaining` is sufficient to invoke fallback model:
-            2.3.2.1 `fallback_answer` ← obtain answer from fallback pipeline
-            2.3.2.2 `fallback_guardrail_result` ← evaluate `fallback_answer` with Guardrails
-            2.3.2.3 If `fallback_guardrail_result` is satisfactory:
-                2.3.2.3.1 Return `fallback_answer` to user
-            2.3.2.4 Else:
-                2.3.2.4.1 Return `override_response` to user
-        2.3.3 Else:
-            2.3.3.1 Return `override_response` to user
-
-**End Algorithm**
 
 #### Framework Selection
 
