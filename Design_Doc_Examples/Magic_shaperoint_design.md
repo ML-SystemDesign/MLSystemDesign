@@ -1016,7 +1016,14 @@ A scalable cloud service (e.g. AWS S3) for scalable storage and files managment 
 
 An intuitive and responsive interface for clients to query and receive results.
 
-**Features.**
+**iii.i. Frameworks and Technologies**
+1. **Frontend.** React.js: A well-known framework for building user interfaces with a modular, component-based architecture.
+2. **Backend.** Redux or Context API: for managing application state.
+3. **Backend integration.** Axios: for handling API requests and responses.
+4. **Real-Time Interaction.** Socket.io: For real-time, bi-directional communication between web clients and servers.
+5. **Styling.** CSS-in-JS libraries like styled-components or Emotion for component-based styling.
+
+**iii.ii. Features**
   1. Clients can upload new documents, which automatically triggers embedding generation and storage.
   2. Consists of a positive/negative feedback on answers.
   3. Clients can report offesnive or unproper responses, which triggers another LLM as a fallback scenario.
@@ -1025,6 +1032,8 @@ An intuitive and responsive interface for clients to query and receive results.
 ### **iv. OCR**
 
 MagicSharepoint utilizes Optical Character Recognition technology to convert text from image-based documents into machine-readable text. This offers users greater flexibility in input data formats. The algorithm takes an intermediate place between the user upload process and embeddings creation.
+
+MagicSharepoint leverages an existing OCR solution - AWS Textract, considering the complexitity and high-accuracy it requires. This choice also facilitates scalability, reducing development time and maintenance overhead.
 
 **Features.**
 1. **Document upload.** The system automatically identifies the format of uploaded file and OCR gets triggered if image-based inputs.
@@ -1038,6 +1047,7 @@ Below are provided events, when a corresponding API action gets triggered, while
 
 **Documents Management.**
 - Upload a new document
+- Delete a document or version
 - Retrieve document metadata
 - Retrieve all versions of a document
 - Retrieve a specific version of a document
@@ -1049,20 +1059,25 @@ Below are provided events, when a corresponding API action gets triggered, while
 - Report an inappropriate response
 
 **Embeddings Management.**
-- Generate embeddings for a new document
-- Update embeddings for a document version change, keeping previous embiddings, corresponding to the same session id.
+- **Model level.** Generate embeddings for a new document - uses a pre-trained model and sends to the IO level component for storage.
+- **IO level.** Update embeddings for a document version change, keeping previous embiddings, corresponding to the same session id. 
 
 **Chat Session Management.**
 - Start a new chat session
+- End a session
 - Retrieve chat history
 - Save chat history
 
-### **vi. Parallel processing**
-To efficiently handle simultanneous queries from users, the system uses queue of requests and pool of worker nodes.
+**Notifications and Alerts API:**
+- Inform users of system updates, document changes they worked with
+- Real-time notifications for document processing status, e.g. "Your document is being uploaded. Please wait..." or "OCR processing started for your document".
+- Error Handling and Logging Events. Examples are "File upload failed due to network timeout", "Document size exceeds limit" or "Unsupported file format".
 
-Worker Allocation:
-- **General Workers.** Handle initial document processing and embedding generation.
-- **Dedicated Workers.** Preserve workers for entire chat sessions to maintain context and improve response relevance.
+### **vi. Parallel processing**
+To handle simultaneous queries and ensure document processing tasks do not slow down user interactions, we adopt a parallel processing strategy that separates asynchronous tasks (e.g., embedding generation) from synchronous tasks (e.g., real-time user interactions).
+
+- **Embedding Generation for Index Updating.** Asynchronous tasks, which are placed in a asynchronous task queue  (e.g., Celery with RabbitMQ) and from there are taken for parallel processing. It is triggered upon Document upload, new version or OCR completion. Processed by general workers.
+- **Real-time User Interaction.** Synchronous tasks, which are priotitised for low latency. Proccessed by preserve workers for entire chat sessions to maintain context and improve response relevance.
 
 ### **vii. SLAs**
 
@@ -1072,14 +1087,39 @@ Key validated compontents
 - **Response Time.** Guarantee first token response within 1 minute.
 - **Uptime.** Ensure a high availability rate, aiming to 99.9% uptime.
 
+**Time Estimates per Stage.**
+
+1. User Query Processing.
+
+- Intent Classification: 200-300ms
+- Context Retrieval from Vector Database: 300-500ms
+- Response Generation by LLM:
+- Network latency to the vendor LLM: 100-200ms (depending on vendor and location)
+- Token Generation: 200-500ms (varies based on response length)
+- Total Estimated Time for User Query Processing: 800-1500ms
+
+2. Document Processing.
+   
+- Document Upload and OCR (if required): 1-2 minutes
+- Embedding Generation:
+- Text Processing and Embedding Creation: 1-3 minutes (depending on document size)
+- Database Update: 200-300ms
+- Total Estimated Time for Document Processing: 2-5 minutes
+
+**Infrastructure Requirements for meeting SLAs.**
+- CPU Nodes: For general API handling, metadata storage and other small task.
+- GPU Nodes: For intensive tasks such as embedding generation.
+- Fast SSDs: For quick read/write operations during document processing and storing original files.
+- High-speed Network: To ensure low latency between API services.
+
 ### **viii. Fallback Strategies**
 
 Fallbacks are crucial for maintaining operational efficiency in the face of unforeseen circumstances. MagicSharepoint uses a multi-tiered fallback system to ensure seamless service:
 
 - **Primary fallback.** The primary model is served by the chosen vendor. It is used unless negative user feedback on the model outcome and if the latency out of the accepted range.
 - **Secondary fallback.** Our next layer of fallback involves using a pretrained LLM from Hugging Face, installed locally. This approach addressed to adress both potential issues.
-
-The system has latency and feedback based switchings, which reroutes requests to the secondary model. Once conditions are improved, it switches to the primary model.
+  
+The system has latency and feedback based switchings, which reroutes requests to the secondary model. Once conditions are improved, it switches to the primary model. To simplify management, each service within MagicSharepoint handles its fallback mechanisms independently.
 
 ### XI. Monitoring
 
