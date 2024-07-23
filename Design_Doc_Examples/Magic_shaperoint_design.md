@@ -924,9 +924,8 @@ The settings can be adapted based on the budget, with potential increases to acc
 #### ii. A/B Tests
 
 **Hypothesis**
-
- - **Primary Hypothesis**: Based on offline metrics and evaluation with a crowdsourcing platform, we expect to improve **Average Relevance Score**.
- - **Secondary Hypothesis**: The system will deliver responses within an average of 1 minute, supporting efficient user interaction without sacrificing quality or accuracy.
+ - **Primary Hypothesis**: We hypothesize that the new system enhancements will increase user retention rates by making the platform more engaging and responsive to user needs.
+ - **Secondary Hypothesis**: We hypothesize that these enhancements will also lead to an increase in the subscription conversion rate, as the improved user experience encourages more users to commit to a paid subscription.
 
 **Termination Criteria.** 
 
@@ -937,11 +936,13 @@ The settings can be adapted based on the budget, with potential increases to acc
 
 **Key Metrics**
 
-- **Average Relevance Score**: Calculates the mean score of how relevant the answers provided by the system are to the queries (positive/negative feedback). 
-- **Offensive or Improper Responses**: This metric tracks the rate at which the system produces inappropriate or offensive content (offesnive or improper responses reports). 
+- **User Retention Rate**: Measures the ratio of users who return to the platform within the next month. This metric is a direct indicator of the ongoing engagement and satisfaction of users.
+- **Subscription Conversion Rate**: Measures the percentage of users who upgrade from a free to a paid subscription during the test period.
 
 **Control metrics**
 
+- **Positive Feedback Rate**: The percentage of feedback that is positive, reflecting users' approval of new features or improvements. This metric helps identify strengths in the service or product.
+- **Negative Feedback Rate**: The percentage of feedback that is negative, indicating areas of user dissatisfaction. This metric is crucial for pinpointing problems and areas needing improvement.
 - **Time to Retrieve (TTR)**: Measures the average time taken by the system to fetch and display results after a query is submitted.
 - **Average amount of clarification questions**: Tracks the average number of additional questions the system needs to ask users to clarify their initial queries.
 - **Average time of dialogue**:  Measures the average duration of an interaction session between the user and the system. This includes the time from the initial query to the final response.
@@ -958,7 +959,7 @@ The settings can be adapted based on the budget, with potential increases to acc
 
 **Experiment Duration.** 
 
-The experiment will last two weeks. After one week, groups will swap configurations to mitigate any biases introduced by variable user experiences and external factors.
+The experiment will last four month. After two month, groups will swap configurations to mitigate any biases introduced by variable user experiences and external factors.
 
 **Statistical Criteria.** Statistical significance will be determined using Welch’s t-test, with a significance level set at 5% and the type II error at 10%.
 
