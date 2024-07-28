@@ -943,9 +943,13 @@ The settings can be adapted based on the budget, with potential increases to acc
 
 - **Positive Feedback Rate**: The percentage of feedback that is positive, reflecting users' approval of new features or improvements. This metric helps identify strengths in the service or product.
 - **Negative Feedback Rate**: The percentage of feedback that is negative, indicating areas of user dissatisfaction. This metric is crucial for pinpointing problems and areas needing improvement.
+- **Reading Efficiency Differential**: Measures the change in time taken to complete reading or information retrieval tasks with the RAG system compared to traditional methods. This metric is designed to quantify the impact of the RAG system on enhancing or reducing the efficiency of document reading processes.
+  - **Baseline Reading Time**: Average time users spend reading or retrieving information using traditional methods.
+  - **RAG Reading Time**: Average time users spend when using the RAG system for similar tasks.
 - **Time to Retrieve (TTR)**: Measures the average time taken by the system to fetch and display results after a query is submitted.
-- **Average amount of clarification questions**: Tracks the average number of additional questions the system needs to ask users to clarify their initial queries.
-- **Average time of dialogue**:  Measures the average duration of an interaction session between the user and the system. This includes the time from the initial query to the final response.
+- **Correction Attempts Rate**: Measures the percentage of responses with correction attempts.
+- **Average Number of Correction Attempts**: Measures the average number of attempts to correct an answer.
+- **Graceful Exits Rate**: Measures the percentage of interactions that result in a graceful exit after unsuccessful correction attempts.
 
 **Auxiliary metrics**
 
