@@ -403,14 +403,21 @@ To ensure balanced representation, we'll use stratified sampling when creating t
 
 ### V. Baseline Solution
 
-#### Document Extraction Process
+#### Document Extraction Process 
 
-Considering the minimal variability among the documents and the sufficient coverage of most cases within the current dataset, it is recommended to implement an in-house document extraction pipeline. This pipeline should consist of:
+##### Baseline extraction
 
-1. File Type Handler: Differentiate and handle file types accordingly, as PDFs and images may require additional processing steps.
-2. Text Extraction: Deploy a customized OCR solution designed to handle non-text elements.
-3. Markdown Formatting: Ensure that the extracted content is formatted correctly according to markdown standards.
-4. Error Management & Spell Checking: This part ensures extraction logging and raises awareness for the maintainer that some documents might not be reliable.
+This baseline pipeline might cover only textual formats like .txt, .doc, or .pdb for simplicity. This significantly simplifies the first iteration by avoiding the need to handle OCR, which contains a machine learning model and requires managing its lifecycle.
+
+1. Format Reader: Differentiate and handle file types accordingly
+2. Markdown Formatting: Ensure that the extracted content is formatted correctly according to markdown standards.
+3. Error Management & Spell Checking: This part ensures extraction logging and raises awareness for the maintainer that some documents might not be reliable.
+
+##### Handling PDFs and Images: a custom OCR solution
+
+To increase format coverage for our users in the next iteration, we will also support image-like PDFs and images. Given the minimal variability among the documents and the sufficient coverage of most cases within the current dataset, it is recommended to implement an in-house OCR pipeline.
+
+This document will not cover all the tasks that need to be addressed by the solution in the future: schemas, mathematical formulas or tables. Additionally, we will not specify a particular solution or framework, as a thorough analysis of the dataset is needed beforehand. The minimal functionality required is to extract text from images, with the first iteration supporting the Latin alphabet only.
 
 #### Retrieval-Augmented Generation Framework
 
@@ -568,7 +575,7 @@ The complexity might be increased or decreased depending on the metrics we obtai
 ** Granularity of embeddings**
 
 There are multiple options for embeddings granularity, i.e., a vector could represent:
-- a document `[level 0]`
+- a document (or a large chunk of it) `[level 0]`
 - an article `[level 1]`
 - a paragraph `[level 2]`
 - a sentence `[level 3]`
