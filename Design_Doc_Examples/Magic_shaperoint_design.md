@@ -60,6 +60,8 @@ Client wants to select documents:
 - Explicit, using filters.
 - Implicit, through dialogue.
 
+The expectation is that the response would be based on content of the selected documents (explicit or implicit).
+
 Fact missmatching levels:
 1. Fact Presence
 - Numbers / Terms / Facts in the answer were not present in the document
@@ -159,21 +161,25 @@ As it is important to extract table-structured data as well, the percentage of i
 
 $`cell\_error\_rate = \frac{amount\_of\_incorrectly\_detected\_cells}{total\_amount\_of\_cells}`$
 
+**c. Data Extraction Error Severity**
+
+Depending on the documents domain, we may introduce quality threshold for data extraction process depending on specific errors.
+May introduce more detailed errors in the future (ex.: Formula Error related to a special character).
 
 ***Retrieval Metrics:***
 
 Pre-requirements: Dataset of queries collected from experts and list of N most relevant chunks for each of the query. 
 
-**d. Recall@k**
+**a. Recall@k**
 
 It determines how many relevant results from all existing relevant results for the query are returned in the retrieval step, where K is the number of results considered, a hyperparameter of the model. 
 
-**e. Normalized discounted cumulative gain (NDCG)**
+**b. Normalized discounted cumulative gain (NDCG)**
 NDCG is a metric that calculates the average of DCGs for a given set of results, which is a measure of the sum of relevance scores taken from the first N results divided by the ideal DCG. In its turn, DCG is the sum of relevance scores among the first N results in the order of decreasing relevance. 
 
 ***Answer Generation Metrics:***
 
-**f. Average Relevance Score**
+**a. Average Relevance Score**
 
 Measures how well the generated answers match the context and query. 
 There are several approaches to calculate that metric:
@@ -182,7 +188,7 @@ There are several approaches to calculate that metric:
 - manually based on experts output (approach is provided in section IX. Measuring and reporting)
 
   
-**g. Hallucination Rate**
+**b. Hallucination Rate**
 
 As one of the requirements is to avoid hallucinating, it is possible to calculate the percentage of incorrect or fabricated information in the generated answers. 
 
@@ -195,7 +201,7 @@ How to calculate:
 $`hallucination\_rate = \frac{amount\_of\_hallucinated\_responses}{total\_amount\_of\_responses}`$
 
 
-**h. Clarification Capability**
+**c. Clarification Capability**
 
 Pre-requirements: Dataset of queries (ideally with unambiguous answer) + expected response, domain experts to evaluate the metric manually.
 
@@ -226,11 +232,11 @@ We have two types of data:
 
 We don't control the data for the main LLM training (meaning that we're coping with the LLM limitations and don't influence this until the moment we realize that we could really benefit from fine-tuning, which will become completely different project).
 
-#### i. Data to perform RAG on - description
+#### i. Available Data (to perform RAG)
 
 We don't distinguish between client roles for data access. Every client would have access to every document. So we basically have a shared dataset for the whole system.
 
-Includes a set of Documents available on the Platform. Documents can be in text format (Markdown) or scanned/image formats.
+Includes a set of documents available on the Platform. Documents can be in text format (Markdown) or scanned/image formats.
 
 1. For Markdown documents
     - Expected Document Size: Up to 500 pages.
@@ -238,39 +244,136 @@ Includes a set of Documents available on the Platform. Documents can be in text 
     - Content: Documents may include text with all Markdown features (e.g., quotes, headings, formulas, tables).
 2. For documents in Image form (scans/images): no additional description available. They are just files that contain image/scan inside.
 3. Each document have origination metadata
-4. Documents may have v1-v2-v3-... versions. For some Documents we know the diff between vX and vY. For some Documents we do not know the diff, and only know how Document looked like at each version.
+4. Documents may have v1-v2-v3-... versions.
 
 Clients can edit documents online via the platform or upload documents from their local machines. Each document receives a version number upon:
 
-- Saving
-- Uploading a new document
-- Uploading a version of the existing document
+- Saving after editing on the platform
+- Uploading a document
+    - As a new document
+    - As a version of an existing document
 
 Clients can access all versions of each document.
 
-#### ii. Data cleaning
 
-Data cleaning process should be automatized with reproducible scripts. Script runs once for each new document that gets uploaded to the system and then for each new version of that document.
+#### ii. Document Versioning
 
-**1. Markdown Documents:**
-- Inter-document links (links that reference another part of the same document or another document in the system): enrich such links with aliases before using them for RAG purposes, i.e. add a descriptive label or name to the link that makes it more meaningful. This helps RAG to understand the context and content of the link. Example: "Section 2" -> "Section 2: Data Cleaning Procedures"
-- Plain URLs (links to external web resources): don't modify, keep them as-is for LLM consumption.
-- Table of Contents (ToC): Generate or validate the presence of a ToC for documents.
+Some documents would be edited directly on our platform. It this case we will know both: the applied diff and the next version of a document. 
+But for the most documents - we would have only the next version of a document, not the diff.
 
-**2. Scanned/Image Documents:**
-- Enhance the quality of scans (e.g., adjusting brightness/contrast, removing noise).
-- Perform Optical Character Recognition (OCR) for scans. Store both initial scan and its recognized content.
+Required adjustments:
+- Diff generation step
+- Match the question intent against available data
+    - Ex.: custom fallback if the question is about diff, but currently we don't have diff
+- Treat diffs as a document
+
+#### iii. Data Cleaning
+
+Data Сleaning process should be automatized with reproducible scripts. Script runs once for each new document that gets uploaded to the system and then for each new version of that document.
 
 We don't perform duplicate removal neither for markdown nor for images.scans, considering that if the client uploaded several duplicating documents, he has the reason to do this, and this is as it should be.
 
-#### ii. Data chunking strategy
+Cleaned documents and images should be stored separately from the original files in a `cleaned_data` directory or database. This ensures keeping the original versions for reference and debugging.
 
-Since our documents may be of a very different size, we need to split them into chunks for later [embedding](#Embedder) creation. Embeddings will cover a document, an article, a paragraph and a sentence.
-A paragraph and a sentence are usually good to go without chunking. For articles - we'll chunk them by sections or other semantical parts, if possible. If that's not applicable (there's no sections in the document), then we apply chunking by 1k tokens (rougly 1-2 pages of text) with 20% overlap. Whole documents are to be chunked by articles and inside article - the same strategy as for article applies. This process will give us a hierarchical structure with chunked documents.
+**iii.i. Markdown Documents:**
+**TODO**: update this part after the project'll start and data will be shared. 
 
-Cleaned documents and images should be stored separately from the original files in a `cleaned_data` directory. This ensures keeping the original versions for reference and debugging.
+**iii.ii. Scanned/Image Documents:**
+- Enhance the quality of scans (e.g., adjusting brightness/contrast, removing noise).
+- Perform Optical Character Recognition (OCR) for scans. Store both initial scan and its recognized content.
 
-#### iii. Metadata
+**iii.iii. Quality Controls:**
+Introduce quality metrics and thresholds to indicate succesfully cleaned documents. [Monitoring](#xi-monitoring)
+
+Example:
+- Text length per OCR'ed page.
+- Processing errors raised and on whcih step.
+
+#### iv. Data Chunking Strategy
+
+Common approach to Document Chunking is:
+- a document `[level 0]`
+- an article `[level 1]`
+- a paragraph `[level 2]`
+- a sentence `[level 3]`
+
+It allows to use the following path:
+- search without specifying a particular document -> `[level 0]`
+- user selects a document and asks if there is a particular section in it -> `[level 1]`
+... 
+
+Large chunks can be an issue for Embedder.
+If a specific chunk exceeds size limit, there are following approaches:
+- Replace such chunk with several sub-chunks
+    - Restricted by size limit
+    - Overlapped by 20%
+- Generate Summary
+    - Restricted by size limit
+Such chunk alternatives should be treated as a proper chunk for RAG purposes, but should be indicated in metadata.
+
+#### v. Data Enhancing
+
+The purpose of Data Enhancing is to empower the context search, by allowing the use of vector databases, understand the structure and presence of special entities.
+
+**v.i. Embeddings:**
+
+A good embedder should define the retrieval layer's ability to:
+
+- Store content representations efficiently
+- Encode the content and queries to be semantically similar
+- Capture nuanced details due to domain-specific content
+- Compare different levels on chunks between eachother
+
+Considering that the retrieval layer is the first step in the pipeline, we do believe it could become a bottleneck in performance. This is because if the context is provided incorrectly, there is less ability for the upstream generation model to improve upon the irrelevant context.
+
+Taking these factors into account, we might be ready to explore and evaluate the performance of various encoders at our disposal. We seek to avoid being restricted by any particular design solution, ensuring that there is room for continuous enhancement over time. With this perspective, we will consider the potential of implementing an in-house embedding solution.
+
+Here are the benefits we highlight:
+- Provides potential for improving this critical component without vendor lock-in
+- Provides control over versioning, determinism, availability (not going to be depricated)
+- Does not require us to provide per-token costs
+- Could potentially benefit from interaction data enhancements
+
+Drawbacks:
+- Development and maintenance costs.
+- Per-token costs may not be as optimized as those of larger companies.
+
+When it comes to generation levels, considering the number of users and the app economy, there is no clear evidence that the company would like to invest in training or fine-tuning custom LLMs. Therefore, it might be beneficial to keep in mind the use of vendor-based API-accessible LLMs.
+
+Here are the potential benefits:
+- LLMs are continually improving, particularly in few-shot learning capabilities
+- Competitive market dynamics are driving down the cost of API calls over time
+- Switching vendors involves minimal effort since it only requires switching APIs, allowing for potential utilization of multiple vendors.
+
+Drawbacks:
+- Less control over the responses
+- Data privacy (though not a significant concern)
+- There is a possibility of service denial from a vendor on account of policy-related issues, such as content restrictions or economic sanctions
+
+
+**v.ii. Documents Enriching:**
+- Inter-document links
+    - Links that reference another part of the same document.
+    - This helps RAG to understand the context and content of the link.
+    - Example: "Section 2" -> "Section 2: Data Cleaning Procedures"
+- Plain URLs
+    - Links to external web resources
+    - Don't modify, keep them as-is for LLM consumption.
+- Table of Contents (ToC)
+    - Extract ToC for document.
+- Named Entity Recognition
+    - Recognise Entities in document.
+    - May cover only common ones or train own NER.
+- Summaries
+    - Text summary for selected levels of chunks.
+
+**v.iii. Quality Controls:**
+Introduce quality metrics and thresholds to indicate succesfully enhanced documents. [Monitoring](#xi-monitoring)
+Example:
+- Text length per OCR'ed page.
+- Processing errors raised and on whcih step.
+
+#### vi. Metadata
 
 **Document Metadata:**
 - Document title
@@ -285,6 +388,21 @@ Cleaned documents and images should be stored separately from the original files
    - Version creation date
    - Changes made in the version (if available)
    - Diff information (if available)
+
+**Cleaning Metadata:**
+- Script versions used for OCR.
+- Script versions used for cleaning.
+- (optional) Store exact cleaning steps.
+- Time to apply the OCR.
+- Time to apply the cleaning.
+
+**Enhancing Metadata:**
+For different chunk levels:
+- Script versions used for embedding generation.
+- Script versions used for enriching.
+- (optional) Store exact enriching steps.
+- Time to apply the embedding generation.
+- Time to apply the enriching.
 
 **Handling Metadata:**
 
@@ -412,12 +530,6 @@ This baseline pipeline might cover only textual formats like .txt, .doc, or .pdb
 1. Format Reader: Differentiate and handle file types accordingly
 2. Markdown Formatting: Ensure that the extracted content is formatted correctly according to markdown standards.
 3. Error Management & Spell Checking: This part ensures extraction logging and raises awareness for the maintainer that some documents might not be reliable.
-
-##### Handling PDFs and Images: a custom OCR solution
-
-To increase format coverage for our users in the next iteration, we will also support image-like PDFs and images. Given the minimal variability among the documents and the sufficient coverage of most cases within the current dataset, it is recommended to implement an in-house OCR pipeline.
-
-This document will not cover all the tasks that need to be addressed by the solution in the future: schemas, mathematical formulas or tables. Additionally, we will not specify a particular solution or framework, as a thorough analysis of the dataset is needed beforehand. The minimal functionality required is to extract text from images, with the first iteration supporting the Latin alphabet only.
 
 #### Retrieval-Augmented Generation Framework
 
@@ -572,55 +684,14 @@ The complexity might be increased or decreased depending on the metrics we obtai
 
 ###### Embedder
 
-** Granularity of embeddings**
+**Granularity of embeddings**
 
-There are multiple options for embeddings granularity, i.e., a vector could represent:
-- a document (or a large chunk of it) `[level 0]`
-- an article `[level 1]`
-- a paragraph `[level 2]`
-- a sentence `[level 3]`
-
-Surely enough, we could cover all the layers by having separate embeddings for each layer and deciding which one to use based on the context, for example:
+Surely enough, we could cover all the chunk levels [Data Chunking Strategy](#iv-data-chunking-strategy) by having separate embeddings for each levels and deciding which one to use based on the context, for example:
 - search without specifying a particular document -> `[level 0]`
 - user selects a document and asks if there is a particular section in it -> `[level 1]`
 ... 
 
 This approach might bring high accuracy, but it's complex and costly to implement. For the baseline solution, we would like to start with a single embedding representation. Based on the most common use case, this would be a paragraph encoding. Because according to our analysis, most of the problems' answers could be found given the context of a single paragraph.
-
-**Embedder: design choice**
-
-A good embedder should define the retrieval layer's ability to:
-
-- Store content representations efficiently
-- Encode the content and queries to be semantically similar
-- Capture nuanced details due to domain-specific content
-
-Considering that the retrieval layer is the first step in the pipeline, we do believe it could become a bottleneck in performance. This is because if the context is provided incorrectly, there is less ability for the upstream generation model to improve upon the irrelevant context.
-
-Taking these factors into account, we might be ready to explore and evaluate the performance of various encoders at our disposal. We seek to avoid being restricted by any particular design solution, ensuring that there is room for continuous enhancement over time. With this perspective, we will consider the potential of implementing an in-house embedding solution.
-
-Here are the benefits we highlight:
-- Provides potential for improving this critical component without vendor lock-in
-- Provides control over versioning, determinism, availability (not going to be depricated)
-- Does not require us to provide per-token costs
-- Could potentially benefit from interaction data enhancements
-
-Drawbacks:
-- Development and maintenance costs.
-- Per-token costs may not be as optimized as those of larger companies.
-
-
-When it comes to generation levels, considering the number of users and the app economy, there is no clear evidence that the company would like to invest in training or fine-tuning custom LLMs. Therefore, it might be beneficial to keep in mind the use of vendor-based API-accessible LLMs.
-
-Here are the potential benefits:
-- LLMs are continually improving, particularly in few-shot learning capabilities
-- Competitive market dynamics are driving down the cost of API calls over time
-- Switching vendors involves minimal effort since it only requires switching APIs, allowing for potential utilization of multiple vendors.
-
-Drawbacks:
-- Less control over the responses
-- Data privacy (though not a significant concern)
-- There is a possibility of service denial from a vendor on account of policy-related issues, such as content restrictions or economic sanctions
 
 #### Framework Selection
 
@@ -685,7 +756,7 @@ Given the multi-step nature of the solution, consider potential isuues on each o
 As errors are inharitated from one stage to another. Use following approaches to diagnose them:
 
 1. *Isolate Components:*
-    - Test each component individually. For embeddings, manually inspect a sample of embeddings to check their quality. For retrieval, evaluate the retrieved documents separately from the generation step. Use metrics from Section 2.
+    - Test each component individually. For embeddings, manually inspect a sample of embeddings to check their quality. For retrieval, evaluate the retrieved documents separately from the generation step. [**Metrics and Losses**](#ii-metrics-and-losses)
 2. *Step-by-Step Analysis:*
     - Follow a query through the entire pipeline to catch where the first major difference from expected behaviour occurs.
 
@@ -696,7 +767,7 @@ Corner-cases to check are mentioned in section 4. Validation Schema.
 
 ### **i. Overview**
 
-We are planning to use external/pretrained solution for Embedding generation, OCR and LLM components.
+We are planning to use external/pretrained solution for Embedding generation, OCR and LLM components. [**Dataset**](#iii-dataset)
 Because of this, our Training Pipeline should focused on:
 - **Stable Data Preprocessing.** Should be executed regularly upon new document being submitted. 
 - **Stable Context Selection.** Enabling robust Prompt Engineering.
@@ -792,55 +863,22 @@ The purpose of this features is to enable easier selection of documents by users
 Either by using filters, or non-explicit mentioning in the chat.
 Such features are not explictly extracted or crafted, rather then translating the state of a document from other sources.
 
-As a side effect, they could be usefull for Prompt Engineering to represent some structure to the LLM.
-
-Those features represent general state of a document, such as:
-- Creation author
-- Creation time
-- Version number
-- Version assignment time
-- Version author
-- Total number of versions
-- Document version name
-- Document version size
-- etc.
+As a side effect, they could be usefull for Prompt Engineering to represent some structure to the LLM. [**Metadata**](#vi-metadata)
 
 **ii. Text level features**
 
-Such features are targeting context selection for the Prompt.
+Such features are targeting context selection for the Prompt. [Data Enhancing](#v-data-enhancing)
 They are split into 3 high level groups:
 1. **Metadata.** 
     - Not extracted features. Represents high level state/statistics of text.
-    - Ex.: 
-        - (do not have example for now)
 2. **Explicit enriching.**
     - Features which are not explicitly available and should be extracted by models / regexp / other approaches.
-    - Ex.:
-        - Table of Content
-        - Sections start-end
-        - Sentiment
-        - Overall summary
-        - Section summary
-        - etc.
 3. **Embeddings.**
     - Focusing the ability to properly extract the context from the Vector DB.
-    - Ex.:
-        - Document embedding
-        - Section embedding
-        - Summary embedding
-        etc.
 
 **iii. Token level features**
 
-This set of features further focusing the ability to select context and document selection.
-Examples including:
-- NER
-- Custom NER
-- Links identification
-- Cross-reference mappings
-    - ex.: 'Section 1' -> 'Section 1: Problem definition'
-- Semantic Role Labeling
-- etc.
+This set of features further focusing the ability to select context and document selection. [Data Enhancing](#v-data-enhancing)
 
 **ix. Prompt templates**
 
@@ -875,7 +913,7 @@ In the beggining component templates should be able to cover following condition
 
 Understanding how to measure the system's performance precisely is essential for validating the effectiveness of the machine learning solution. Experiments must be well-designed to capture meaningful metrics that reflect real-world utility.
 
-In the **V. Baseline Solution** section, we highlighted several reasonable approaches, each with unique advantages and drawbacks. The challenge lies in determining which approach is most suitable for specific scenarios, particularly when the trade-offs impact performance unpredictably.
+In the [**Baseline Solution**](#v-baseline-solution) section, we highlighted several reasonable approaches, each with unique advantages and drawbacks. The challenge lies in determining which approach is most suitable for specific scenarios, particularly when the trade-offs impact performance unpredictably.
 
 **Previous work**
 
@@ -990,9 +1028,11 @@ At the end of the experiment, a comprehensive report will be generated. This wil
 
 ### **X. Integration**
 
+![RAG Reliable & Interactive](docs/rag_reliable_interactive.png)
+
 ### **i. Embeddings Database**
 
-This is one of the core components in the system for efficient document search and retrival.
+This is one of the core components in the system for efficient document search and retrival. [Data Enhancing](#v-data-enhancing)
 It consists of
 1. Vector representations of uploaded/created by users files.
 2. Chat communications and response ratings, structured with fields of user queries, responses, timestamps, ratings and session id.
@@ -1043,7 +1083,7 @@ An intuitive and responsive interface for clients to query and receive results.
 
 ### **iv. OCR**
 
-MagicSharepoint utilizes Optical Character Recognition technology to convert text from image-based documents into machine-readable text. This offers users greater flexibility in input data formats. The algorithm takes an intermediate place between the user upload process and embeddings creation.
+MagicSharepoint utilizes Optical Character Recognition technology to convert text from image-based documents into machine-readable text. This offers users greater flexibility in input data formats. The algorithm takes an intermediate place between the user upload process and embeddings creation. [Data Cleaning](#iii-data-cleaning)
 
 MagicSharepoint leverages an existing OCR solution - AWS Textract, considering the complexitity and high-accuracy it requires. This choice also facilitates scalability, reducing development time and maintenance overhead.
 
@@ -1063,7 +1103,7 @@ Below are provided events, when a corresponding API action gets triggered, while
 - Retrieve document metadata
 - Retrieve all versions of a document
 - Retrieve a specific version of a document
-- Apply OCR technology for image-basede documents, if required
+- Apply OCR technology for image-based documents, if required
 
 **User Queries Management.**
 - Retrieve a query result
@@ -1134,6 +1174,7 @@ Fallbacks are crucial for maintaining operational efficiency in the face of unfo
 The system has latency and feedback based switchings, which reroutes requests to the secondary model. Once conditions are improved, it switches to the primary model. To simplify management, each service within MagicSharepoint handles its fallback mechanisms independently.
 
 ### XI. Monitoring
+**TODO**: update this part with main metrics to be monitored for each system. 
 
 #### Engineering Logging & Monitoring
 
@@ -1146,12 +1187,13 @@ The system has latency and feedback based switchings, which reroutes requests to
    - **Database (DB)**: Monitor the time taken for each retrieval operation and DB utilization.
    
 3. **Generation**:
-   - **LLM**: Monitor latency, cost, error rates, uptime, and the volume of generated content to predict scaling needs.
+   - **LLM**: Monitor latency, cost, error rates, uptime, and the token volume for input and output to predict scaling needs.
 
 #### ML Logging & Monitoring
 
 1. **Ingestion Layer** 
     - Every step of the ETL pipeline for document extraction must be fully logged to ensure the process is reproducible and help issue resolution
+    - OCR process must be logged separately, as it is a different system
     - Statistics for documents during ingestion should be monitored, including word count, character distribution, document length, paragraph length, detected languages, and the percentage of tables or images
     - Monitor the preprocessing layer to bring awareness of not ingested documetns or documents with too many errors
 
@@ -1213,6 +1255,8 @@ The system has latency and feedback based switchings, which reroutes requests to
 
 ### **XII. Serving and inference**
 
+![RAG Reliable & Interactive](docs/rag_reliable_interactive.png)
+
 The inference part of a system would contain from 3 major on-premise services:
 - **Embedding service**
 - **OCR service**
@@ -1239,7 +1283,7 @@ Invoked upon every document receiving a version.
 Should pull required metadata from other databases to enrich embeddings with metadata upon saving.
 
 For every document:
-- Invoke OCD service.
+- Invoke OCR service.
     - If document is Image based.
 - Pull text representation from Document storage.
 - Embedding service will generate embeddings.
@@ -1283,7 +1327,9 @@ For every question:
 
 ### **ii. Infrastructure**
 
-**Load Balancer service** should be hosted on a regular node. It should be responsible for routing requests and start-stopping for **Embedding service** and **OCR service**.
+**Load Balancer service** should be hosted on a regular node. It should be responsible for routing requests and start-stopping for **Embedding service** and **OCR service**. 
+
+**LLM service** is an external service and already has auto-scaling functionality and load balancer. 
 
 **Cacher service** would have Redis under the hood, and to be hosted on a regular node. 
 
