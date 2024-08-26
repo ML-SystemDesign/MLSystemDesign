@@ -6,7 +6,7 @@
 
 MagicSharepoint is a platform designed for collaborative work and document sharing among clients. Documents can be in text format (Markdown) or scanned/image formats.
 
-- Expected Document Size: Up to 500 pages (system restriction).
+- Expected Document Size: Up to 500 pages (system restriction, hard limit with error notification).
 - Structure: Documents typically include a table of contents and dedicated sections, such as introduction or glossary.
 - Content: Documents may include text with all Markdown features (e.g., quotes, headings, formulas, tables).
 
@@ -141,7 +141,8 @@ It shows how accurately a model can classify the intent of questions, which is c
 
 Pre-requirements: Dataset of scanned documents and appropriate them texts. (As a work around: readable documents could be scanned manually, which gives both - scanned image and ground truth text values)
 
-It’s reasonable to measure OCR quality separately, as in the case of poor OCR quality, an accurate result can’t be reached. On the first stage of project let’s skip this metrics step, calculate high-level metrics on markup docs vs scanned images, only in case of significant difference in numbers data extraction metrics are calculated. 
+It’s reasonable to measure OCR quality separately, as in the case of poor OCR quality, an accurate result can’t be reached. On the first stage of project let’s skip this metrics step, calculate high-level metrics on markup docs vs scanned images, only in case of significant difference in numbers data extraction metrics are calculated.
+In the future we will need to design a fallback machanism for processing documents with poor OCR performance.
 
 **a. Word Error Rate**
 
@@ -1140,6 +1141,8 @@ Key validated compontents
 - **Uptime.** Ensure a high availability rate, aiming to 99.9% uptime.
 
 **Time Estimates per Stage.**
+
+If Time Estimate was not met - we need to save related logs and highlight/mark for future analysis.
 
 1. User Query Processing.
 
