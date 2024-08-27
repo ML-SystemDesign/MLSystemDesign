@@ -1,7 +1,7 @@
 # 6. Validation Scheme
 
 The validation scheme for a single product will be as follows:
-![](Снимок экрана 2024-08-27 в 16.12.01.png)
+![](https://github.com/PsihAnalitik/Design_document/blob/kmo/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202024-08-27%20%D0%B2%2016.12.01.png)
 
 We allocate a validation set that is time-equivalent to the duration of the incident. We train our model or calculate the baseline heuristic on **Train 1**. **Train 1** represents a dataset with revenue from a period prior to validation (the size will be determined experimentally). Validation will be used as the basis for tuning the hyperparameters of ML models. We then combine **Train 1** and **Val**, train a new model, and then obtain predictions on the incident data. As a proxy metric, we use the performance indicators on **Val**.
 
