@@ -63,7 +63,7 @@ The existing approach (without the use of machine learning) - Customer Segmentat
 The implementation of an ML solution (in theory) should help us purposefully influence a loyal audience, which will help us reduce the costs of promotions (minimizing the impact on groups: loyal (sure things), indifferent (do not disturbs), negative (lost causes) and influence only the target audience, namely the persuadables.
 
 
-![alt text](media_for_md\persuadables.png "types of customers")
+![alt text](./media_for_md/persuadables.png "types of customers")
 
 ## Business requirements and restrictions<a name="Business_requirements_and_restrictions"></a>
 
@@ -262,13 +262,13 @@ $$
 C G(p)=\left(\frac{Y_p^T}{N_p^T}-\frac{Y_p^C}{N_p^C}\right) \cdot\left(N_p^T+N_p^C\right)
 $$
 
-![alt text](media_for_md\This-incremental-gains-curve-shows-the-effect-of-targeting-different-proportions-of-the.png "Example of CGC.")
+![alt text](./media_for_md/This-incremental-gains-curve-shows-the-effect-of-targeting-different-proportions-of-the.png "Example of CGC.")
 
 There are few metrics based on this curve:
 
 #### Area under uplift curve (AUUC)<a name="Area_under_uplift_curve_(AUUC)"></a>
 
-![alt text](media_for_md\bf06408d7fa21689fd02edd9cf19eb9e.png "Scheme of AUUC and qini cof. calculation.")
+![alt text](./media_for_md/bf06408d7fa21689fd02edd9cf19eb9e.png "Scheme of AUUC and qini cof. calculation.")
 
 Why not?:
 
@@ -308,7 +308,7 @@ Counting algorithm:
 
 
 $$
-\operatorname{qini} \operatorname{curve}(t)=Y_t^T-\frac{Y_t^C N_t^T}{N_t^C}
+qini \quad curve(t)=Y_t^T-\frac{Y_t^C N_t^T}{N_t^C}
 $$
 
 #### Area under qini coefficient (AUQC)<a name="Area_under_qini_coefficient_(AUQC)"></a>
@@ -345,10 +345,10 @@ An advantage of this value is very probable convergence to uplift value. Next, w
 We split each node into leaves to maximize a difference between uplifts among leaves. Estimator for uplift in node: 
 
 $$
-\widehat{\tau}_{\text {node }}=\frac{\sum_{i \in \text { node }} Y_i T_i}{\sum_{i \in \text { node }} T_i}-\frac{\sum_{i \in \text { node }} Y_i\left(1-T_i\right)}{\sum_{i \in \text { node }}\left(1-T_i\right)}
+\tau_{node}=\frac{\sum_{i \in node} Y_i T_i}{\sum_{i \in node} T_i}-\frac{\sum_{i \in node} Y_i\left(1-T_i\right)}{\sum_{i \in node}\left(1-T_i\right)}
 $$
 
-In this case optimization criteria will be just a maximization of difference: $|\widehat{\tau}_{\text {left }} - \widehat{\tau}_{\text {right }}|$.
+In this case optimization criteria will be just a maximization of difference: $|\tau_{left} - \tau_{right}|$.
 
 There are more complicated optimization criteria based on distances between distributions (distances not in direct mathematical sense!) such as Kullback-Leibler divergence and Energy distance.
 
