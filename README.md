@@ -1,38 +1,49 @@
-# 6. Validation Scheme
+# **Project Design Document: Downtime Cost Estimation**
 
-The validation scheme for a single product will be as follows:
-![](https://github.com/PsihAnalitik/Design_document/blob/kmo/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202024-08-27%20%D0%B2%2016.12.01.png)
+## **Overview**
 
-We allocate a validation set that is time-equivalent to the duration of the incident. We train our model or calculate the baseline heuristic on **Train 1**. **Train 1** represents a dataset with revenue from a period prior to validation (the size will be determined experimentally). Validation will be used as the basis for tuning the hyperparameters of ML models. We then combine **Train 1** and **Val**, train a new model, and then obtain predictions on the incident data. As a proxy metric, we use the performance indicators on **Val**.
+This repository is dedicated to the ML System Design for estimating the cost of downtime for financial marketplace products based on incident outcomes. The document outlines the problem, methods, and models used to predict financial losses due to service unavailability.
 
-# 7. Baseline Models Development
+## **Contents**
 
-## Naive Prediction by Averaging
+1. Document Purpose
+2. Abbreviations and Definitions
+3. Task Statement
+4. Metrics and Loss Functions
+5. Data
+6. Validation Scheme
+7. Baseline Model Development
 
-This approach involves using the average target value from a previous time period equal to the downtime or several periods within the sales seasonality of the product.
+## **Contributing**
 
-**Example:** Product A was partially unavailable because some users couldn't access the payment service from 12:00 to 15:00 on Tuesday. Our baseline suggests using the average sales of this product during this time on Tuesdays over the past three weeks (as an example). We subtract the actual revenue obtained from this average to determine our losses.
+Please feel free to submit issues or pull requests.
 
-## ARIMA and sARIMA Models
+## **License**
 
-ARIMA (AutoRegressive Integrated Moving Average) models are used as an initial application of machine learning due to their simplicity in use.
+This project is licensed under the MIT License.
 
-## Prophet
+---
 
-This forecasting tool is useful for time series data and incorporates seasonal effects and trends.
+# **Дизайн-документ проекта: Оценка стоимости простоя**
 
-## Linear Regression
+## **Обзор**
 
-Starting with linear models, we can further engage in feature engineering, which requires additional effort but may improve model performance.
+Этот репозиторий посвящен ML System Design для оценки стоимости простоя продуктов финансового маркетплейса на основе результатов инцидентов. Документ описывает проблему, методы и модели, используемые для прогнозирования финансовых потерь из-за недоступности сервисов.
 
-## Gradient Boosting
+## **Содержание**
 
-By creating features such as past sales (averages, moving windows with mean, median, minimum, maximum calculations), sales frequency, and historical service prices, we can use gradient boosting on trees to achieve good model accuracy.
+1. Назначение документа
+2. Аббревиатуры и определения
+3. Постановка задачи
+4. Метрики и функции потерь
+5. Данные
+6. Схема валидации
+7. Разработка бейзлайн моделей
 
-## Recurrent Neural Networks (RNN, GRU, LSTM)
+## **Вклад**
 
-Recurrent neural networks (GRU and LSTM) can be tested if needed, though they require more development time and computational resources.
+Вы можете отправлять запросы на изменение или создавать задачи.
 
-## Transformers
+## **Лицензия**
 
-If previous models indicate that neural network approaches are worthwhile, transformers can be tested for solving our task.
+Проект лицензирован под лицензией MIT.
