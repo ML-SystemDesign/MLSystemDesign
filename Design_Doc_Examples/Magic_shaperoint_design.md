@@ -41,7 +41,8 @@ In the future, we may reuse some components of Q&A solutions as a starting point
 Client expect answers to be:
 - Fast
     - First token within 1 minute.
-- Trustfull
+        - "1 minute" was identified by deep interviews, can specify later.
+- Trustful
     - Limited hallucinations or 'extended' answers. At least 95% of the answers should not contain fact missmatching of level 1 and level 2 (described below).
     - In case if clients would have any doubts, they won't need to proofread whole document to resolve the uncertainty. 
 - Interactive
@@ -214,10 +215,11 @@ $`clarification\_capability = \frac{number\_of\_clarification\_questions}{total\
 *Metrics to pick:*
 
 A lot of metrics were provided, but it’s a good idea to go in the reverse direction: start from the more general and dive deeper into partial ones only when necessary.
-*TODO*: build hierarchy of metrics
+
+**TODO**: build hierarchy of metrics
 
 *Online metrics of interest during A/B tests are (more details are provided in section IX. Measuring and reporting):*
-- Time to Retrieve (TTR)
+- ~~Time to Retrieve (TTR)~~
 - Average Relevance score
 - Average amount of clarification questions
 - Average time of dialogue
@@ -277,11 +279,14 @@ We don't perform duplicate removal neither for markdown nor for images.scans, co
 Cleaned documents and images should be stored separately from the original files in a `cleaned_data` directory or database. This ensures keeping the original versions for reference and debugging.
 
 **iii.i. Markdown Documents:**
+
 **TODO**: update this part after the project'll start and data will be shared. 
 
 **iii.ii. Scanned/Image Documents:**
 - Enhance the quality of scans (e.g., adjusting brightness/contrast, removing noise).
 - Perform Optical Character Recognition (OCR) for scans. Store both initial scan and its recognized content.
+
+**TODO**: add more details/ideas how to do it 
 
 **iii.iii. Quality Controls:**
 Introduce quality metrics and thresholds to indicate succesfully cleaned documents. [Monitoring](#xi-monitoring)
@@ -451,6 +456,10 @@ version_info:
 
 For validation purposes, we will use a data set generated from the original documents using the [RAGAS](https://docs.ragas.io/en/stable/)  functionality. This approach allows us to create a comprehensive validation set that closely mirrors the real-world usage of our system.
 
+**TODO**: add more details about what RAGAS is and how it is doing it
+
+**TODO**: add complementary frameworkd for better covering all important aspects
+
 #### i. Question Selection and Dataset Creation
 RAGAS takes the original documents and their associated metadata and generates a structured dataset with the following components
 
@@ -593,6 +602,8 @@ Components:
     - Highlights the top-k results for the user
     - Handles an explicit user feedback dialogue ("Have you found what you were looking for?")
 
+**TODO**: add criterias for irrelevance content and some examples
+
 ##### Pros & Cons
 
 Pros:
@@ -603,7 +614,7 @@ Pros:
 + Low maintenance costs, suitable for junior engineers
 
 Cons:
-- No semantic understanding: snonyms are not supported by default
+- No semantic understanding: synonyms are not supported by default
 - Bag-of-words approach: word order is not considered
 - Requires updates to accommodate new vocabulary
 
@@ -621,7 +632,7 @@ A basic RAG system consists of the following components components:
     - DB simularity search. This part is usually provided by the same tools utilized for indexing.
 3. Chat Service:
     - Manages chat context
-    - Prompt template constructor: supports diaologs for clarification
+    - Prompt template constructor: supports dialogs for clarification
     - Stores chat history
 4. Synthesis Component:
     - Utilizes an LLM for response generation
@@ -632,7 +643,7 @@ A basic RAG system consists of the following components components:
 
 ##### RAG: Bridging the Qualitative Gap
 
-Currently, the common functionality lacks modules to ensure the solution meets quality criteria, specifically in areas such as hallucination mitigation and tolerance against misuse. To address these gaps, we propose using guardrails for quality assurance. This includes a retry strategy and a fallback mechanism designed to enhance reliability and robustness.
+Currently, the common functionality lacks modules to ensure the solution meets quality criteria, specifically in areas such as hallucination mitigation and tolerance against misuse. To address these gaps, we propose using guardrails for quality assurance. This includes a retry strategy and a fallback mechanism designed to enhance reliability and robustness. ([About Guardrails](https://docs.nvidia.com/nemo/guardrails/user_guides/guardrails-process.html))
 
 NeMo guardrails provide the following levels of checks that are relevant to our project:
 
@@ -1011,6 +1022,8 @@ The settings can be adapted based on the budget, with potential increases to acc
 
 The experiment will last four month. After two month, groups will swap configurations to mitigate any biases introduced by variable user experiences and external factors.
 
+**TODO**: are there any seasonality concerns?
+
 **Statistical Criteria.** Statistical significance will be determined using Welch’s t-test, with a significance level set at 5% and the type II error at 10%.
 
 **Future Steps for Experiment Improvement.** 
@@ -1134,6 +1147,8 @@ To handle simultaneous queries and ensure document processing tasks do not slow 
 
 ### **vii. SLAs**
 
+**TODO**: separate SLA and Latency Expectations ideas
+
 In order to control system performance and meeting defined standards, the MagicSharepoint service is integrated with a monitoring tool.
 
 Key validated compontents
@@ -1171,13 +1186,18 @@ If Time Estimate was not met - we need to save related logs and highlight/mark f
 
 Fallbacks are crucial for maintaining operational efficiency in the face of unforeseen circumstances. MagicSharepoint uses a multi-tiered fallback system to ensure seamless service:
 
+**TODO**: add more details to illustrate multi-component nature of a problem
+
 - **Primary fallback.** The primary model is served by the chosen vendor. It is used unless negative user feedback on the model outcome and if the latency out of the accepted range.
 - **Secondary fallback.** Our next layer of fallback involves using a pretrained LLM from Hugging Face, installed locally. This approach addressed to adress both potential issues.
   
 The system has latency and feedback based switchings, which reroutes requests to the secondary model. Once conditions are improved, it switches to the primary model. To simplify management, each service within MagicSharepoint handles its fallback mechanisms independently.
 
 ### XI. Monitoring
+
 **TODO**: update this part with main metrics to be monitored for each system. 
+
+**TODO**: select main metrics for each system
 
 #### Engineering Logging & Monitoring
 
@@ -1274,6 +1294,8 @@ While following parts of a solution are considered as external cloud services:
 - **Document storage**
 - **Metadata database**
 - **LLM**
+
+**TODO**: concider separating app nodes bs data nodes
 
 ### **i. Serving architecture**
 
