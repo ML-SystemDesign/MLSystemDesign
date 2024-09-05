@@ -122,11 +122,9 @@ To systematically evaluate the performance of the system, we employ the RAGAS fr
 - Context Recall:  
 - Description: Context recall measures how well each sentence in the response can be attributed to the provided context. It evaluates how much of the relevant information from the context is utilized in the model’s response. The final score for context recall is calculated as the ratio of true positives (TP) to the sum of true positives and false negatives (TP / (TP \+ FN)). This metric ensures that the response is comprehensive and leverages the full breadth of the available information.  
 - Importance: High context recall indicates that the model effectively uses the available information to form a comprehensive answer.  
-  ![][image1]  
 - Context Precision:  
 - Description: Assesses how accurately and appropriately the contextual information is applied in the response.  
 - Importance: High context precision ensures that the model is selective and relevant in the information it uses, avoiding unnecessary or irrelevant details.  
-  ![][image2]
 
 4. Answer Semantic Similarity  
 - Description: This metric measures the semantic closeness of the model's response to a reference answer. It helps evaluate how naturally and accurately the model can reproduce human-like language in its responses. Semantic similarity is important for ensuring that the chatbot's responses are both natural and easy to understand, closely mirroring the way a human expert might respond.
