@@ -160,6 +160,11 @@ The validation scheme for a single product will be as follows:
 
 We allocate a validation set that is time-equivalent to the duration of the incident. We train our model or calculate the baseline heuristic on **Train 1**. **Train 1** represents a dataset with revenue from a period prior to validation (the size will be determined experimentally). Validation will be used as the basis for tuning the hyperparameters of ML models. We then combine **Train 1** and **Val**, train a new model, and then obtain predictions on the incident data. As a proxy metric, we use the performance indicators on **Val**.
 
+To better understand the scheme, we also add a dataset sample
+![](https://github.com/eliassz/MLSystemDesign/blob/Downtime-Cost-Estimation/pics/Pasted%20image%2020240907175941.png)
+and a time series plot.
+![](https://github.com/eliassz/MLSystemDesign/blob/Downtime-Cost-Estimation/pics/Pasted%20image%2020240907172657.png)
+
 ## Baseline Models Development
 
 ### Naive Prediction by Averaging
