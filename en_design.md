@@ -162,6 +162,7 @@ We allocate a validation set that is time-equivalent to the duration of the inci
 
 To better understand the scheme, we also add a dataset sample
 ![](https://github.com/eliassz/MLSystemDesign/blob/Downtime-Cost-Estimation/pics/Pasted%20image%2020240907175941.png)
+
 and a time series plot.
 ![](https://github.com/eliassz/MLSystemDesign/blob/Downtime-Cost-Estimation/pics/Pasted%20image%2020240907172657.png)
 
