@@ -16,7 +16,7 @@ Our solution should cover 2 types of models: **static** and **dynamic**. **Stati
 
 One of the key problems in predictive maintenance is to predict equipment failures early enough to perform maintenance before breakdown. In practice, complete data on equipment failures are not available. For example, equipment may have been sent for maintenance or disposed of. Such observations are called censored observations. The most common is right censoring, where the time to exit the study is determined before the event occurs.
 
-![][https://github.com/iuliivasilev/MLSystemDesign/blob/main/Design_Doc_Examples/rul-image/DataCollection.jpg]
+![](https://github.com/iuliivasilev/MLSystemDesign/blob/main/Design_Doc_Examples/rul-image/DataCollection.jpg)
 
 We consider two target variables: the event time T and the censoring flag C. The feature vector X is the status of equipment at entry into the study (static) or a chain of statuses (dynamic). The figure depicts the process of determining the target values. All observations are centered on the zero point in time. The problem is solved by predicting two values:
 
@@ -137,7 +137,7 @@ The **dynamic** model is fed with the chain of equipment parameters for the peri
 
 The validation approaches are shown in the figure. For the static model, we consider a single status point at the time the equipment enters exploitation. For the dynamic model, we consider a chain of statuses, at the last of which we predict RUL and FP.
 
-![][https://github.com/iuliivasilev/MLSystemDesign/blob/main/Design_Doc_Examples/rul-image/ValidationScheme.jpg]
+![](https://github.com/iuliivasilev/MLSystemDesign/blob/main/Design_Doc_Examples/rul-image/ValidationScheme.jpg)
 
 **The scheme replicates real-world usage:** the model is training on one piece of equipment, and hazard prediction is performed on new equipment.  
 Quality assessment is performed on nested-cross-validation with stratification. Stratification is performed on 10 quantiles of time distribution and class balance by event flag.  
