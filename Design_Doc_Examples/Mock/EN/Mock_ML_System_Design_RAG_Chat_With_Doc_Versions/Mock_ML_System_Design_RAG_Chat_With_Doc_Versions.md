@@ -38,32 +38,32 @@ In the future, we may reuse some components of Q&A solutions as a starting point
 
 ### **iii. Expectations**
 
-Client expect answers to be:
+Clients expect answers to be:
 - Fast
     - First token within 1 minute.
-        - "1 minute" was identified by deep interviews, can specify later.
-- Trustful
-    - Limited hallucinations or 'extended' answers. At least 95% of the answers should not contain fact missmatching of level 1 and level 2 (described below).
-    - In case if clients would have any doubts, they won't need to proofread whole document to resolve the uncertainty. 
+        - "1 minute" was identified by deep interviews, can be specified later.
+- Trustworthy
+    - Limited hallucinations or 'extended' answers. At least 95% of the answers should not contain fact mismatching of level 1 and level 2 (described below).
+    - In case clients have any doubts, they won't need to proofread the whole document to resolve the uncertainty. 
 - Interactive
     - Ability to provide more details/follow-up questions if the answer is insufficient.
-    - Automatically be requested for more details if could not generate insufficient answer.
+    - Automatically request more details if unable to generate sufficient answer.
 - Direct
     - Indicate when an answer cannot be provided due to lack of context.
 
-Client need to get answers about:
+Clients need to get answers about:
 - A single document in its latest version.
 - Multiple documents in their latest versions.
 - A single document and its various versions.
 - Multiple documents and their various versions.
 
-Client wants to select documents:
-- Explicit, using filters.
-- Implicit, through dialogue.
+Clients want to select documents:
+- Explicitly, using filters.
+- Implicitly, through dialogue.
 
-The expectation is that the response would be based on content of the selected documents (explicit or implicit).
+The expectation is that the response would be based on the content of the selected documents (explicit or implicit).
 
-Fact missmatching levels:
+Fact mismatching levels:
 1. Fact Presence
 - Numbers / Terms / Facts in the answer were not present in the document
 2. Fact Integrity
@@ -88,7 +88,7 @@ Addressable use cases:
     - e.g., how section names changed between v2 and v12 from 'Machine Learning System Design'.
 - `3a` Specific Question about Multiple Document Version Changes
     - e.g., differences between the first available draft and the published version for all books in the 'Harry Potter' series.
-- `4a` Specific Question about Document Metadata (propose to remove - too litle data to use any algorithms)
+- `4a` Specific Question about Document Metadata (propose to remove - too little data to use any algorithms)
     - e.g., author and date.
 
 Non-addressable use cases
@@ -98,13 +98,13 @@ Non-addressable use cases
     - e.g., how the Attention mechanism works from 'Bible'.
 
 
-### **iiii. Previous work**
+### **iv. Previous work**
 
 - Implemented 'smart' full-text search to help navigate faster and easier.
     - Similar to the "match" query available in the Elasticsearch out of the box.
 - Cataloged frequent questions and used Mechanical Turk to get answers in advance.
 
-### **iv. Usage volumes and patterns**
+### **v. Usage volumes and patterns**
 
 Every month:
 - Platform has ~1000 unique users.
@@ -114,7 +114,7 @@ Every month:
     - New documents or edited existing documents.
 - 10% of the documents are image based.
 
-### **v. Other details**
+### **vi. Other details**
 
 - Cloud Object Storage with automated version cataloging.
 - OCR is not implemented.
@@ -124,7 +124,7 @@ Every month:
 
 **i. Metrics**
 
-The task could be split into independent subtasks: OCR, Intent classification -> Search/Retrieval -> answer generation. These parts can be evaluated independently to prioritize improvements based on the source of errors as well as overall solution performance.
+The task could be split into independent subtasks: OCR, Intent classification -> Search/Retrieval -> Answer generation. These parts can be evaluated independently to prioritize improvements based on the source of errors as well as overall solution performance.
 
 
 ***Question Intent Classification Metrics:***
@@ -140,10 +140,10 @@ It shows how accurately a model can classify the intent of questions, which is c
    
 ***Data Extraction Metrics:***
 
-Pre-requirements: Dataset of scanned documents and appropriate them texts. (As a work around: readable documents could be scanned manually, which gives both - scanned image and ground truth text values)
+Pre-requirements: Dataset of scanned documents and their corresponding texts. (As a workaround: readable documents could be scanned manually, which gives both - scanned image and ground truth text values)
 
-It’s reasonable to measure OCR quality separately, as in the case of poor OCR quality, an accurate result can’t be reached. On the first stage of project let’s skip this metrics step, calculate high-level metrics on markup docs vs scanned images, only in case of significant difference in numbers data extraction metrics are calculated.
-In the future we will need to design a fallback machanism for processing documents with poor OCR performance.
+It's reasonable to measure OCR quality separately, as in the case of poor OCR quality, an accurate result can't be reached. In the first stage of the project, let's skip this metrics step, calculate high-level metrics on markup docs vs scanned images, only in case of significant difference in numbers data extraction metrics are calculated.
+In the future, we will need to design a fallback mechanism for processing documents with poor OCR performance.
 
 **a. Word Error Rate**
 
@@ -153,7 +153,7 @@ $`word\_error\_rate = \frac{amount\_of\_misspelled\_words}{total\_amount\_of\_wo
 
 **b. Formula Error Rate**
 
-Formulas could be presented in the document as well. They are not a typical OCR problem, so if they are not recognized well, it degrades the system performance. The formula error rate could be measured as the percentage of incorrect OCRed formulas to the total amount of formulas.
+Formulas could be present in the document as well. They are not a typical OCR problem, so if they are not recognized well, it degrades the system performance. The formula error rate could be measured as the percentage of incorrect OCRed formulas to the total amount of formulas.
 
 $`formula\_error\_rate = \frac{amount\_of\_misspelled\_formulas}{total\_amount\_of\_formulas}`$
 
@@ -163,10 +163,10 @@ As it is important to extract table-structured data as well, the percentage of i
 
 $`cell\_error\_rate = \frac{amount\_of\_incorrectly\_detected\_cells}{total\_amount\_of\_cells}`$
 
-**c. Data Extraction Error Severity**
+**d. Data Extraction Error Severity**
 
-Depending on the documents domain, we may introduce quality threshold for data extraction process depending on specific errors.
-May introduce more detailed errors in the future (ex.: Formula Error related to a special character).
+Depending on the documents' domain, we may introduce quality thresholds for the data extraction process depending on specific errors.
+We may introduce more detailed errors in the future (e.g., Formula Error related to a special character).
 
 ***Retrieval Metrics:***
 
@@ -207,14 +207,14 @@ $`hallucination\_rate = \frac{amount\_of\_hallucinated\_responses}{total\_amount
 
 Pre-requirements: Dataset of queries (ideally with unambiguous answer) + expected response, domain experts to evaluate the metric manually.
 
-As one of the requirements is the ability to automatically request more details if an insufficient answer is generated, the average number of interactions or follow-up questions needed to clarify or correct an answer could be calculated to measure clarification capability and average relevance of follow-up questions. This metric helps to check the system’s ability to provide comprehensive answers initially or minimise the number of interactions needed for detalization.
+As one of the requirements is the ability to automatically request more details if an insufficient answer is generated, the average number of interactions or follow-up questions needed to clarify or correct an answer could be calculated to measure clarification capability and average relevance of follow-up questions. This metric helps to check the system's ability to provide comprehensive answers initially or minimise the number of interactions needed for detalization.
 
 $`clarification\_capability = \frac{number\_of\_clarification\_questions}{total\_amount\_of\_queries}`$
 
 
 *Metrics to pick:*
 
-A lot of metrics were provided, but it’s a good idea to go in the reverse direction: start from the more general and dive deeper into partial ones only when necessary.
+A lot of metrics were provided, but it's a good idea to go in the reverse direction: start from the more general and dive deeper into partial ones only when necessary.
 
 **TODO**: build hierarchy of metrics
 
@@ -289,11 +289,11 @@ Cleaned documents and images should be stored separately from the original files
 **TODO**: add more details/ideas how to do it 
 
 **iii.iii. Quality Controls:**
-Introduce quality metrics and thresholds to indicate succesfully cleaned documents. [Monitoring](#xi-monitoring)
+Introduce quality metrics and thresholds to indicate successfully cleaned documents. [Monitoring](#xi-monitoring)
 
 Example:
 - Text length per OCR'ed page.
-- Processing errors raised and on whcih step.
+- Processing errors raised and on which step.
 
 #### iv. Data Chunking Strategy
 
@@ -374,10 +374,10 @@ Drawbacks:
     - Text summary for selected levels of chunks.
 
 **v.iii. Quality Controls:**
-Introduce quality metrics and thresholds to indicate succesfully enhanced documents. [Monitoring](#xi-monitoring)
+Introduce quality metrics and thresholds to indicate successfully enhanced documents. [Monitoring](#xi-monitoring)
 Example:
 - Text length per OCR'ed page.
-- Processing errors raised and on whcih step.
+- Processing errors raised and on which step.
 
 #### vi. Metadata
 
@@ -458,7 +458,7 @@ For validation purposes, we will use a data set generated from the original docu
 
 **TODO**: add more details about what RAGAS is and how it is doing it
 
-**TODO**: add complementary frameworkd for better covering all important aspects
+**TODO**: add complementary frameworks for better covering all important aspects
 
 #### i. Question Selection and Dataset Creation
 RAGAS takes the original documents and their associated metadata and generates a structured dataset with the following components
@@ -561,7 +561,7 @@ Considering the solution that covers both Retrieval and Generation, we might div
 The idea here is that although the interactive mode brings value and covers the use cases described in Section 1, it comes with the cost of creating, managing, and monitoring a complex workflow.
 
 
-Below you will find the schemas describing trhee options of increased complexity during implementation. The description is available further in the chapter.
+Below you will find the schemas describing three options of increased complexity during implementation. The description is available further in the chapter.
 
 **RAG: Basic solution**
 
@@ -602,7 +602,7 @@ Components:
     - Highlights the top-k results for the user
     - Handles an explicit user feedback dialogue ("Have you found what you were looking for?")
 
-**TODO**: add criterias for irrelevance content and some examples
+**TODO**: add criteria for irrelevant content and some examples
 
 ##### Pros & Cons
 
@@ -629,7 +629,7 @@ A basic RAG system consists of the following components components:
     - DB-indexing
 2. Retrieval Layer:
     - Embedder
-    - DB simularity search. This part is usually provided by the same tools utilized for indexing.
+    - DB similarity search. This part is usually provided by the same tools utilized for indexing.
 3. Chat Service:
     - Manages chat context
     - Prompt template constructor: supports dialogs for clarification
@@ -745,8 +745,8 @@ Given the pros and cons listed above, it appears that LlamaIndex provides all th
 Given the multi-step nature of the solution, consider potential isuues on each of the steps:
 
 **0. Intent classification**
-- “under” filtering: Irrelevant questions are treated as meaningful, pipeline’s running for  nothing
-- “over” filtering: Filtering out relevant questions ⇒ the response won’t be provided
+- "under" filtering: Irrelevant questions are treated as meaningful, pipeline's running for  nothing
+- "over" filtering: Filtering out relevant questions ⇒ the response won't be provided
 
 **1. Embeddings**
 - Poor Quality Embeddings: If the embeddings do not accurately capture the semantic meaning of the input text, the entire pipeline is compromised.
@@ -761,8 +761,8 @@ Given the multi-step nature of the solution, consider potential isuues on each o
 - Lack of Context Understanding: The model might fail to catch a relevant information from context and instead of providing clarification question generate incomplete responses.
 
 **4. Guardrails**
-- “under” filtering:  filtering out inappropriate or harmful content might fail, leading to problematic outputs.
-- “over” filtering: guardrails might filter out correct, useful information, reducing the system's performance.
+- "under" filtering:  filtering out inappropriate or harmful content might fail, leading to problematic outputs.
+- "over" filtering: guardrails might filter out correct, useful information, reducing the system's performance.
 
 
 As errors are inharitated from one stage to another. Use following approaches to diagnose them:
@@ -779,10 +779,10 @@ Corner-cases to check are mentioned in section 4. Validation Schema.
 
 ### **i. Overview**
 
-We are planning to use external/pretrained solution for Embedding generation, OCR and LLM components. [**Dataset**](#iii-dataset)
-Because of this, our Training Pipeline should focused on:
-- **Stable Data Preprocessing.** Should be executed regularly upon new document being submitted. 
-- **Stable Context Selection.** Enabling robust Prompt Engineering.
+We are planning to use external/pretrained solutions for Embedding generation, OCR, and LLM components. [**Dataset**](#iii-dataset)
+Because of this, our Training Pipeline should focus on:
+- **Stable Data Preprocessing:** Should be executed regularly upon new document submission.
+- **Stable Context Selection:** Enabling robust Prompt Engineering.
 
 ### **ii. Toolset**
 
@@ -797,13 +797,13 @@ The suggested tools are:
 
 The data preprocessing should include:
 
-- **Text Recognition.** OCR module to convert image documents into text representation.
-- **Text Metadata Extraction.** Store explicit information and statistics about documents.
-- **Feature Engineering.** Extract required features on different levels.
-- **Preprocessing Metadata Storage.** Store explicit information about tools and their versions used for preprocessing.
-- **Feature Storage.** Make features accessible and searchable.
+- **Text Recognition:** OCR module to convert image documents into text representation.
+- **Text Metadata Extraction:** Store explicit information and statistics about documents.
+- **Feature Engineering:** Extract required features on different levels.
+- **Preprocessing Metadata Storage:** Store explicit information about tools and their versions used for preprocessing.
+- **Feature Storage:** Make features accessible and searchable.
 
-The main goal - document should be preprocessed withint 1-2 hours after submition/new version being assigned.
+The main goal - document should be preprocessed within 1-2 hours after submission/new version being assigned.
 
 ### **iv. Evaluations**
 For Context, Prompt, and Chat E2E evaluations we would be using RAGAS tool as described in [**IV. Validation Schema**](#iv-validation-schema)
@@ -823,14 +823,14 @@ The section lacks of testing approaches for the specific user needs, such as ask
 
 ### **VIII. Features**
 
-Our key criterias to select features:
-1. **Context selection flexibility.** Users may ask a variety of questions and features needs to ba adaptive enough to ensure that context may be selected for any question.
-2. **Context selection relevance.** Besides supporting a variety of questions, we need to ensure that whenever context is selected - it is relevant for the question.
-3. **Computational time.** We are not working with online data and not very time-restricted and features could be generated in some lag within several hours. However, as we may encounter pretty long documents (up to 500 pages long) some features could be expensive at such scale.
+Our key criteria to select features:
+1. **Context selection flexibility:** Users may ask a variety of questions and features need to be adaptive enough to ensure that context may be selected for any question.
+2. **Context selection relevance:** Besides supporting a variety of questions, we need to ensure that whenever context is selected - it is relevant for the question.
+3. **Computational time:** We are not working with online data and are not very time-restricted, and features could be generated with some lag within several hours. However, as we may encounter pretty long documents (up to 500 pages long), some features could be expensive at such scale.
 
-Adding new features should be formulated as new hypothesis, which should originate from covering specific corner cases or improving metrics.
+Adding new features should be formulated as new hypotheses, which should originate from covering specific corner cases or improving metrics.
 
-The idea is not to execute any automated feature selection, rather then focusing on providing the most complete and relevant context in the prompt for LLM.
+The idea is not to execute any automated feature selection, rather than focusing on providing the most complete and relevant context in the prompt for LLM.
 
 Features are met in the following services, by their components and areas:
 - Metadata enriching service
@@ -1008,7 +1008,7 @@ The settings can be adapted based on the budget, with potential increases to acc
 - **Average Number of Correction Attempts**: Measures the average number of attempts to correct an answer.
 - **Graceful Exits Rate**: Measures the percentage of interactions that result in a graceful exit after unsuccessful correction attempts.
 
-**Auxiliary metrics**
+**Auxiliary metrics**
 
 - Total Document Count
 - Daily New Documents
@@ -1024,7 +1024,7 @@ The experiment will last four month. After two month, groups will swap configura
 
 **TODO**: are there any seasonality concerns?
 
-**Statistical Criteria.** Statistical significance will be determined using Welch’s t-test, with a significance level set at 5% and the type II error at 10%.
+**Statistical Criteria.** Statistical significance will be determined using Welch's t-test, with a significance level set at 5% and the type II error at 10%.
 
 **Future Steps for Experiment Improvement.** 
 
@@ -1046,29 +1046,29 @@ At the end of the experiment, a comprehensive report will be generated. This wil
 
 ### **i. Embeddings Database**
 
-This is one of the core components in the system for efficient document search and retrival. [Data Enhancing](#v-data-enhancing)
-It consists of
+This is one of the core components in the system for efficient document search and retrieval. [Data Enhancing](#v-data-enhancing)
+It consists of:
 1. Vector representations of uploaded/created by users files.
-2. Chat communications and response ratings, structured with fields of user queries, responses, timestamps, ratings and session id.
+2. Chat communications and response ratings, structured with fields of user queries, responses, timestamps, ratings and session ID.
 
 **i.i. Embeddings Generation**
 
-- **Query Embeddings:** Converts client's query into embeddings for further selecting nearest neighbours within the database.
+- **Query Embeddings:** Converts client's query into embeddings for further selecting nearest neighbors within the database.
 - **Document Embeddings:** Creates embeddings using a pre-trained BERT-based model for new documents. The model processes documents via API request, resulting in document ID, document metadata and embeddings. The original file is stored in Documents Storage with the same document ID to avoid overloading the vector DB.
-- **Updates:** Automatically updates embeddings when document version changes to maintain vectors relevance.
+- **Updates:** Automatically updates embeddings when document version changes to maintain vector relevance.
 
 **i.ii. Database Features**
 
-A cloud and scalable database, e.g. Pinecone. It is designed to scale horizontally to handle large volumes of embeddings.
+A cloud and scalable database, e.g., Pinecone. It is designed to scale horizontally to handle large volumes of embeddings.
 - Supports nearest neighbor search, using cosine or Euclidean similarity.
 - Supports filtering based on metadata.
 - The following fields are stored for further mapping with Documents Storage:
   1. Document ID
   2. Version number
   3. Document's Metadata (document title, author, creation date)
-  4. Model's Metadata (Baseline / Main embedding tool, model's realease version)
+  4. Model's Metadata (Baseline / Main embedding tool, model's release version)
   5. Embeddings representation
-- Embeddings, metadata, and queries are encrypted to ensure security. Strict access control managment.
+- Embeddings, metadata, and queries are encrypted to ensure security. Strict access control management.
 
 **Database quantified requirements:**
 - Should return top-10 nearest neighbors within 100ms for up to 1 million vectors.
@@ -1092,7 +1092,7 @@ An intuitive and responsive interface for clients to query and receive results.
 **iii.ii. Features**
   1. Clients can upload new documents, which automatically triggers embedding generation and storage.
   2. Consists of a positive/negative feedback on answers.
-  3. Clients can report offesnive or unproper responses, which triggers another LLM as a fallback scenario.
+  3. Clients can report offensive or improper responses, which triggers another LLM as a fallback scenario.
   4. Allows to save a chat history and responses for future reference.
 
 ### **iv. OCR**
@@ -1109,9 +1109,9 @@ MagicSharepoint leverages an existing OCR solution - AWS Textract, considering t
 
 ### **v. Backend API Design**
 
-Below are provided events, when a corresponding API action gets triggered, while interacting with a user.
+Below are the events when a corresponding API action gets triggered while interacting with a user.
 
-**Documents Management.**
+**Documents Management**
 - Upload a new document
 - Delete a document or version
 - Retrieve document metadata
@@ -1119,68 +1119,66 @@ Below are provided events, when a corresponding API action gets triggered, while
 - Retrieve a specific version of a document
 - Apply OCR technology for image-based documents, if required
 
-**User Queries Management.**
+**User Queries Management**
 - Retrieve a query result
 - Rate a query response
 - Report an inappropriate response
 
-**Embeddings Management.**
-- **Model level.** Generate embeddings for a new document - uses a pre-trained model and sends to the IO level component for storage.
-- **IO level.** Update embeddings for a document version change, keeping previous embiddings, corresponding to the same session id. 
+**Embeddings Management**
+- **Model level:** Generate embeddings for a new document - uses a pre-trained model and sends to the IO level component for storage.
+- **IO level:** Update embeddings for a document version change, keeping previous embeddings corresponding to the same session ID.
 
-**Chat Session Management.**
+**Chat Session Management**
 - Start a new chat session
 - End a session
 - Retrieve chat history
 - Save chat history
 
-**Notifications and Alerts API:**
+**Notifications and Alerts API**
 - Inform users of system updates, document changes they worked with
-- Real-time notifications for document processing status, e.g. "Your document is being uploaded. Please wait..." or "OCR processing started for your document".
-- Error Handling and Logging Events. Examples are "File upload failed due to network timeout", "Document size exceeds limit" or "Unsupported file format".
+- Real-time notifications for document processing status, e.g., "Your document is being uploaded. Please wait..." or "OCR processing started for your document"
+- Error Handling and Logging Events. Examples are "File upload failed due to network timeout", "Document size exceeds limit" or "Unsupported file format"
 
-### **vi. Parallel processing**
+### **vi. Parallel Processing**
 To handle simultaneous queries and ensure document processing tasks do not slow down user interactions, we adopt a parallel processing strategy that separates asynchronous tasks (e.g., embedding generation) from synchronous tasks (e.g., real-time user interactions).
 
-- **Embedding Generation for Index Updating.** Asynchronous tasks, which are placed in a asynchronous task queue  (e.g., Celery with RabbitMQ) and from there are taken for parallel processing. It is triggered upon Document upload, new version or OCR completion. Processed by general workers.
-- **Real-time User Interaction.** Synchronous tasks, which are priotitised for low latency. Proccessed by preserve workers for entire chat sessions to maintain context and improve response relevance.
+- **Embedding Generation for Index Updating:** Asynchronous tasks, which are placed in an asynchronous task queue (e.g., Celery with RabbitMQ) and from there are taken for parallel processing. It is triggered upon Document upload, new version, or OCR completion. Processed by general workers.
+- **Real-time User Interaction:** Synchronous tasks, which are prioritized for low latency. Processed by reserved workers for entire chat sessions to maintain context and improve response relevance.
 
 ### **vii. SLAs**
 
 **TODO**: separate SLA and Latency Expectations ideas
 
-In order to control system performance and meeting defined standards, the MagicSharepoint service is integrated with a monitoring tool.
+To control system performance and meet defined standards, the MagicSharepoint service is integrated with a monitoring tool.
 
-Key validated compontents
-- **Response Time.** Guarantee first token response within 1 minute.
-- **Uptime.** Ensure a high availability rate, aiming to 99.9% uptime.
+Key validated components:
+- **Response Time:** Guarantee first token response within 1 minute.
+- **Uptime:** Ensure a high availability rate, aiming for 99.9% uptime.
 
-**Time Estimates per Stage.**
+**Time Estimates per Stage**
 
-If Time Estimate was not met - we need to save related logs and highlight/mark for future analysis.
+If Time Estimate is not met - we need to save related logs and highlight/mark them for future analysis.
 
-1. User Query Processing.
-
+1. User Query Processing
 - Intent Classification: 200-300ms
 - Context Retrieval from Vector Database: 300-500ms
 - Response Generation by LLM:
-- Network latency to the vendor LLM: 100-200ms (depending on vendor and location)
-- Token Generation: 200-500ms (varies based on response length)
+  - Network latency to the vendor LLM: 100-200ms (depending on vendor and location)
+  - Token Generation: 200-500ms (varies based on response length)
 - Total Estimated Time for User Query Processing: 800-1500ms
 
-2. Document Processing.
-   
+2. Document Processing
 - Document Upload and OCR (if required): 1-2 minutes
 - Embedding Generation:
-- Text Processing and Embedding Creation: 1-3 minutes (depending on document size)
-- Database Update: 200-300ms
+  - Text Processing and Embedding Creation: 1-3 minutes (depending on document size)
+  - Database Update: 200-300ms
 - Total Estimated Time for Document Processing: 2-5 minutes
 
-**Infrastructure Requirements for meeting SLAs.**
-- CPU Nodes: For general API handling, metadata storage and other small task.
-- GPU Nodes: For intensive tasks such as embedding generation.
-- Fast SSDs: For quick read/write operations during document processing and storing original files.
-- High-speed Network: To ensure low latency between API services.
+**Infrastructure Requirements for Meeting SLAs**
+- CPU Nodes: For general API handling, metadata storage, and other small tasks
+- GPU Nodes: For intensive tasks such as embedding generation
+- Fast SSDs: For quick read/write operations during document processing and storing original files
+- High-speed Network: To ensure low latency between API services
 
 ### **viii. Fallback Strategies**
 
@@ -1188,65 +1186,65 @@ Fallbacks are crucial for maintaining operational efficiency in the face of unfo
 
 **TODO**: add more details to illustrate multi-component nature of a problem
 
-- **Primary fallback.** The primary model is served by the chosen vendor. It is used unless negative user feedback on the model outcome and if the latency out of the accepted range.
-- **Secondary fallback.** Our next layer of fallback involves using a pretrained LLM from Hugging Face, installed locally. This approach addressed to adress both potential issues.
+- **Primary fallback:** The primary model is served by the chosen vendor. It is used unless there is negative user feedback on the model outcome or if the latency is outside the accepted range.
+- **Secondary fallback:** Our next layer of fallback involves using a pretrained LLM from Hugging Face, installed locally. This approach addresses both potential issues.
   
-The system has latency and feedback based switchings, which reroutes requests to the secondary model. Once conditions are improved, it switches to the primary model. To simplify management, each service within MagicSharepoint handles its fallback mechanisms independently.
+The system has latency and feedback-based switching, which reroutes requests to the secondary model. Once conditions improve, it switches back to the primary model. To simplify management, each service within MagicSharepoint handles its fallback mechanisms independently.
 
-### XI. Monitoring
+### **XI. Monitoring**
 
-**TODO**: update this part with main metrics to be monitored for each system. 
+**TODO**: update this part with main metrics to be monitored for each system.
 
-**TODO**: select main metrics for each system
+**TODO**: select main metrics for each system.
 
 #### Engineering Logging & Monitoring
 
-1. **Ingestion Layer**: 
-    - Process and I/O timings 
+1. **Ingestion Layer**
+    - Process and I/O timings
     - Code errors
 
-2. **Retrieval**:
-   - **Embedder**: Monitor preprocessing time, embedding model time, and utilization instances of the embedding model.
-   - **Database (DB)**: Monitor the time taken for each retrieval operation and DB utilization.
+2. **Retrieval**
+   - **Embedder**: Monitor preprocessing time, embedding model time, and utilization of embedding model instances.
+   - **Database (DB)**: Monitor time taken for each retrieval operation and DB utilization.
    
-3. **Generation**:
-   - **LLM**: Monitor latency, cost, error rates, uptime, and the token volume for input and output to predict scaling needs.
+3. **Generation**
+   - **LLM**: Monitor latency, cost, error rates, uptime, and token volume for input and output to predict scaling needs.
 
 #### ML Logging & Monitoring
 
-1. **Ingestion Layer** 
-    - Every step of the ETL pipeline for document extraction must be fully logged to ensure the process is reproducible and help issue resolution
+1. **Ingestion Layer**
+    - Every step of the ETL pipeline for document extraction must be fully logged to ensure the process is reproducible and help with issue resolution
     - OCR process must be logged separately, as it is a different system
-    - Statistics for documents during ingestion should be monitored, including word count, character distribution, document length, paragraph length, detected languages, and the percentage of tables or images
-    - Monitor the preprocessing layer to bring awareness of not ingested documetns or documents with too many errors
+    - Statistics for documents during ingestion should be monitored, including word count, character distribution, document length, paragraph length, detected languages, and percentage of tables or images
+    - Monitor the preprocessing layer to bring awareness of non-ingested documents or documents with too many errors
 
-2. **Retrieval**: 
-    - Logging the details of each query, including the tokenizer used, the document context found within a particular document version, and other relevant metadata for future analyses
-    - Keep track of the indexes found, similarity scores
+2. **Retrieval**
+    - Log the details of each query, including the tokenizer used, document context found within a particular document version, and other relevant metadata for future analyses
+    - Keep track of the indexes found and similarity scores
 
-3. **Chat History**: Storing all chat history is crucial for a thorough analysis and debugging process, providing valuable insights into user interactions and system performance
+3. **Chat History**: Store all chat history for thorough analysis and debugging, providing valuable insights into user interactions and system performance
 
-4. **Augmented Generation**: 
+4. **Augmented Generation**
     - Quality of generated content through user feedback
 
-5. **Alerting Mechanisms**: Have an alerting mechanisms for any anomalies or exceeded thresholds based on the metrics being monitored.
+5. **Alerting Mechanisms**: Have alerting mechanisms for any anomalies or exceeded thresholds based on the metrics being monitored
 
 #### Tooling
 
-1. **For RAG Operations - Langfuse Callback**:
+1. **For RAG Operations - Langfuse Callback**
     - Integrates with LlamaIndex
     - Supports measuring the quality of the model through user feedback, both explicit and implicit
     - Calculates costs, latency, and total volume
     - For more information about analytics capabilities, see: [Langfuse Analytics Overview](https://langfuse.com/docs/analytics/overview)
 
-2. **For System Health Metrics, Ingestion Layer, Alerting - Prometheus & Grafana**: 
+2. **For System Health Metrics, Ingestion Layer, Alerting - Prometheus & Grafana**
     - Prometheus is an open-source system monitoring and alerting toolkit
     - Grafana is used to visualize the data collected by Prometheus
     - Since LLMs logging is stored within Langfuse, there is no need to build additional solutions for this
 
     **Why not a standard ELK stack?**
 
-    For more details, please read this great blogpost [Prometheus-vs-ELK](https://www.metricfire.com/blog/prometheus-vs-elk/)
+    For more details, please read this great blog post: [Prometheus-vs-ELK](https://www.metricfire.com/blog/prometheus-vs-elk/)
 
     | Feature/Aspect                 | Prometheus                                        | ELK (Elasticsearch, Logstash, Kibana)              |
     |-------------------------------|---------------------------------------------|---------------------------------------------------|
@@ -1268,12 +1266,12 @@ The system has latency and feedback based switchings, which reroutes requests to
     4. Real-Time Alerts and Querying: Prometheus provides a powerful query language (PromQL) and supports real-time alerting
 
     **Cons:**
-    1. No vertical scaling.
+    1. No vertical scaling
     2. Limited logs data retention. This might become a problem if we change the RAG framework and want to store ML logs elsewhere
 
-3. **Code error reports - Sentry.io**:
+3. **Code error reports - Sentry.io**
     - Sentry is a widely-used error tracking tool that helps developers monitor, fix, and optimize application performance
-    - We may choose between self-hosted versions and the paid cloud version in the future.
+    - We may choose between self-hosted versions and the paid cloud version in the future
 
 
 ### **XII. Serving and inference**
