@@ -15,15 +15,17 @@ This directory contains ML system design documents based on real-world scenarios
      - Real-time adaptation
      - Risk management and monitoring
 
-2. **Vector Search Similar Queries**
-   - Domain: Web Services / AI Applications
-   - Problem: Finding similar user queries to reduce AI processing costs and improve user experience
-   - Key Features:
-     - Multimodal vector search (text + images) in unified vector space
-     - Real-time similarity search with <1s latency requirement
-     - Integration with MongoDB and vector databases (ClickHouse/Elasticsearch)
-     - Uses jina-v4 model for embeddings (<0.1s latency, 6-7GB RAM)
-     - Cost optimization through query reuse
+### RU (Русский)
+
+1. **Vector Search Similar Queries / Выдача похожих ответов**
+   - Domain: Web Services / AI Applications / Веб-сервисы / ИИ приложения
+   - Problem: Поиск похожих пользовательских запросов для снижения затрат на обработку ИИ и улучшения пользовательского опыта
+   - Key Features / Ключевые особенности:
+     - Мультимодальный векторный поиск (текст + изображения) в едином векторном пространстве
+     - Поиск похожих запросов в реальном времени с требованием latency < 1 секунды
+     - Интеграция с MongoDB и векторными базами данных (ClickHouse/Elasticsearch)
+     - Использование модели jina-v4 для эмбеддингов (< 0.1s latency, 6-7GB RAM)
+     - Оптимизация затрат через переиспользование запросов
 
 ## Contributing New Examples
 
@@ -54,4 +56,5 @@ Each example should:
 ## Language Organization
 
 - `EN/` - English examples
+- `RU/` - Russian examples (примеры на русском языке)
 - Additional language folders can be added following the same structure 
