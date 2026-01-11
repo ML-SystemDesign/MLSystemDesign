@@ -8,9 +8,11 @@ This directory contains various ML system design documents organized into three 
 ├── Mock/                  # Educational mock examples
 │   └── EN/               # English mock examples
 ├── Examples/             # Real-world inspired examples
-│   └── EN/              # English examples
+│   ├── EN/              # English examples
+│   └── RU/              # Russian examples
 └── Real/                # Actual production design docs
-    └── EN/              # English real examples
+    ├── EN/              # English real examples
+    └── RU/              # Russian real examples
 ```
 
 ## Categories
