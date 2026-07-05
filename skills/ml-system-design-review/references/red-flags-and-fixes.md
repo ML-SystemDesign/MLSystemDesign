@@ -6,7 +6,7 @@ Use this file to prioritize. A finding is useful when it explains why the gap ma
 
 - No clear problem, user, or business decision; the project starts with a model.
 - No cost-of-mistake analysis for high-stakes, financial, safety, legal, medical, moderation, fraud, credit, or pricing decisions.
-- Validation leaks future information, users, sessions, duplicates, geography, or target-derived features.
+- Validation leaks future information (lookahead bias), users, sessions, duplicates, geography, or target-derived features.
 - Offline metric has no credible relationship to online or business impact.
 - No baseline before complex modeling.
 - Model changes can affect production with no fallback, rollback, owner, or monitoring.
@@ -29,6 +29,21 @@ Use this file to prioritize. A finding is useful when it explains why the gap ma
 - Monitoring is only uptime, request count, or final accuracy.
 - Ownership is a team name, not a responsible owner and escalation path.
 - LLM-as-judge is used without calibration or human spot checks.
+
+## Leakage And Lookahead Checklist
+
+Walk this list when grading validation, data, or features — against the doc's claims and, when a repo is available, against split/feature code. Classify confirmed items per the Severity section in SKILL.md: serious leakage is critical, weaker validation gaps are major.
+
+- Every feature is computable at prediction time: feature values predate the label/decision timestamp (no lookahead bias). In code, check as-of/point-in-time joins, backfilled feature tables, and aggregation window end times.
+- Preprocessing (scalers, imputers, encoders, vocabularies) is fit on training data only, inside the split or CV loop.
+- Target-derived features and target encodings are computed out-of-fold, never on the full dataset.
+- Duplicates and near-duplicates do not straddle the split boundary.
+- The same user, session, entity, or group never appears on both sides of a split when it shares target information.
+- Temporal splits respect label maturity: labels that arrive with a delay are not consumed before that delay has elapsed.
+- Feature selection, hyperparameter tuning, and threshold choice never touch the test set; tuning uses an inner split, and any golden set stays reserved for final evaluation.
+- The retraining/update policy re-verifies these boundaries; a clean initial split can rot as data and features evolve.
+
+For modern AI systems, also check eval contamination (`modern-ai-systems.md`).
 
 ## Low-Hanging Fixes
 

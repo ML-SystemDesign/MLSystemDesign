@@ -92,6 +92,7 @@ Evaluate behavior, not vibes.
 - Use repeated runs for reliability when outputs or tool choices are stochastic.
 - Keep regression cases from production failures.
 - Calibrate LLM-as-judge with human spot checks and disagreement analysis.
+- Check eval contamination: verbatim golden-set Q&A pairs in fine-tuning data or few-shot examples make scores meaningless. For RAG, retrieving the answer-bearing source document is the point — contamination is the eval answer key itself indexed as a document. Treat public-benchmark results as weak evidence when pretraining overlap is plausible.
 
 Grade anchors:
 
