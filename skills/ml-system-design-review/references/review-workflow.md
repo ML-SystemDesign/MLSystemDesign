@@ -68,7 +68,7 @@ For modern AI systems, also apply `modern-ai-systems.md`.
 
 ## Output Discipline
 
-- Findings first, ordered by severity.
+- Findings ordered by severity, immediately after the gradecard; do not bury them in coverage.
 - Include evidence references when reviewing files.
 - Phrase recommendations as concrete changes, not abstract advice.
 - Separate blockers from improvements.
