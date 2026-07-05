@@ -74,5 +74,5 @@ For modern AI systems, also apply `modern-ai-systems.md`.
 - Separate blockers from improvements.
 - Include praise only when tied to a specific design mechanism.
 - Include an author verdict only after the technical verdict is supported by evidence.
-- End with a short book-backed takeaway the team can reuse.
-- Full and repo-only reviews close with the Final Scorecard (`output-templates.md`), grades matching the report exactly.
+- Every review opens with the Scorecard (`output-templates.md`); the verdict follows from the gradecard average per that template, and the comments never contradict the scorecard.
+- The book-backed takeaway on the scorecard is a short lesson the team can reuse.

@@ -15,7 +15,7 @@ Use `+` or `-` for meaningful nuance:
 - Add `+` when a section exceeds the anchor on stage-critical evidence.
 - Add `-` when a material caveat could change the design decision.
 - Avoid `A+` unless the artifact has measured production evidence, explicit tradeoffs, and a maintenance loop.
-- Do not average grades into a fake number. Overall grade is dominated by stage-critical dimensions and red flags.
+- The verdict is computed from the gradecard average per `output-templates.md`. The average never hides risk: stage-critical `F`/`D` grades and critical findings must still lead the findings.
 
 ## Base MLSD Gradecard
 
@@ -36,9 +36,7 @@ Ten dimensions. This table is the single source for the base gradecard rows: rep
 
 ## Verdict Mapping
 
-- Fail: any critical design gap, any stage-critical `F`, or any stage-critical `D` that makes the project likely to build the wrong system.
-- Pass-with-concerns: no critical gaps, but `C` or `D` grades remain in areas that matter before pilot or production.
-- Pass: major design risks are covered for the current stage; remaining issues are minor or explicitly deferred.
+The verdict (approve | approve with concerns | needs improvement) is read off the gradecard average; the point mapping and bands live in `output-templates.md`. `n/a (stage)` and `not fairly gradeable` rows are excluded from the average, so grading a dimension `F` when it should be `n/a (stage)` corrupts the verdict — apply the stage gate below before grading.
 
 ## Author Verdicts
 
@@ -57,6 +55,12 @@ Vary the sentence to match the finding. Do not force the exact wording when it s
 ## Stage Adjustment
 
 Do not punish an early concept for missing production runbooks. Do punish a production candidate for missing runbooks, monitoring, fallback, ownership, or rollback.
+
+Decide stage relevance explicitly before grading each dimension:
+
+- Stage-irrelevant and unaddressed: `n/a (stage)`, excluded from the verdict average. A missing serving/inference design in an obvious prototype is `n/a (stage)`, not `F`.
+- Stage-irrelevant but addressed anyway — a solution, a doc section, or an explicit deferral ("not doing this yet, revisit at pilot"): grade what is written. A credible deferral with a revisit trigger is a good decision, not a gap.
+- Stage-relevant: grade normally; here absence or silence is exactly the failure the `F` anchor describes.
 
 Minimum acceptable by stage:
 

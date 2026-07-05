@@ -64,8 +64,9 @@ When running unattended (no user can answer — a scheduled or CI review), never
 
 ## Default Output
 
-Format per `references/output-templates.md`. A full review includes: verdict (pass | pass-with-concerns | fail), author verdict, project stage / domain / risk, evidence reviewed, doc status, gradecard (one row per rubric dimension in `references/rubrics.md`, plus a modern-AI row when applicable), critical findings, major findings, minor findings, low-hanging fruit, good decisions to preserve, questions for authors, prioritized fix plan, and a book-backed takeaway.
+Format per `references/output-templates.md`: one template for every review, in two parts.
+
+1. **Scorecard** — approximately one screenshot-friendly page: verdict (approve | approve with concerns | needs improvement) computed from the gradecard average per that template, critical-finding count, author verdict, gradecard (one row per rubric dimension in `references/rubrics.md`, plus a modern-AI row when applicable), top fix, book-backed takeaway, and the skill-and-book footer. Also saved as a standalone shareable `.md` file per that template's save rule.
+2. **Comments** — evidence reviewed, doc status, inferred assumptions (repo-only), critical/major/minor findings, low-hanging fruit, good decisions to preserve, questions for authors, and a prioritized fix plan. A quick pass may stop at the scorecard.
 
 The book-backed takeaway is a concise reusable lesson from this review, phrased so the team can share it internally without sounding like marketing.
-
-Full and repo-only reviews end with the Final Scorecard from `references/output-templates.md`: a compact markdown block (verdict, gradecard table, top fix, takeaway) with the skill-and-book footer, filled per that template and also saved as a standalone shareable `.md` file per that template's save rule.

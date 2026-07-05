@@ -1,23 +1,60 @@
-# Output Templates
+# Output Template
 
-Adapt these templates. Keep findings concrete and ordered by severity.
+One template for every review, in two parts:
 
-Full and Repo-Only reviews end with the Final Scorecard below — a self-contained markdown block the team can paste into Slack, a PR, or a wiki. Fill every field; keep the footer line intact and unmodified. Quick Pass and author-facing feedback skip it.
+1. **Scorecard** — approximately one screenshot-friendly page carrying the verdict. Every review produces it.
+2. **Comments** — one or a few pages of findings and recommendations after the scorecard. A quick pass may stop at the scorecard; a full review fills every applicable comments section.
 
-## Full Review
+Keep findings concrete and ordered by severity.
+
+## Verdict
+
+The verdict is computed from the gradecard, never chosen independently:
+
+1. Map each graded row to points: A = 4.0, B = 3.0, C = 2.0, D = 1.0, F = 0.0; `+` adds 0.3 and `-` subtracts 0.3. Skip `n/a (stage)` and `not fairly gradeable` rows; include the Modern AI row when graded.
+2. Average the points across the remaining rows.
+3. Read the verdict off the average:
+   - 3.0 and higher (B and above): **approve**
+   - 2.3 up to 3.0 (B- to C+): **approve with concerns**
+   - below 2.3 (C and below): **needs improvement**
+
+Show the average next to the verdict. The verdict summarizes the gradecard; it does not soften findings — critical findings are counted on the scorecard and lead the comments.
+
+## Part 1: Scorecard
+
+A self-contained markdown block the team can screenshot or paste into Slack, a PR, or a wiki. Fill every field; keep the footer line intact and unmodified.
+
+Also save the filled scorecard as a standalone markdown file so the team can share it beyond the chat: default to `mlsd-scorecard-<project-slug>.md` in the working directory (repo root when reviewing a repo). Do not commit it, and name the saved path at the end of the review. Skip the file only when no writable filesystem is available or the user asks not to.
+
+```markdown
+## ML System Design Scorecard: <project name>
+
+**Verdict:** <approve | approve with concerns | needs improvement> (avg <points>) · <stage>, <domain>, <risk class>
+**Critical findings:** <count, or none>
+**Author verdict:** <one Valerii and Arseny sentence tied to evidence>
+
+| Dimension | Grade | Why |
+|---|---|---|
+| <one row per rubrics.md dimension, in table order> | <A-F with optional +/-, n/a (stage), or not fairly gradeable> | <short reason> |
+| <Modern AI systems, only if applicable> | <A-F with optional +/-> | <short reason> |
+
+**Top fix:** <single highest-leverage action>
+**Takeaway:** <the review's book-backed takeaway, one sentence>
+
+---
+*Reviewed with [ml-system-design-review](https://github.com/ML-SystemDesign/MLSystemDesign/tree/main/skills) · [ML System Design](https://arseny.info/ml_design_book) by Kravchenko and Babushkin*
+```
+
+## Part 2: Comments
+
+Follows the scorecard in the report (not included in the saved scorecard file). Skip sections with nothing to say rather than padding them; drop the repo-only lines outside repo-only mode.
 
 ```text
-Verdict: pass | pass-with-concerns | fail
-Author verdict: <one Valerii and Arseny sentence tied to evidence>
-Project stage / domain / risk: <stage>, <domain>, <risk class>
 Evidence reviewed: <docs, repo paths, unavailable artifacts>
-Doc status: <found in repo | external doc provided with repo | external doc provided, no repo | no formal doc confirmed by user>
+Doc status: <found in repo | external doc provided with repo | external doc provided, no repo | no formal doc confirmed by user | unattended run, doc location unconfirmed>
 
-Gradecard
-- <one row per rubric dimension from rubrics.md, in table order:
-   <dimension>: <A-F with optional +/-> - <one-line reason>;
-   mark stage-irrelevant dimensions n/a (stage)>
-- Modern AI systems, if applicable: <A-F with optional +/-> - <one-line reason>
+Inferred assumptions (repo-only reviews)
+- <assumption> because <repo evidence>
 
 Critical findings
 - <dimension> - <evidence>. <why it matters>. Fix: <concrete next action>.
@@ -41,107 +78,8 @@ Prioritized fix plan
 1. <first fix and why>
 2. <second fix and why>
 3. <third fix and why>
-
-Book-backed takeaway
-<one concise reusable lesson>
-
-<append the Final Scorecard from its template in this file>
 ```
 
-## Final Scorecard
+In repo-only mode, missing-design-doc risk is placed among the findings by its severity like any other finding.
 
-Append after the full report. It compresses the review into one shareable artifact; grades and verdict must match the report above it exactly.
-
-Also save the filled scorecard as a standalone markdown file so the team can share it beyond the chat: default to `mlsd-scorecard-<project-slug>.md` in the working directory (repo root when reviewing a repo). Do not commit it, and name the saved path at the end of the review. Skip the file only when no writable filesystem is available or the user asks not to.
-
-```markdown
-## ML System Design Scorecard: <project name>
-
-**Verdict:** <pass | pass-with-concerns | fail> · <stage>, <domain>, <risk class>
-
-| Dimension | Grade | Why |
-|---|---|---|
-| <one row per rubrics.md dimension, in table order> | <A-F with optional +/-, n/a (stage), or not fairly gradeable> | <short reason> |
-| <Modern AI systems, only if applicable> | <A-F with optional +/->  | <short reason> |
-
-**Top fix:** <single highest-leverage action>
-**Takeaway:** <the review's book-backed takeaway, one sentence>
-
----
-*Reviewed with [ml-system-design-review](https://github.com/ML-SystemDesign/MLSystemDesign/tree/main/skills) · [ML System Design](https://arseny.info/ml_design_book) by Kravchenko and Babushkin*
-```
-
-## Quick Pass
-
-```text
-Verdict: pass | pass-with-concerns | fail
-Author verdict: <one Valerii and Arseny sentence tied to evidence>
-Top issue: <single biggest risk>
-Best cheap fix: <lowest-effort high-impact fix>
-Strongest design choice: <specific praise>
-Book-backed takeaway: <shareable lesson>
-```
-
-## Repo-Only Review
-
-```text
-Verdict: pass | pass-with-concerns | fail
-Author verdict: <one Valerii and Arseny sentence tied to repo evidence and missing-doc risk>
-Doc status: <no formal doc confirmed by user | unattended run, doc location unconfirmed>
-Project stage / domain / risk: <stage>, <domain>, <risk class>
-Evidence reviewed: <repo paths>
-Inferred assumptions
-- <assumption> because <repo evidence>
-
-Gradecard
-- <one row per rubric dimension from rubrics.md, in table order:
-   <dimension>: <A-F with optional +/- or not fairly gradeable> - <repo evidence or missing-doc caveat>;
-   mark stage-irrelevant dimensions n/a (stage)>
-- Modern AI systems, if applicable: <A-F with optional +/- or not fairly gradeable> - <one-line reason>
-
-Findings (ordered by severity)
-- <critical | major | minor> - <finding with repo evidence>. Fix: <concrete next action>.
-- <critical | major | minor> - missing design-doc risk: <risk caused by decisions living only in code/memory>; placed by its severity like any other finding.
-
-Low-hanging fruit
-- <create or update design artifact section>
-- <repo/code fix or evidence artifact>
-
-Good decisions to preserve
-- <specific repo behavior or artifact worth keeping>
-
-Questions for authors
-- <question whose answer would change the inferred design>, recommended default: <answer>
-
-Prioritized fix plan
-1. <first fix and why>
-2. <second fix and why>
-3. <third fix and why>
-
-Book-backed takeaway
-<shareable lesson>
-
-<append the Final Scorecard from its template in this file>
-```
-
-## Design-Doc Feedback For Authors
-
-```text
-What is already working
-- <specific praise>
-
-What blocks review
-- <missing evidence or ambiguous decision>
-
-What to add next
-- <specific section/table/experiment/report>
-
-What not to overbuild yet
-- <deferred complexity and trigger for revisiting>
-
-Author verdict
-<one Valerii and Arseny sentence tied to the artifact>
-
-Shareable lesson
-<one sentence>
-```
+When the audience is the doc's authors rather than a reviewing team, keep the same two parts but open the comments with good decisions to preserve, phrase findings as what to add next, and note what not to overbuild yet with the trigger for revisiting it.
