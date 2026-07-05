@@ -66,7 +66,7 @@ When running unattended (no user can answer — a scheduled or CI review), never
 
 Format per `references/output-templates.md`: one template for every review, in two parts.
 
-1. **Scorecard** — approximately one screenshot-friendly page: verdict (approve | approve with concerns | needs improvement) computed from the gradecard average per that template, critical-finding count, author verdict, gradecard (one row per rubric dimension in `references/rubrics.md`, plus a modern-AI row when applicable), top fix, book-backed takeaway, and the skill-and-book footer. Also saved as a standalone shareable `.md` file per that template's save rule.
+1. **Scorecard** — approximately one screenshot-friendly page: a small skill-and-book attribution line at the top, then verdict (approve | approve with concerns | needs improvement) computed from the gradecard average per that template, critical-finding count, author verdict, gradecard (one row per rubric dimension in `references/rubrics.md`, plus a modern-AI row when applicable), top fix, and book-backed takeaway. Also saved as a standalone shareable `.md` file per that template's save rule.
 2. **Comments** — evidence reviewed, doc status, inferred assumptions (repo-only), critical/major/minor findings, low-hanging fruit, good decisions to preserve, questions for authors, and a prioritized fix plan. A quick pass may stop at the scorecard.
 
 The book-backed takeaway is a concise reusable lesson from this review, phrased so the team can share it internally without sounding like marketing.

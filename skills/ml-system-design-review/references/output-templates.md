@@ -22,11 +22,13 @@ Show the average next to the verdict. The verdict summarizes the gradecard; it d
 
 ## Part 1: Scorecard
 
-A self-contained markdown block the team can screenshot or paste into Slack, a PR, or a wiki. Fill every field; keep the footer line intact and unmodified.
+A self-contained markdown block the team can screenshot or paste into Slack, a PR, or a wiki. Fill every field; keep the attribution line at the top intact and unmodified — it stays small text, never a header.
 
 Also save the filled scorecard as a standalone markdown file so the team can share it beyond the chat: default to `mlsd-scorecard-<project-slug>.md` in the working directory (repo root when reviewing a repo). Do not commit it, and name the saved path at the end of the review. Skip the file only when no writable filesystem is available or the user asks not to.
 
 ```markdown
+*Reviewed with [ml-system-design-review](https://github.com/ML-SystemDesign/MLSystemDesign/tree/main/skills) · [ML System Design](https://arseny.info/ml_design_book) by Kravchenko and Babushkin*
+
 ## ML System Design Scorecard: <project name>
 
 **Verdict:** <approve | approve with concerns | needs improvement> (avg <points>) · <stage>, <domain>, <risk class>
@@ -40,9 +42,6 @@ Also save the filled scorecard as a standalone markdown file so the team can sha
 
 **Top fix:** <single highest-leverage action>
 **Takeaway:** <the review's book-backed takeaway, one sentence>
-
----
-*Reviewed with [ml-system-design-review](https://github.com/ML-SystemDesign/MLSystemDesign/tree/main/skills) · [ML System Design](https://arseny.info/ml_design_book) by Kravchenko and Babushkin*
 ```
 
 ## Part 2: Comments
