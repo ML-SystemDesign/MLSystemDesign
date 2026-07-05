@@ -10,7 +10,7 @@ Search likely locations and names:
 - Files containing `design`, `architecture`, `proposal`, `prd`, `rfc`, `adr`, `experiment`, `evaluation`, `metrics`, `monitoring`, `runbook`.
 - Issue/PR templates or contribution docs when the repo has no dedicated design folder.
 
-If no formal doc is found, apply the Formal Doc Gate in `review-workflow.md`: ask the user where it lives; unattended, proceed repo-only with the missing-doc caveat at the top of the report. Do not assume absence.
+If no formal doc is found in the repo and the user has not provided one, apply the Formal Doc Gate in `review-workflow.md`: ask the user where it lives; unattended, proceed repo-only with the missing-doc caveat at the top of the report. Do not assume absence.
 
 ## What To Inspect In Code
 

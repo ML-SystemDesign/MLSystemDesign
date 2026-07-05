@@ -31,7 +31,7 @@ Prefer evidence in this order: runnable code and configs, experiment artifacts, 
 
 ## Formal Doc Gate
 
-The gate applies only when a repo is under review and no formal design doc is found in it. A standalone doc with no repo is doc-only mode, not a gate trigger. Ask before continuing:
+The gate applies only when a repo is under review, the user has not provided a design doc, and none is found in the repo. A user-provided external doc plus a repo is doc-and-repo mode; a standalone doc with no repo is doc-only mode — neither triggers the gate. Ask before continuing:
 
 ```text
 I don't see a formal design doc in the repo. Is it in Google Docs, Confluence, Notion, or elsewhere? If no formal doc exists, say so and I'll do a repo-only MLSD audit with explicit assumptions.

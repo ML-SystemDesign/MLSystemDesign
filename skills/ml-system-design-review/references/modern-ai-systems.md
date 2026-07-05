@@ -4,6 +4,8 @@ Load this reference for LLMs, RAG, foundation models, fine-tuning, agents, tool 
 
 Modern AI systems are still ML systems. The difference is that the model is often a service, the context is part of the input distribution, the system can call tools, and failures can look fluent. Review the system, not the demo.
 
+When reporting, collapse this reference into the single optional "Modern AI systems" gradecard row: grade the weakest stage-critical aspect across the sections below and name it in the one-line reason.
+
 ## Core Review Questions
 
 - What task does the AI system perform, and what failures are unacceptable?

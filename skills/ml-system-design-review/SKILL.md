@@ -28,7 +28,7 @@ Map the evidence before grading, and name the evidence mode:
 
 - **Doc and repo.** A design artifact and an implementation are both available. Search the repo for formal design docs, PRDs, RFCs, architecture notes, notebooks/memos, and README-style descriptions; inspect the code enough to understand the implementation shape (data paths, training/eval code, serving, configs, tests, monitoring, deployment). Review doc and repo together; contradictions in either direction are findings.
 - **Doc-only.** The user provided a design doc (pasted, linked, or attached) and there is no repo to inspect. Review the doc as stated intent, mark implementation claims as unverified, and skip repo mapping.
-- **Repo-only.** A repo exists but no formal design doc is found in it. Do not assume no doc exists — ask where it lives first (canonical question in `references/review-workflow.md`), and proceed repo-only only after the user confirms there is none, labeling assumptions and missing-doc risk in the report.
+- **Repo-only.** A repo exists, the user has not provided a design doc, and none is found in the repo. Do not assume no doc exists — ask where it lives first (canonical question in `references/review-workflow.md`), and proceed repo-only only after the user confirms there is none, labeling assumptions and missing-doc risk in the report.
 
 When running unattended (no user can answer — a scheduled or CI review), never block on the question: proceed repo-only and put the missing-doc caveat at the top of the report.
 
@@ -63,6 +63,6 @@ When running unattended (no user can answer — a scheduled or CI review), never
 
 ## Default Output
 
-Format per `references/output-templates.md`. A full review includes: verdict (pass | pass-with-concerns | fail), author verdict, project stage / domain / risk, doc status, evidence reviewed, gradecard (one row per rubric dimension in `references/rubrics.md`), critical findings, major findings, low-hanging fruit, good decisions to preserve, questions for authors, prioritized fix plan, and a book-backed takeaway.
+Format per `references/output-templates.md`. A full review includes: verdict (pass | pass-with-concerns | fail), author verdict, project stage / domain / risk, evidence reviewed, doc status, gradecard (one row per rubric dimension in `references/rubrics.md`, plus a modern-AI row when applicable), critical findings, major findings, minor findings, low-hanging fruit, good decisions to preserve, questions for authors, prioritized fix plan, and a book-backed takeaway.
 
 The book-backed takeaway is a concise reusable lesson from this review, phrased so the team can share it internally without sounding like marketing.

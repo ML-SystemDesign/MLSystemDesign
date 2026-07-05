@@ -23,6 +23,9 @@ Critical findings
 Major findings
 - <dimension> - <evidence>. <why it matters>. Fix: <concrete next action>.
 
+Minor findings
+- <dimension> - <evidence>. Fix: <concrete next action>.
+
 Low-hanging fruit
 - <cheap concrete action> -> <risk reduced or decision improved>.
 
@@ -58,6 +61,7 @@ Book-backed takeaway: <shareable lesson>
 Verdict: pass | pass-with-concerns | fail
 Author verdict: <one Valerii and Arseny sentence tied to repo evidence and missing-doc risk>
 Doc status: <no formal doc confirmed by user | unattended run, doc location unconfirmed>
+Project stage / domain / risk: <stage>, <domain>, <risk class>
 Evidence reviewed: <repo paths>
 Inferred assumptions
 - <assumption> because <repo evidence>
@@ -66,12 +70,13 @@ Gradecard
 - <one row per rubric dimension from rubrics.md, in table order:
    <dimension>: <A-F with optional +/- or not fairly gradeable> - <repo evidence or missing-doc caveat>;
    mark stage-irrelevant dimensions n/a (stage)>
+- Modern AI systems, if applicable: <A-F with optional +/- or not fairly gradeable> - <one-line reason>
 
 Missing design-doc risk
 - <risk caused by decisions living only in code/memory>
 
-Findings
-- <finding with repo evidence>
+Findings (ordered by severity)
+- <critical | major | minor> - <finding with repo evidence>. Fix: <concrete next action>.
 
 Low-hanging fruit
 - <create or update design artifact section>

@@ -19,7 +19,7 @@ Use `+` or `-` for meaningful nuance:
 
 ## Base MLSD Gradecard
 
-Ten dimensions. This table is the single source for gradecard rows: report one row per dimension, in this order. Within a merged dimension, grade the weakest stage-critical facet and name it in the one-line reason.
+Ten dimensions. This table is the single source for the base gradecard rows: report one row per dimension, in this order. Modern AI systems add one optional row, graded per `modern-ai-systems.md`. Within a merged dimension, grade the weakest stage-critical facet and name it in the one-line reason. Templates may also use `n/a (stage)` for stage-irrelevant dimensions and `not fairly gradeable` in repo-only mode; these are explicit non-grades, not letter grades.
 
 | Dimension | F | D | C | B | A |
 |---|---|---|---|---|---|
