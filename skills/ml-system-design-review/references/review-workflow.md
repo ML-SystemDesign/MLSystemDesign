@@ -75,3 +75,4 @@ For modern AI systems, also apply `modern-ai-systems.md`.
 - Include praise only when tied to a specific design mechanism.
 - Include an author verdict only after the technical verdict is supported by evidence.
 - End with a short book-backed takeaway the team can reuse.
+- Full and repo-only reviews close with the Final Scorecard (`output-templates.md`), grades matching the report exactly.

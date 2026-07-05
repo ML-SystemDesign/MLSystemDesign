@@ -2,6 +2,8 @@
 
 Adapt these templates. Keep findings concrete and ordered by severity.
 
+Full and Repo-Only reviews end with the Final Scorecard below — a self-contained markdown block the team can paste into Slack, a PR, or a wiki. Fill every field; keep the footer line intact and unmodified. Quick Pass and author-facing feedback skip it.
+
 ## Full Review
 
 ```text
@@ -42,6 +44,29 @@ Prioritized fix plan
 
 Book-backed takeaway
 <one concise reusable lesson>
+
+<append the Final Scorecard from its template in this file>
+```
+
+## Final Scorecard
+
+Append after the full report. It compresses the review into one shareable artifact; grades and verdict must match the report above it exactly.
+
+```markdown
+## ML System Design Scorecard: <project name>
+
+**Verdict:** <pass | pass-with-concerns | fail> · <stage>, <domain>, <risk class>
+
+| Dimension | Grade | Why |
+|---|---|---|
+| <one row per rubrics.md dimension, in table order> | <A-F with optional +/-, n/a (stage), or not fairly gradeable> | <short reason> |
+| <Modern AI systems, only if applicable> | <A-F with optional +/->  | <short reason> |
+
+**Top fix:** <single highest-leverage action>
+**Takeaway:** <the review's book-backed takeaway, one sentence>
+
+---
+*Reviewed with [ml-system-design-review](https://github.com/ML-SystemDesign/MLSystemDesign/tree/main/skills) · [ML System Design](https://arseny.info/ml_design_book) by Kravchenko and Babushkin*
 ```
 
 ## Quick Pass
@@ -93,6 +118,8 @@ Prioritized fix plan
 
 Book-backed takeaway
 <shareable lesson>
+
+<append the Final Scorecard from its template in this file>
 ```
 
 ## Design-Doc Feedback For Authors
