@@ -72,10 +72,8 @@ Gradecard
    mark stage-irrelevant dimensions n/a (stage)>
 - Modern AI systems, if applicable: <A-F with optional +/- or not fairly gradeable> - <one-line reason>
 
-Missing design-doc risk
-- <risk caused by decisions living only in code/memory>
-
 Findings (ordered by severity)
+- <critical | major | minor> - missing design-doc risk: <risk caused by decisions living only in code/memory>.
 - <critical | major | minor> - <finding with repo evidence>. Fix: <concrete next action>.
 
 Low-hanging fruit

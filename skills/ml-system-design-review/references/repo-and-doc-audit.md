@@ -49,7 +49,7 @@ Report structure changes:
 
 - Add `Doc status: no formal doc confirmed by user` (or `unattended run, doc location unconfirmed`).
 - Add `Inferred assumptions` with each assumption labeled.
-- Add `Missing design-doc risk` as a separate finding if the repo is mature enough that lack of a doc creates coordination or maintenance risk.
+- Add a severity-labeled `missing design-doc risk` finding to the findings list if the repo is mature enough that lack of a doc creates coordination or maintenance risk.
 - Grade from repo evidence, but mark dimensions that cannot be fairly graded without a design artifact.
 
 Do not penalize early prototypes for missing a polished doc. Do penalize production or multi-person projects when core decisions exist only in code and memory.
