@@ -19,6 +19,7 @@ This repository provides structure and a variety of design documents you can use
 │   │   └── EN/                      # English examples
 │   └── Mock/                        # Educational mock examples
 │       └── EN/                      # English mock examples
+├── skills/                          # Agent skills (ml-system-design-review)
 ├── BookOutline.md                   # Book chapter summaries and key concepts
 ├── CONTRIBUTING.md                  # Contribution guidelines
 ├── LICENSE                          # MIT License
@@ -41,6 +42,16 @@ This repository provides structure and a variety of design documents you can use
    - [`Design_Doc_Examples/`](Design_Doc_Examples/) contains worked examples across different domains and complexity levels.
    - [Retail Demand Forecasting](Design_Doc_Examples/Examples/EN/Retail_Demand_Forecasting_Design.md) — a real-world–inspired forecasting system.
    - [RAG Chat with Document Versions](Design_Doc_Examples/Mock/EN/RAG_Chat_With_Doc_Versions/RAG_Chat_With_Doc_Versions_Design.md) — an educational mock of a RAG system.
+
+## New: Agent Skill For Design Review
+
+This repository now ships [`ml-system-design-review`](skills/README.md) — an agent skill that applies the book's framework to review ML/AI system designs: a verdict, a stage-aware gradecard, severity-ranked findings, and a prioritized fix plan for a design doc, a repo, or both.
+
+```bash
+npx skills add ML-SystemDesign/MLSystemDesign
+```
+
+See [`skills/README.md`](skills/README.md) for details and usage.
 
 ## Templates
 
