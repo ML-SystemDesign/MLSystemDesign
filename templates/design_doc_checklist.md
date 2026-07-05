@@ -1,13 +1,13 @@
 # ML System Design Document Review Checklist
 
 ## Problem Definition
-- [ ] Clear problem statement with measurable objectives
-- [ ] Well-defined scope and constraints
+- [ ] Defined a clear problem statement with measurable objectives
+- [ ] Scoped the problem and stated constraints
 - [ ] Identified stakeholders and their requirements
 - [ ] Justified business value and impact
 - [ ] Analyzed existing solutions and their limitations
 - [ ] Assessed risks and failure modes
-- [ ] Estimated costs of mistakes
+- [ ] Estimated the cost of mistakes
 - [ ] Defined success criteria
 
 ## Metrics and Losses
@@ -16,58 +16,55 @@
 - [ ] Justified loss functions
 - [ ] Aligned metrics with business goals
 - [ ] Considered trade-offs
-- [ ] Defined evaluation strategy
-- [ ] Set up measurement framework
-- [ ] Planned A/B testing approach
+- [ ] Set up a measurement framework
 
 ## Data Considerations
 - [ ] Identified all data sources (internal/external)
 - [ ] Assessed data quality and freshness
-- [ ] Documented data pipeline architecture
+- [ ] Documented the data pipeline architecture
 - [ ] Addressed data privacy and security
-- [ ] Considered data versioning strategy
+- [ ] Considered a data versioning strategy
 - [ ] Evaluated data storage requirements
-- [ ] Planned data labeling process
+- [ ] Planned the data labeling process
 - [ ] Documented metadata usage
-- [ ] Designed ETL pipeline
+- [ ] Designed the ETL pipeline
 - [ ] Set up data quality checks
 
-## Validation Strategy
+## Validation Schemas
 - [ ] Defined validation requirements
-- [ ] Designed validation schema
+- [ ] Designed the validation schema
 - [ ] Prevented data leakage
 - [ ] Planned update frequency
-- [ ] Set up cross-validation strategy
+- [ ] Set up a cross-validation strategy
 - [ ] Considered temporal aspects
-- [ ] Documented validation process
-- [ ] Planned for data drift
+- [ ] Documented the validation process
 
 ## Baseline Solutions
 - [ ] Defined constant baselines
 - [ ] Selected model baselines
 - [ ] Identified feature baselines
 - [ ] Set minimum performance requirements
-- [ ] Planned comparison methodology
+- [ ] Planned the comparison methodology
 - [ ] Documented baseline results
-- [ ] Set up improvement metrics
+- [ ] Defined metrics for tracking iterative improvement
 
 ## Error Analysis
 - [ ] Planned learning curve analysis
 - [ ] Set up residual analysis
-- [ ] Identified edge cases
+- [ ] Identified edge cases and corner cases
 - [ ] Planned monitoring of failure modes
 - [ ] Designed error tracking
 - [ ] Set up performance analysis
-- [ ] Planned improvement process
+- [ ] Planned the improvement process
 
 ## Training Pipeline
-- [ ] Designed training architecture
+- [ ] Designed the training architecture
 - [ ] Selected appropriate tools
 - [ ] Planned data preprocessing
 - [ ] Set up experiment tracking
 - [ ] Defined model versioning
 - [ ] Planned resource allocation
-- [ ] Documented training process
+- [ ] Documented the training process
 - [ ] Set up monitoring
 
 ## Feature Engineering
@@ -79,54 +76,52 @@
 - [ ] Planned feature updates
 - [ ] Considered computational constraints
 
+## System Architecture
+- [ ] Detailed infrastructure requirements
+- [ ] Addressed scalability considerations
+- [ ] Defined latency requirements
+- [ ] Planned security measures
+- [ ] Identified integration points
+- [ ] Defined the deployment strategy
+
 ## Integration
 - [ ] Designed API interfaces
-- [ ] Planned release cycle
+- [ ] Planned the release cycle
 - [ ] Set up fallback strategies
 - [ ] Defined operational procedures
 - [ ] Planned monitoring and alerts
-- [ ] Documented deployment process
+- [ ] Documented the deployment process
 - [ ] Set up incident response
 - [ ] Defined SLAs
 
 ## Documentation
-- [ ] Clear writing and organization
-- [ ] Technical details sufficient
-- [ ] Diagrams and visualizations
-- [ ] References and citations
-- [ ] Glossary of terms
-- [ ] Version history
-- [ ] Maintenance procedures
-- [ ] Update guidelines
-
-## System Architecture
-- [ ] Detailed infrastructure requirements
-- [ ] Scalability considerations
-- [ ] Latency requirements
-- [ ] Security measures
-- [ ] Integration points
-- [ ] Deployment strategy
+- [ ] Wrote clearly and organized the document
+- [ ] Included sufficient technical detail
+- [ ] Included diagrams and visualizations
+- [ ] Added references and citations
+- [ ] Provided a glossary of terms
+- [ ] Recorded version history
+- [ ] Documented maintenance procedures
+- [ ] Provided update guidelines
 
 ## Evaluation Strategy
-- [ ] Clear success metrics
-- [ ] A/B testing methodology
-- [ ] Performance benchmarks
-- [ ] Monitoring plan
-- [ ] Alert thresholds
-- [ ] Fallback strategies
+- [ ] Defined clear success metrics
+- [ ] Defined the A/B testing methodology
+- [ ] Established performance benchmarks
+- [ ] Planned the monitoring approach
+- [ ] Set alert thresholds
 
 ## Implementation Plan
-- [ ] Realistic timeline
-- [ ] Resource requirements
-- [ ] Dependencies identified
-- [ ] Risk assessment
-- [ ] Mitigation strategies
-- [ ] Success criteria
+- [ ] Set a realistic timeline
+- [ ] Specified resource requirements
+- [ ] Identified dependencies
+- [ ] Completed a risk assessment
+- [ ] Defined mitigation strategies
 
-## Maintenance & Operations
-- [ ] Monitoring setup
-- [ ] Update procedures
-- [ ] Backup strategies
-- [ ] Incident response plan
-- [ ] SLAs defined
-- [ ] Resource scaling plan 
+## Maintenance and Operations
+- [ ] Configured monitoring
+- [ ] Defined update procedures
+- [ ] Planned backup strategies
+- [ ] Prepared an incident response plan
+- [ ] Planned for data drift and model decay
+- [ ] Defined a resource scaling plan
