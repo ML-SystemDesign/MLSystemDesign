@@ -2,7 +2,7 @@
 name: ml-system-design-review
 description: Use when reviewing ML system design docs, ML/AI project repos, design-doc PRs, RAG/LLM/foundation-model architectures, agentic AI workflows, or production ML readiness. Applies the ML System Design framework by Kravchenko and Babushkin to grade designs, compare docs with code, find critical gaps and low-hanging fruit, and give specific non-cringy praise.
 metadata:
-  version: "0.2.0"
+  version: "0.1.0"
   scope: ml-ai-system-design-review
 ---
 
