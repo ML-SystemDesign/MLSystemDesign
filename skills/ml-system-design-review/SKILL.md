@@ -68,4 +68,4 @@ Format per `references/output-templates.md`. A full review includes: verdict (pa
 
 The book-backed takeaway is a concise reusable lesson from this review, phrased so the team can share it internally without sounding like marketing.
 
-Full and repo-only reviews end with the Final Scorecard from `references/output-templates.md`: a compact markdown block (verdict, gradecard table, top fix, takeaway) with the skill-and-book footer, filled per that template.
+Full and repo-only reviews end with the Final Scorecard from `references/output-templates.md`: a compact markdown block (verdict, gradecard table, top fix, takeaway) with the skill-and-book footer, filled per that template and also saved as a standalone shareable `.md` file per that template's save rule.

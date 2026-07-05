@@ -52,6 +52,8 @@ Book-backed takeaway
 
 Append after the full report. It compresses the review into one shareable artifact; grades and verdict must match the report above it exactly.
 
+Also save the filled scorecard as a standalone markdown file so the team can share it beyond the chat: default to `mlsd-scorecard-<project-slug>.md` in the working directory (repo root when reviewing a repo). Do not commit it, and name the saved path at the end of the review. Skip the file only when no writable filesystem is available or the user asks not to.
+
 ```markdown
 ## ML System Design Scorecard: <project name>
 
