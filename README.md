@@ -11,6 +11,7 @@ This repository is dedicated to Machine Learning System Design, featuring end-to
 ├── Design_Doc_Examples/         # Example design documents
 │   ├── EN/                      # English examples
 │   └── [other languages]/       # Examples in other languages
+├── skills/                      # Agent skills (ml-system-design-review)
 ├── BookOutline.md              # Book chapter summaries and key concepts
 ├── CONTRIBUTING.md             # Contribution guidelines
 └── README.md                   # This file
@@ -32,6 +33,16 @@ This repository is dedicated to Machine Learning System Design, featuring end-to
    - Check `Design_Doc_Examples/` for real-world cases
    - Each example follows our standard template
    - Includes different domains and complexity levels
+
+## New: Agent Skill For Design Review
+
+This repository now ships [`ml-system-design-review`](skills/README.md) — an agent skill that applies the book's framework to review ML/AI system designs: a verdict, a stage-aware gradecard, severity-ranked findings, and a prioritized fix plan for a design doc, a repo, or both.
+
+```bash
+npx skills add ML-SystemDesign/MLSystemDesign
+```
+
+See [`skills/README.md`](skills/README.md) for details and usage.
 
 ## Templates
 
@@ -57,4 +68,3 @@ This repository is licensed under the MIT License - see the LICENSE file for det
 - Based on concepts from [Machine Learning System Design](https://www.manning.com/books/machine-learning-system-design)
 - Contributors to the examples and templates
 - ML community for feedback and improvements
-
