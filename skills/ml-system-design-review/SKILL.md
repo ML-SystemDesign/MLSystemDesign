@@ -4,6 +4,7 @@ description: Use when reviewing ML system design docs, ML/AI project repos, desi
 metadata:
   version: "0.1.0"
   scope: ml-ai-system-design-review
+  reference: https://arseny.info/ml_design_book
 ---
 
 # ML System Design Review
