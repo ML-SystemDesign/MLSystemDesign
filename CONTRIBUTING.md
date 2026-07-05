@@ -1,6 +1,6 @@
-# Contributing to ML System Design
+# Contributing to Machine Learning System Design
 
-Thank you for your interest in contributing to the ML System Design repository! This guide will help you understand how to contribute effectively.
+Thank you for your interest in contributing to the Machine Learning System Design repository! This guide will help you understand how to contribute effectively.
 
 ## Types of Contributions
 
@@ -17,9 +17,9 @@ We welcome the following types of contributions:
 
 ### Adding a New Design Document
 
-1. Use the template in `templates/basic_ml_design_doc.md`
-2. Place your document in the `Design_Doc_Examples` directory
-3. Follow the naming convention: `[Domain]_[Problem]_Design.md`
+1. Use the template in [`templates/basic_ml_design_doc.md`](templates/basic_ml_design_doc.md)
+2. Place your document in the appropriate subdirectory — `Design_Doc_Examples/Examples/EN/` for real-world–inspired examples or `Design_Doc_Examples/Mock/EN/` for educational examples (use the correct language folder)
+3. Follow the naming convention: `[Domain]_[Problem]_Design.md` (e.g. `Retail_Demand_Forecasting_Design.md`)
 4. Include all relevant sections from the template
 5. Add any supporting diagrams or code snippets
 
@@ -37,7 +37,7 @@ We welcome the following types of contributions:
 1. Fork the repository
 2. Create a new branch for your contribution
 3. Make your changes
-4. Run through the checklist in `templates/design_doc_checklist.md`
+4. Run through the checklist in [`templates/design_doc_checklist.md`](templates/design_doc_checklist.md)
 5. Submit a pull request
 6. Respond to review comments
 
@@ -70,4 +70,4 @@ If you have questions about contributing, please:
 2. Review the templates and examples
 3. Open a new issue for clarification
 
-Thank you for helping improve ML system design practices! 
+Thank you for helping improve machine learning system design practices!

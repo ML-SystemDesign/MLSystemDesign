@@ -1,3 +1,35 @@
+# Book Outline
+
+Chapter-by-chapter summaries and key concepts from *Machine Learning System Design* (Babushkin & Kravchenko, Manning). Use this as a map of the book; each design document [template](templates/basic_ml_design_doc.md) section corresponds to one or more of these chapters (see the mapping in the [README](README.md#how-the-template-maps-to-the-book)).
+
+## Table of Contents
+
+**Part 1 — Getting Started**
+1. [Essentials of Machine Learning System Design](#chapter-1-essentials-of-machine-learning-system-design)
+2. [Is There a Problem?](#chapter-2-is-there-a-problem)
+3. [Preliminary Research](#chapter-3-preliminary-research)
+4. [Design Document](#chapter-4-design-document)
+
+**Part 2 — Early Stage**
+5. [Loss Functions and Metrics](#chapter-5-loss-functions-and-metrics)
+6. [Gathering Datasets](#chapter-6-gathering-datasets)
+7. [Validation Schemas](#chapter-7-validation-schemas)
+8. [Baseline Solution](#chapter-8-baseline-solution)
+
+**Part 3 — Intermediate Steps**
+9. [Error Analysis](#chapter-9-error-analysis)
+10. [Training Pipelines](#chapter-10-training-pipelines)
+11. [Features and Feature Engineering](#chapter-11-features-and-feature-engineering)
+12. [Measuring and Reporting Results](#chapter-12-measuring-and-reporting-results)
+
+**Part 4 — Integration and Growth**
+13. [Integration](#chapter-13-integration)
+14. [Monitoring and Reliability](#chapter-14-monitoring-and-reliability)
+15. [Serving and Inference Optimization](#chapter-15-serving-and-inference-optimization)
+16. [Ownership and Maintenance](#chapter-16-ownership-and-maintenance)
+
+---
+
 # Chapter 1: Essentials of Machine Learning System Design
 
 ## Introduction
@@ -68,18 +100,18 @@ Machine Learning System Design (MLSD) is a multifaceted discipline that bridges 
 - Implementing structured design processes, such as those outlined in this book, is vital for creating ML systems that are not only powerful but also scalable, maintainable, reliable, and ultimately successful in delivering value.
 - Adhering to the core principles of MLSD, from starting simple to ensuring reproducibility and comprehensive testing, significantly increases the likelihood of project success and mitigates common risks associated with complex ML initiatives.
 
-# Сhapter 2: Is there a problem?
+# Chapter 2: Is there a problem?
 
-### Introduction
+## Introduction
 
 This chapter emphasizes the critical importance of accurately identifying and articulating the problem before diving into machine learning system design. It argues that a deep understanding of the problem space is essential for the successful development of ML systems. The chapter aims to guide readers through the process of problem identification, exploring the problem space versus the solution space, and understanding the implications of risks, limitations, and the costs of mistakes in ML projects. A failure to thoroughly investigate the problem often leads to solutions that are misaligned with actual needs, wasting resources and effort.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: Problem Space vs. Solution Space
 
 - **Key Concepts:**
-    - **The distinction between problem space and solution space:** 
+    - **The distinction between problem space and solution space:**
         - *Problem Space:* Encompasses the needs, goals, context, and constraints of the users or business. It's about understanding the "what" and "why" of the problem itself, independent of any specific solution. For example, "users are spending too much time finding relevant documents."
         - *Solution Space:* Consists of specific products, features, technologies, or methodologies proposed to address the problem. It's about the "how." For example, "implement a semantic search engine" or "develop a better document categorization system."
     - **The importance of focusing on the problem space before considering the solution:**
@@ -107,10 +139,7 @@ This chapter emphasizes the critical importance of accurately identifying and ar
         - Follow with important details: supporting facts, evidence, scope, and constraints.
         - Conclude with background information and less critical details.
         - This structure ensures that anyone reading the problem statement can quickly grasp the essentials.
-
-### Section 3: Approximating a Solution through an ML System
-
-- **Key Concepts:**
+    - **Approximating a solution through an ML system (subsection 2.2.1):**
     - **Reframing business problems into software/ML problems:**
         - Business problems are often broad (e.g., "increase customer retention"). ML problems need to be more specific and framed in terms of prediction, classification, generation, etc. (e.g., "predict which customers are likely to churn next month").
         - This involves identifying where an ML model's predictive power can provide a tangible benefit towards solving the broader business problem.
@@ -125,7 +154,7 @@ This chapter emphasizes the critical importance of accurately identifying and ar
         - Often, achieving perfect correctness is impossible or impractical. A robust system that performs reasonably well across a wide range of real-world scenarios might be more valuable than a brittle system that is highly accurate only under ideal conditions.
         - The acceptable trade-off depends on the specific application and the cost of errors.
 
-### Section 4: Risks, Limitations, and Possible Consequences
+### Section 3: Risks, Limitations, and Possible Consequences
 
 - **Key Concepts:**
     - **Identifying potential risks and limitations early in the design process:**
@@ -143,7 +172,7 @@ This chapter emphasizes the critical importance of accurately identifying and ar
         - *E.g., a financial fraud detection system that is too slow to prevent fraudulent transactions in real-time.*
         - *E.g., a content recommendation system that creates filter bubbles or promotes harmful content due to unforeseen feedback loops.*
 
-### Section 5: Costs of a Mistake
+### Section 4: Costs of a Mistake
 
 - **Key Concepts:**
     - **Evaluating the potential costs associated with errors in ML systems:**
@@ -162,7 +191,7 @@ This chapter emphasizes the critical importance of accurately identifying and ar
         - *Human-in-the-Loop Systems:* Incorporating human oversight and intervention capabilities for critical decisions or when the model's confidence is low.
         - *Regular Audits and Monitoring:* Continuously tracking performance, data quality, and potential biases post-deployment.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. A thorough understanding of the problem space is foundational to effective ML system design, ensuring that solutions are relevant and targeted. Rushing into solutions without this clarity leads to wasted effort and systems that fail to deliver real value.
@@ -171,13 +200,14 @@ This chapter emphasizes the critical importance of accurately identifying and ar
     4. ML system designers must balance the trade-offs between robustness and correctness, tailoring their approach to the specific context and requirements of the project, and always considering the non-functional requirements that shape the system's architecture and behavior.
 
 This outline provides a comprehensive framework for understanding and applying the principles discussed in the chapter, guiding readers through the critical early stages of machine learning system design.
-# Chapter 3: Priliminary research
 
-### Introduction
+# Chapter 3: Preliminary Research
+
+## Introduction
 
 This chapter transitions from identifying the problem to exploring the solution space for machine learning system design. It emphasizes the importance of preliminary research in understanding available solutions, deciding whether to build or buy, decomposing the problem, and determining the appropriate level of innovation. The goal is to lay the groundwork for creating a comprehensive design document by examining use cases, addressing the build or buy dilemma, decomposing problems, and choosing the right degree of innovation.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: What Problems Can Inspire You?
 
@@ -207,7 +237,7 @@ This chapter transitions from identifying the problem to exploring the solution 
     - Balancing innovation with practical constraints such as time, budget, and existing capabilities.
     - The dynamic nature of innovation requirements as projects evolve from prototypes to mature systems.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. Preliminary research is crucial for navigating the solution space effectively, enabling designers to make informed decisions about building or buying, leveraging existing solutions, and setting innovation goals.
@@ -216,43 +246,51 @@ This chapter transitions from identifying the problem to exploring the solution 
     4. The degree of innovation required for a machine learning system is context-dependent, influenced by business goals, competitive landscape, and resource availability. Designers must balance the desire for cutting-edge solutions with the practicalities of their specific situation.
 
 This outline provides a roadmap for the preliminary research phase of machine learning system design, highlighting the importance of a strategic approach to problem-solving and innovation.
+
 # Chapter 4: Design document
 
-### Introduction
+## Introduction
 
 This chapter emphasizes the critical role of a design document in the machine learning system design process. It outlines the steps for drafting, reviewing, and evolving a design document, highlighting its importance in clarifying project goals, identifying potential issues, and ensuring stakeholder alignment. The chapter underscores that a well-crafted design document can often lead to the realization that a complex ML project may not be necessary, saving significant time and resources.
 
-### Main Sections
+## Main Sections
 
-### Section 1: Goals and Antigoals
+### Section 1: Common Myths Surrounding the Design Document
+
+- **Key Concepts:**
+    - Addressing widespread misconceptions that discourage teams from writing design documents.
+    - Common myths include: "the design doc is a waste of time," "it will be outdated immediately," "only large projects need one," and "the code is the documentation."
+    - Reframing the design document as a lightweight, high-leverage tool rather than bureaucratic overhead.
+
+### Section 2: Goals and Antigoals
 
 - **Key Concepts:**
     - Importance of clearly defining what the project aims to achieve and deliberately stating what it does not aim to solve (antigoals).
     - Utilizing antigoals to focus the project scope and avoid unnecessary work.
     - Examples of how setting improper goals can mislead the project direction.
 
-### Section 2: Design Document Structure
+### Section 3: Design Document Structure
 
 - **Key Concepts:**
     - There is no universal structure for a design document, but it must cover essential aspects such as problem definition, relevance, previous work, and risks.
     - The structure should facilitate easy navigation and understanding for stakeholders from various backgrounds.
     - Introduction of two fictional case studies to illustrate the practical application of design document principles.
 
-### Section 3: Reviewing a Design Document
+### Section 4: Reviewing a Design Document
 
 - **Key Concepts:**
     - The iterative nature of design document development, emphasizing the importance of peer feedback.
     - Strategies for effective review, including focusing on areas of expertise, questioning assumptions, and suggesting improvements.
     - The role of the reviewer in enriching the document through constructive criticism and alternative solutions.
 
-### Section 4: The Evolution of Design Docs
+### Section 5: A Design Doc Is a Living Thing
 
 - **Key Concepts:**
     - Acknowledgment that a design document is a "living" artifact that evolves over time based on new insights, real-world feedback, and changing project requirements.
     - The continuous cycle of iteration and improvement that a design document undergoes, even post-implementation.
     - The necessity of keeping the design document updated to reflect the current understanding and state of the system for future maintenance and scalability.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. The process of creating and refining a design document is as critical as the technical development of the ML system itself, serving as a blueprint for the project.
@@ -261,14 +299,14 @@ This chapter emphasizes the critical role of a design document in the machine le
     4. A design document is never truly final; it must evolve with the project, reflecting changes, learnings, and improvements to remain a relevant and useful guide.
 
 This outline provides a comprehensive overview of the process and importance of creating, reviewing, and updating a design document in the context of machine learning system design, highlighting the iterative and collaborative nature of this foundational step.
+
 # Chapter 5: Loss Functions and Metrics
 
-
-### Introduction
+## Introduction
 
 This chapter delves into the critical aspects of selecting appropriate metrics and loss functions for machine learning systems. It emphasizes the distinction between metrics used for model evaluation and loss functions optimized during training. The chapter aims to guide the reader through the process of choosing metrics and loss functions that align with the system's objectives, ensuring the model's performance is accurately measured and optimized.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: Losses
 
@@ -294,7 +332,7 @@ This chapter delves into the critical aspects of selecting appropriate metrics a
     - Detailed walkthrough on selecting metrics and loss functions for each case, considering their specific business objectives and challenges.
     - Emphasis on the iterative process of refining the choice of metrics and loss functions as part of the system design document.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. The choice of loss functions and metrics is pivotal in guiding a machine learning system towards achieving its intended objectives. These choices directly influence the model's learning focus and evaluation criteria.
@@ -303,13 +341,14 @@ This chapter delves into the critical aspects of selecting appropriate metrics a
     4. The development of a machine learning system should include a thoughtful selection of both offline and online metrics, with a clear understanding of how these metrics relate to the system's ultimate goals. Proxy metrics and a well-defined hierarchy of metrics can facilitate this alignment, enabling more effective system evaluation and optimization.
 
 This structured outline encapsulates the essence of Chapter 5, highlighting the importance of carefully selecting metrics and loss functions in the design and evaluation of machine learning systems.
+
 # Chapter 6: Gathering Datasets
 
-### Introduction
+## Introduction
 
 This chapter emphasizes the foundational role of datasets in the development and operation of machine learning systems. It draws parallels between essential life elements and datasets, highlighting the necessity of quality data for the functionality of ML systems. The chapter aims to guide through the process of identifying, processing, and utilizing data sources to construct effective datasets, underlining the principle that the quality of input data directly influences the output of ML systems.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: Data Sources
 
@@ -337,7 +376,7 @@ This chapter emphasizes the foundational role of datasets in the development and
     - Discussion on determining the adequate size and quality of datasets for training ML models.
     - Considerations on data diversity, representativeness, and the diminishing returns of adding more data.
 
-### Section 5: Solving the Cold Start Problem
+### Section 5: Chicken-or-Egg Problem
 
 - **Key Concepts:**
     - Strategies for overcoming the lack of initial data for training ML systems, including synthetic data generation and leveraging similar datasets.
@@ -349,7 +388,7 @@ This chapter emphasizes the foundational role of datasets in the development and
     - Essential properties of a data pipeline: reproducibility, consistency, and availability.
     - Importance of data management practices that ensure the reliability and accessibility of data for both the ML system and its developers.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. The success of an ML system is heavily dependent on the quality and relevance of its underlying datasets. Identifying and utilizing the right data sources is crucial for system effectiveness.
@@ -359,14 +398,14 @@ This chapter emphasizes the foundational role of datasets in the development and
     5. Establishing a healthy data pipeline is foundational to the long-term success and scalability of ML systems, underscoring the importance of reproducibility, consistency, and availability in data management practices.
 
 This outline captures the essence of Chapter 6, providing a structured overview of the critical aspects of gathering and preparing datasets for machine learning systems.
+
 # Chapter 7: Validation Schemas
 
-
-### Introduction
+## Introduction
 
 This chapter delves into the critical aspect of building a robust evaluation process for machine learning systems through proper validation schemas. It discusses the importance of selecting the right validation schema based on the specifics of a given problem and the factors to consider when designing the evaluation process. The goal is to achieve confident estimates of system performance, ensuring the model's predictive power on unseen data is accurately measured.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: Reliable Evaluation
 
@@ -399,11 +438,11 @@ This chapter delves into the critical aspect of building a robust evaluation pro
 ### Section 5: Design Document: Choosing Validation Schemas
 
 - **Key Concepts:**
-    - Detailed examples of validation schema choices for two hypothetical companies, Supermegaretail and Photostock Inc.
+    - Detailed examples of validation schema choices for two hypothetical companies, Supermegaretail and PhotoStock Inc.
     - Considerations for ensuring validation and test sets are representative, diverse, and free from data leakage.
     - The use of deterministic bucketing for user split assignments and the potential for future adjustments.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. The selection of a validation schema is crucial for accurately measuring a model's performance on unseen data, requiring careful consideration of the specific characteristics of the dataset and the problem at hand.
@@ -412,13 +451,14 @@ This chapter delves into the critical aspect of building a robust evaluation pro
     4. Detailed planning and documentation of the chosen validation schemas within the design document are vital for ensuring the evaluation process is aligned with the project's goals and constraints.
 
 This outline captures the essence of Chapter 7, providing a structured overview of the considerations and methodologies involved in selecting and implementing validation schemas for machine learning systems.
+
 # Chapter 8: Baseline Solution
 
-### Introduction
+## Introduction
 
 This chapter emphasizes the importance of establishing a baseline solution in machine learning system design, likening it to the MVP (Minimum Viable Product) in product development. The baseline serves as the simplest but operational version of a model, setting a foundational performance metric from which improvements can be iteratively made. It underscores the principle that a mediocre model in production is more valuable than a sophisticated model that never leaves the drawing board.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: Baseline: What Are You?
 
@@ -455,7 +495,7 @@ This chapter emphasizes the importance of establishing a baseline solution in ma
     - Factors to consider when choosing a baseline, including accuracy, development time, interpretability, and computation time.
     - The diminishing returns of increasing model complexity and the importance of early stopping based on the accuracy-effort trade-off.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. Establishing a baseline is a critical first step in machine learning system design, serving as a simple, operational starting point for iterative improvement.
@@ -464,14 +504,14 @@ This chapter emphasizes the importance of establishing a baseline solution in ma
     4. Continuous evaluation and comparison against the baseline are essential for guiding the development process, ensuring that complexity is added only when it yields proportional benefits in performance.
 
 This structured outline captures the essence of Chapter 8, highlighting the strategic role of baselines in the development of machine learning systems and providing a roadmap for their selection and implementation.
+
 # Chapter 9: Error Analysis
 
-
-### Introduction
+## Introduction
 
 Error analysis acts as a crucial compass in the iterative improvement of machine learning systems, offering insights into error dynamics and patterns post-prediction. This chapter delves into learning curve analysis, residual analysis, and the identification of commonalities in errors, guiding the enhancement of system performance through detailed examination of where and how models falter.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: Learning Curve Analysis
 
@@ -479,22 +519,19 @@ Error analysis acts as a crucial compass in the iterative improvement of machine
     - Introduction to learning curves and their significance in evaluating the learning process.
     - Examination of model convergence and the balance between underfitting and overfitting.
     - Exploration of learning curves based on the number of iterations, model complexity, and dataset size.
+    - **Overfitting and underfitting (subsection 9.1.1):**
+        - Definitions and implications of overfitting and underfitting.
+        - The bias-variance trade-off and its impact on model performance.
+        - Strategies for mitigating overfitting and underfitting.
 
-### Section 2: Overfitting and Underfitting
-
-- **Key Concepts:**
-    - Definitions and implications of overfitting and underfitting.
-    - The bias-variance trade-off and its impact on model performance.
-    - Strategies for mitigating overfitting and underfitting.
-
-### Section 3: Residual Analysis
+### Section 2: Residual Analysis
 
 - **Key Concepts:**
     - Calculation and interpretation of residuals to assess model predictions.
     - Goals of residual analysis, including verification of model assumptions and detection of error sources.
     - Examination of residual distribution, fairness, and specific patterns like underprediction and overprediction.
 
-### Section 4: Finding Commonalities in Residuals
+### Section 3: Finding Commonalities in Residuals
 
 - **Key Concepts:**
     - Techniques for grouping and analyzing residuals to uncover patterns.
@@ -502,7 +539,7 @@ Error analysis acts as a crucial compass in the iterative improvement of machine
     - Adversarial validation as a method for distinguishing between "good" and "bad" samples.
     - Group analysis and corner-case analysis for detailed error pattern identification.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. Error analysis is an indispensable step in refining machine learning systems, providing a deeper understanding of model errors and guiding targeted improvements.
@@ -511,14 +548,14 @@ Error analysis acts as a crucial compass in the iterative improvement of machine
     4. Identifying commonalities in residuals through various analytical approaches, including adversarial validation and group analysis, helps pinpoint specific areas for improvement, ensuring the model performs well across diverse scenarios and datasets.
 
 This structured outline encapsulates the essence of Chapter 9, underscoring the critical role of error analysis in the iterative process of machine learning system development and optimization.
+
 # Chapter 10: Training Pipelines
 
-
-### Introduction
+## Introduction
 
 This chapter delves into the essence of training pipelines in machine learning projects, emphasizing their critical role beyond mere model training. It explores the structured sequence of steps necessary to prepare, train, evaluate, and deploy machine learning models efficiently and reproducibly. The chapter aims to transition the reader from a model-centric to a pipeline-centric view of machine learning, highlighting the importance of reproducibility, scalability, and configurability in the ML lifecycle.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: Understanding Training Pipelines
 
@@ -552,7 +589,7 @@ This chapter delves into the essence of training pipelines in machine learning p
     - Recommendations for combining high-level smoke tests with low-level unit tests to cover both pipeline integrity and component functionality.
     - Introduction to property-based testing for validating model properties such as consistency, monotonicity, and robustness.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. Training pipelines are foundational to the success of ML projects, ensuring that models are not only trained but also prepared, evaluated, and deployed in a consistent and reproducible manner.
@@ -561,14 +598,14 @@ This chapter delves into the essence of training pipelines in machine learning p
     4. Comprehensive testing, including both smoke tests and unit tests, is essential for maintaining the integrity of training pipelines and ensuring the reliability of deployed models.
 
 This structured outline encapsulates the core themes of Chapter 10, providing a roadmap for designing and implementing robust training pipelines that are scalable, configurable, and thoroughly tested.
+
 # Chapter 11: Features and Feature Engineering
 
-
-### Introduction
+## Introduction
 
 This chapter emphasizes the pivotal role of features in machine learning systems, asserting that even a mediocre model can excel with well-engineered features. It explores the iterative process of feature engineering, the analysis of feature importance, the selection of optimal features, and the advantages and disadvantages of feature stores. The chapter aims to guide readers through enhancing model performance and interpretability by meticulously crafting and selecting features.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: The Essence of Feature Engineering
 
@@ -606,7 +643,7 @@ This chapter emphasizes the pivotal role of features in machine learning systems
     - Discussion on the pros and cons of implementing a feature store.
     - Desired properties of a feature store, including read-write skew, pre-calculation, feature versioning, dependencies, and feature catalog.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. Effective feature engineering is crucial for enhancing the performance and interpretability of machine learning models. It involves not only the generation of new features but also the careful selection and analysis of these features to ensure they contribute positively to the model's predictions.
@@ -616,13 +653,14 @@ This chapter emphasizes the pivotal role of features in machine learning systems
     5. Ultimately, the goal of feature engineering is to create a set of features that are not only predictive but also interpretable, manageable, and aligned with the business objectives of the machine learning system.
 
 This structured outline encapsulates the core themes of Chapter 11, providing a comprehensive guide to the critical role of features in the development and optimization of machine learning models.
+
 # Chapter 12: Measuring and Reporting Results
 
-### Introduction
+## Introduction
 
 This chapter delves into the critical phase of evaluating and communicating the outcomes of a machine learning system. It underscores the importance of measuring results through offline and online testing, conducting A/B tests to validate the system's effectiveness in real-world scenarios, and effectively reporting these results to stakeholders. The chapter aims to bridge the gap between technical achievements and business impacts, ensuring that the advancements in machine learning translate into tangible benefits.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: Measuring Results
 
@@ -648,7 +686,7 @@ This chapter delves into the critical phase of evaluating and communicating the 
     - Deciding when to conclude an experiment and how to interpret mixed outcomes.
     - Structuring reports to communicate findings, including uplift monitoring, statistical significance, and the broader impact on business objectives.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. Effective measurement and reporting are foundational to translating machine learning advancements into business value. They ensure that technical improvements are accurately assessed and communicated in terms of their impact on key business metrics.
@@ -657,13 +695,14 @@ This chapter delves into the critical phase of evaluating and communicating the 
     4. The process of measuring and reporting results is iterative and should inform ongoing development and refinement of machine learning systems. It requires close collaboration between technical teams and business stakeholders to ensure that the insights gained drive actionable improvements.
 
 This structured outline encapsulates the essence of Chapter 12, offering a roadmap for effectively measuring, evaluating, and reporting the outcomes of machine learning systems in a way that aligns technical achievements with business goals.
+
 # Chapter 13: Integration
 
-### Introduction
+## Introduction
 
 This chapter emphasizes the significance of integration as an ongoing process crucial for the success of machine learning systems. It highlights the importance of API design, the release cycle, operating the system, and implementing overrides and fallbacks to ensure the system's robustness and adaptability. The chapter aims to guide readers through the technical aspects of integrating ML systems into existing workflows and infrastructures, ensuring they are prepared for real-world deployment and operation.
 
-### Main Sections
+## Main Sections
 
 ### Section 1: API Design
 
@@ -693,7 +732,7 @@ This chapter emphasizes the significance of integration as an ongoing process cr
     - The use of overrides to manually adjust the system's output in specific scenarios or during transitional periods.
     - The potential of using multisource weak supervision to improve model performance based on collections of overrides.
 
-### Conclusion
+## Conclusion
 
 - **Key Takeaways:**
     1. Integration is a continuous and essential process that ensures the success and longevity of ML systems. It requires careful planning, from API design to deployment and operation.
@@ -702,116 +741,117 @@ This chapter emphasizes the significance of integration as an ongoing process cr
     4. Operational robustness is achieved not only through technical means such as CI, logging, and monitoring but also by addressing non-technical aspects like compliance and user data management. Overrides and fallbacks are critical for maintaining service continuity and adapting to changes or failures in real-time.
 
 This structured outline provides a comprehensive overview of Chapter 13, offering insights into the crucial aspects of integrating ML systems into broader systems and workflows, ensuring they are ready for deployment and capable of evolving in response to new challenges and requirements.
-# Chapter 14: **Monitoring and Reliability**
 
-### **Introduction**
+# Chapter 14: Monitoring and Reliability
 
-Chapter 14 of "Machine Learning System Design With End-to-End Examples" addresses the critical aspects of monitoring and ensuring the reliability of machine learning systems post-deployment. This chapter explores why traditional software monitoring practices are insufficient for ML systems and details the specific challenges posed by the dynamic nature of ML models, which may degrade over time or behave unpredictably when faced with real-world data.
+## Introduction
 
-### **Main Sections**
+Chapter 14 of "Machine Learning System Design With end-to-end examples" addresses the critical aspects of monitoring and ensuring the reliability of machine learning systems post-deployment. This chapter explores why traditional software monitoring practices are insufficient for ML systems and details the specific challenges posed by the dynamic nature of ML models, which may degrade over time or behave unpredictably when faced with real-world data.
 
-**Section 14.1: Importance of Monitoring**
+## Main Sections
+
+### Section 1: Why Monitoring Is Important
 
 - Overview of the risks associated with not monitoring ML systems.
 - Discussion on the types of issues that can arise from unmonitored systems, including model degradation and data drift.
 - The importance of continuous validation and testing to ensure system stability.
 
-**Section 14.2: Software System Health**
+### Section 2: Software System Health
 
 - Critical aspects of maintaining the health of the software infrastructure supporting ML models.
 - Techniques and tools for monitoring software performance, such as application and infrastructure monitoring, alerting, and incident management.
 - Example metrics for monitoring including error rates, request rates, and system utilization.
 
-**Section 14.3: Data Quality and Integrity**
+### Section 3: Data Quality and Integrity
 
 - Challenges in maintaining data quality and integrity in dynamic environments.
 - Common data issues such as processing errors, source corruption, and cascade/upstream model impacts.
 - Strategies for monitoring data quality, including anomaly detection and schema validation.
 
-**Section 14.4: Model Quality and Relevance**
+### Section 4: Model Quality and Relevance
 
 - Exploring model decay and the concepts of data drift and concept drift.
 - Methods for assessing model performance and relevance over time.
 - Techniques for detecting and addressing model drift, such as retraining and using robust model architectures.
 
-### **Conclusion**
+## Conclusion
 
 1. **Monitoring is Essential**: Without proper monitoring, even the most sophisticated ML models can fail, highlighting the need for robust monitoring frameworks that include software health, data quality, and model performance.
 2. **Proactive Maintenance**: Proactive strategies in monitoring can mitigate risks associated with data drift and model decay, ensuring that ML systems continue to perform optimally over time.
 3. **Integrated Approach**: Effective monitoring combines traditional software monitoring techniques with new approaches tailored to the nuances of ML systems, integrating data quality checks, performance benchmarks, and business KPIs to create a holistic view of system health.
 4. **Continuous Improvement**: The field of ML monitoring is evolving, necessitating ongoing adjustments to monitoring practices as new challenges and technological advancements arise.
 
-# Chapter 15: **Serving and Inference Optimization**
+# Chapter 15: Serving and Inference Optimization
 
-### **Introduction**
+## Introduction
 
 Chapter 15 delves into the crucial aspects of deploying and optimizing machine learning models for serving and inference in production environments. It addresses the common challenges that practitioners face during this phase and explores various methods to enhance the efficiency of inference pipelines, emphasizing the importance of this final step in ensuring the practical utility of machine learning models.
 
-### **Main Sections**
+## Main Sections
 
-**Section 15.1: Challenges in Serving and Inference**
+### Section 1: Challenges in Serving and Inference
 
 - Overview of key performance indicators such as latency, throughput, and scalability.
 - Discussion on the diverse requirements depending on the target platforms like mobile, IoT, or cloud servers.
 - Cost considerations and the balance between computational expense and system performance.
 - The importance of system reliability, flexibility, and security in various deployment contexts.
 
-**Section 15.2: Trade-offs and Optimization Patterns**
+### Section 2: Tradeoffs and Patterns
 
 - Analysis of common trade-offs between latency, throughput, and cost.
 - Exploration of patterns like batching, caching, and model routing to optimize inference.
 - Strategies to balance model accuracy with computational efficiency.
 
-**Section 15.3: Tools and Frameworks for Inference**
+### Section 3: Tools and Frameworks
 
 - Introduction to different frameworks and their suitability for specific types of inference tasks.
 - Discussion on the benefits of separating training and inference frameworks to maximize performance.
 - Overview of popular tools such as ONNX, OpenVINO, TensorRT, and their roles in optimizing inference.
 
-### **Conclusion**
+## Conclusion
 
 1. **Critical Balance of Factors**: Effective inference optimization requires a careful balance between competing factors such as latency, throughput, and cost. Understanding and prioritizing these based on specific application needs is key to successful deployment.
 2. **Choice of Tools and Frameworks**: Selecting the right tools and frameworks is crucial and should be guided by the specific requirements of the deployment environment and the nature of the machine learning tasks.
 3. **Continuous Monitoring and Optimization**: Continuous performance monitoring and iterative optimization are essential to maintain and improve the inference capabilities of machine learning systems in production.
 4. **Strategic Planning for Scalability**: Planning for scalability from the outset can mitigate future challenges and help manage costs effectively as system demand grows.
 
-# Chapter 16: **Ownership and Maintenance**
+# Chapter 16: Ownership and Maintenance
 
-### **Introduction**
+## Introduction
 
 Chapter 16 of "Machine Learning System Design With end-to-end examples" emphasizes the critical aspects of ownership and maintenance in machine learning (ML) systems. It addresses the necessity of accountability, the balance between efficiency and redundancy, the importance of thorough documentation, and the pitfalls of excessive complexity in system design. This chapter guides the reader on integrating these principles from the inception of the system to ensure its robustness and sustainability over time.
 
-### **Main Sections**
+## Main Sections
 
-**Section 16.1: Accountability**
+### Section 1: Accountability
 
 - **Key Concepts:**
     - Involvement of various stakeholders and the importance of their contributions from the early stages.
     - Definition and assignment of clear responsibilities using the RACI matrix.
     - The value of redundancy in roles to ensure continuity and the prevention of knowledge silos.
 
-**Section 16.2: The Bus Factor**
+### Section 2: The Bus Factor
 
 - **Key Concepts:**
     - Explanation of the "bus factor" and its impact on project continuity.
     - Strategies to mitigate risks associated with high bus factors, such as cross-training and comprehensive documentation.
     - Balancing team efficiency with the need for redundancy in knowledge and skills.
 
-**Section 16.3: Documentation**
+### Section 3: Documentation
 
 - **Key Concepts:**
     - The role of documentation in maintaining long-term system health and facilitating knowledge transfer.
     - Effective documentation practices, including the use of detailed system descriptions, operational procedures, and maintenance logs.
     - The pitfalls of neglecting documentation, illustrated with practical consequences and mitigation strategies.
 
-**Section 16.4: Complexity Management**
+### Section 4: Complexity
 
 - **Key Concepts:**
     - Discussion on the deceptive appeal of creating complex systems and the associated risks.
     - Importance of simplicity in design for ease of use, maintenance, and scalability.
     - Techniques for reducing unnecessary complexity, such as modular design and adherence to design principles.
 
-### **Conclusion**
+## Conclusion
 
 - **Key Takeaways:**
     - Proper system maintenance and clear accountability are foundational to the success and sustainability of a machine learning system.
