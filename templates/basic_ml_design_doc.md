@@ -14,7 +14,7 @@
 - What are the current limitations/challenges?
 - What is the current workflow?
 
-### ii. Relevance & Reasons
+### ii. Relevance and Reasons
 - Why is this problem important?
 - What are the expected benefits?
 - What is the estimated business impact?
@@ -26,7 +26,7 @@
 - What can we learn from past attempts?
 - Can we improve existing solutions?
 
-### iv. Other Issues & Risks
+### iv. Other Issues and Risks
 - What infrastructure requirements exist?
 - What are the potential failure modes?
 - What is the cost of mistakes?
@@ -65,13 +65,19 @@
 - How will it be used?
 - What additional context can it provide?
 
-### iv. Data Quality Issues
+### iv. Available History
+- How much historical data is available?
+- Does it cover enough seasonality cycles?
+- What is the data retention policy?
+- Is the history consistent over time, or were there schema/collection changes?
+
+### v. Data Quality Issues
 - What quality issues exist?
 - How will they be addressed?
 - What is the data cleaning process?
 - How will we handle missing data?
 
-### v. ETL Pipeline
+### vi. ETL Pipeline
 - How will data be collected?
 - What transformations are needed?
 - How will we handle updates?
@@ -84,7 +90,7 @@
 - How will we prevent data leakage?
 - What temporal constraints exist?
 
-### ii. Inference Process
+### ii. Inference
 - How will the model make predictions?
 - What is the prediction horizon?
 - What constraints must be considered?
@@ -128,10 +134,11 @@
 - What distributions do we expect?
 - How will we handle outliers?
 
-### iii. Best/Worst Case Analysis
+### iii. Best/Worst/Corner Case Analysis
 - How will we identify edge cases?
 - What are the failure modes?
 - How will we improve worst cases?
+- What are the corner cases, and how does the model perform on them?
 
 ## VII. Training Pipeline
 
@@ -209,4 +216,46 @@
 ### iv. Operational Concerns
 - How will we monitor the system?
 - What alerts are needed?
-- How will we handle incidents? 
+- How will we handle incidents?
+
+## XI. Monitoring
+
+### i. Software System Health
+- What infrastructure metrics will we track (latency, throughput, error rates, resource utilization)?
+- What are the alert thresholds?
+- How will we handle incident response?
+
+### ii. Data Quality and Integrity
+- How will we detect missing, corrupted, or out-of-range data?
+- How will we validate schema compliance?
+- What anomaly-detection checks are needed?
+
+### iii. Model Quality and Relevance
+- How will we detect data drift and concept drift?
+- Are true labels available, and with what delay?
+- What triggers retraining or a fallback?
+
+### iv. Business Metrics
+- Which business KPIs will we monitor post-deployment?
+- How do they connect to model performance?
+
+## XII. Serving and Inference
+
+### i. Requirements
+- What are the latency, throughput, and scalability requirements?
+- What is the target platform (batch, real-time, edge, cloud)?
+- What are the cost constraints?
+
+### ii. Serving Architecture
+- How will the model be served (batch jobs, online API, streaming)?
+- How will requests be routed and scaled?
+- What are the security and isolation requirements?
+
+### iii. Optimization
+- What trade-offs apply between latency, throughput, and cost?
+- Which optimizations are relevant (batching, caching, model routing, quantization)?
+- What tools or frameworks will we use?
+
+### iv. Monitoring
+- What serving/inference metrics will we track?
+- How will we detect and respond to degradation?
