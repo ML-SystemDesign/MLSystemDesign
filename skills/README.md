@@ -20,4 +20,4 @@ cp -r skills/ml-system-design-review ~/.claude/skills/
 
 ### Use
 
-Ask your agent to review, grade, or audit an ML system design: "review my ML design doc", "audit this repo for production ML readiness", "grade this RAG architecture". The skill activates on design-review requests and routes itself through `SKILL.md`; the depth lives in `references/` (workflow, rubrics, modern-AI addendum, red flags, praise patterns, output templates).
+Ask your agent to review, grade, or audit an ML system design: "review my ML design doc", "audit this repo for production ML readiness", "grade this RAG architecture". The skill activates on design-review requests and routes itself through `SKILL.md`; the depth lives in `references/` (workflow, rubrics, doc/repo audit, modern-AI addendum, red flags, praise patterns, output templates).

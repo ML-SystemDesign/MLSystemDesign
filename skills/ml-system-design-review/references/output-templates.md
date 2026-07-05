@@ -73,8 +73,8 @@ Gradecard
 - Modern AI systems, if applicable: <A-F with optional +/- or not fairly gradeable> - <one-line reason>
 
 Findings (ordered by severity)
-- <critical | major | minor> - missing design-doc risk: <risk caused by decisions living only in code/memory>.
 - <critical | major | minor> - <finding with repo evidence>. Fix: <concrete next action>.
+- <critical | major | minor> - missing design-doc risk: <risk caused by decisions living only in code/memory>; placed by its severity like any other finding.
 
 Low-hanging fruit
 - <create or update design artifact section>
