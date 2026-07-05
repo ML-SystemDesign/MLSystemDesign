@@ -1,8 +1,8 @@
 # MagicSharepoint
 
-### **I. Problem definition**
+## I. Problem definition
 
-### **i. Origin**
+### i. Origin
 
 MagicSharepoint is a platform designed for collaborative work and document sharing among clients. Documents can be in text format (Markdown) or scanned/image formats.
 
@@ -20,13 +20,13 @@ Clients can access all versions of each document.
 
 The project's goal is to provide clients with a tool to get answers about document content and version changes more easily and quickly than by proofreading and comparing documents on their own.
 
-### **ii. Relevance & Reasons**
+### ii. Relevance & Reasons
 
 **ii.i. Existing flow**
 
-To get answers about the content of a document, clients need to read through the document or use search functionality. 
+To get answers about the content of a document, clients need to read through the document or use search functionality.
 
-Since documents are domain-specific, clients must have relevant expertise depending on the nature of the question. Answers must be cataloged manually in an external tool. 
+Since documents are domain-specific, clients must have relevant expertise depending on the nature of the question. Answers must be cataloged manually in an external tool.
 
 Additionally, if another client has the same or a similar question, they have no way of knowing that the question was already asked and answered.
 
@@ -36,7 +36,7 @@ The proposed tool could be reused to support frequent questions or bulk inquirie
 
 In the future, we may reuse some components of Q&A solutions as a starting point for building a Knowledge Center for clients, allowing documents to be represented as a graph of facts or knowledge.
 
-### **iii. Expectations**
+### iii. Expectations
 
 Clients expect answers to be:
 - Fast
@@ -44,7 +44,7 @@ Clients expect answers to be:
         - "1 minute" was identified by deep interviews, can be specified later.
 - Trustworthy
     - Limited hallucinations or 'extended' answers. At least 95% of the answers should not contain fact mismatching of level 1 and level 2 (described below).
-    - In case clients have any doubts, they won't need to proofread the whole document to resolve the uncertainty. 
+    - In case clients have any doubts, they won't need to proofread the whole document to resolve the uncertainty.
 - Interactive
     - Ability to provide more details/follow-up questions if the answer is insufficient.
     - Automatically request more details if unable to generate sufficient answer.
@@ -78,7 +78,7 @@ We will categorize the use cases as follows:
 - Addressable - The system's response must be useful and relevant.
 - Non-addressable - The system cannot provide an answer, or the question is beyond the scope of its capabilities. In such cases, the appropriate action is to implement a proper restriction. Although those questions might not bring benefits, it's very crucial to have a proper fallback.
 
-We will use split the use cases to better define the overall problem space for the solution.
+We will split the use cases to better define the overall problem space for the solution.
 We will index the use cases as `Na` where `N` is a priority and `a/na` is an addressability flag.
 
 Addressable use cases:
@@ -98,29 +98,29 @@ Non-addressable use cases
     - e.g., how the Attention mechanism works from 'Bible'.
 
 
-### **iv. Previous work**
+### iv. Previous work
 
 - Implemented 'smart' full-text search to help navigate faster and easier.
     - Similar to the "match" query available in the Elasticsearch out of the box.
 - Cataloged frequent questions and used Mechanical Turk to get answers in advance.
 
-### **v. Usage volumes and patterns**
+### v. Usage volumes and patterns
 
 Every month:
 - Platform has ~1000 unique users.
-- Each user is having 10 document reading sessions.
+- Each user has 10 document reading sessions.
 - Reading session lasts between 30 and 120 minutes.
 - Version is assigned to 500 documents.
     - New documents or edited existing documents.
 - 10% of the documents are image based.
 
-### **vi. Other details**
+### vi. Other details
 
 - Cloud Object Storage with automated version cataloging.
 - OCR is not implemented.
 - Documents could be sent to service vendors, provided they are not used for training as per SLA (e.g., OpenAI, Anthropic, etc.).
 
-### **II. Metrics and losses**
+## II. Metrics and losses
 
 **i. Metrics**
 
@@ -131,13 +131,13 @@ The task could be split into independent subtasks: OCR, Intent classification ->
 
 Pre-requirements: Define all possible labels (intents). Prepare dataset of questions/sentences and appropriate labels.
 
-It shows how accurately a model can classify the intent of questions, which is crucial for the whole processing pipeline. Below metrics could be used for QIC (macro + per class): 
+It shows how accurately a model can classify the intent of questions, which is crucial for the whole processing pipeline. Below metrics could be used for QIC (macro + per class):
 
 1. Precision
 2. Recall
 3. F1
 
-   
+
 ***Data Extraction Metrics:***
 
 Pre-requirements: Dataset of scanned documents and their corresponding texts. (As a workaround: readable documents could be scanned manually, which gives both - scanned image and ground truth text values)
@@ -170,35 +170,35 @@ We may introduce more detailed errors in the future (e.g., Formula Error related
 
 ***Retrieval Metrics:***
 
-Pre-requirements: Dataset of queries collected from experts and list of N most relevant chunks for each of the query. 
+Pre-requirements: Dataset of queries collected from experts and list of N most relevant chunks for each of the query.
 
 **a. Recall@k**
 
-It determines how many relevant results from all existing relevant results for the query are returned in the retrieval step, where K is the number of results considered, a hyperparameter of the model. 
+It determines how many relevant results from all existing relevant results for the query are returned in the retrieval step, where K is the number of results considered, a hyperparameter of the model.
 
 **b. Normalized discounted cumulative gain (NDCG)**
-NDCG is a metric that calculates the average of DCGs for a given set of results, which is a measure of the sum of relevance scores taken from the first N results divided by the ideal DCG. In its turn, DCG is the sum of relevance scores among the first N results in the order of decreasing relevance. 
+NDCG is a metric that calculates the average of DCGs for a given set of results, which is a measure of the sum of relevance scores taken from the first N results divided by the ideal DCG. In its turn, DCG is the sum of relevance scores among the first N results in the order of decreasing relevance.
 
 ***Answer Generation Metrics:***
 
 **a. Average Relevance Score**
 
-Measures how well the generated answers match the context and query. 
+Measures how well the generated answers match the context and query.
 There are several approaches to calculate that metric:
 - automatically with framework ragas [https://docs.ragas.io/en/stable/] (detailed description provided in section IV. Validation Schema)
 - with other llms (paper to consider "Automatic Evaluation of Attribution by Large Language Models" [https://arxiv.org/pdf/2305.06311])
 - manually based on experts output (approach is provided in section IX. Measuring and reporting)
 
-  
+
 **b. Hallucination Rate**
 
-As one of the requirements is to avoid hallucinating, it is possible to calculate the percentage of incorrect or fabricated information in the generated answers. 
+As one of the requirements is to avoid hallucinating, it is possible to calculate the percentage of incorrect or fabricated information in the generated answers.
 
-How to calculate: 
+How to calculate:
 
 - Manually: prepare dataset of queries (including queries without answer in dataset)  + expected responses; calculate by comparing expected response to provided
 - Finetune smaller llms to detect hallucination
-- Add guardrails [https://github.com/NVIDIA/NeMo-Guardrails] - it will not only improve reponse, but also helps to calculate amount of times, model attempts to hallucinate
+- Add guardrails [https://github.com/NVIDIA/NeMo-Guardrails] - it will not only improve response, but also helps to calculate amount of times, model attempts to hallucinate
 
 $`hallucination\_rate = \frac{amount\_of\_hallucinated\_responses}{total\_amount\_of\_responses}`$
 
@@ -207,7 +207,7 @@ $`hallucination\_rate = \frac{amount\_of\_hallucinated\_responses}{total\_amount
 
 Pre-requirements: Dataset of queries (ideally with unambiguous answer) + expected response, domain experts to evaluate the metric manually.
 
-As one of the requirements is the ability to automatically request more details if an insufficient answer is generated, the average number of interactions or follow-up questions needed to clarify or correct an answer could be calculated to measure clarification capability and average relevance of follow-up questions. This metric helps to check the system's ability to provide comprehensive answers initially or minimise the number of interactions needed for detalization.
+As one of the requirements is the ability to automatically request more details if an insufficient answer is generated, the average number of interactions or follow-up questions needed to clarify or correct an answer could be calculated to measure clarification capability and average relevance of follow-up questions. This metric helps to check the system's ability to provide comprehensive answers initially or minimise the number of interactions needed for clarification.
 
 $`clarification\_capability = \frac{number\_of\_clarification\_questions}{total\_amount\_of\_queries}`$
 
@@ -227,7 +227,7 @@ A lot of metrics were provided, but it's a good idea to go in the reverse direct
 
 
 
-### **III. Dataset**
+## III. Dataset
 
 We have two types of data:
 * data that was used to train the main LLM model;
@@ -235,7 +235,7 @@ We have two types of data:
 
 We don't control the data for the main LLM training (meaning that we're coping with the LLM limitations and don't influence this until the moment we realize that we could really benefit from fine-tuning, which will become completely different project).
 
-#### i. Available Data (to perform RAG)
+### i. Available Data (to perform RAG)
 
 We don't distinguish between client roles for data access. Every client would have access to every document. So we basically have a shared dataset for the whole system.
 
@@ -246,7 +246,7 @@ Includes a set of documents available on the Platform. Documents can be in text 
     - Structure: Documents typically include a table of contents and dedicated sections, such as introduction or glossary.
     - Content: Documents may include text with all Markdown features (e.g., quotes, headings, formulas, tables).
 2. For documents in Image form (scans/images): no additional description available. They are just files that contain image/scan inside.
-3. Each document have origination metadata
+3. Each document has origination metadata
 4. Documents may have v1-v2-v3-... versions.
 
 Clients can edit documents online via the platform or upload documents from their local machines. Each document receives a version number upon:
@@ -259,9 +259,9 @@ Clients can edit documents online via the platform or upload documents from thei
 Clients can access all versions of each document.
 
 
-#### ii. Document Versioning
+### ii. Document Versioning
 
-Some documents would be edited directly on our platform. It this case we will know both: the applied diff and the next version of a document. 
+Some documents would be edited directly on our platform. In this case we will know both: the applied diff and the next version of a document.
 But for the most documents - we would have only the next version of a document, not the diff.
 
 Required adjustments:
@@ -270,23 +270,23 @@ Required adjustments:
     - Ex.: custom fallback if the question is about diff, but currently we don't have diff
 - Treat diffs as a document
 
-#### iii. Data Cleaning
+### iii. Data Cleaning
 
-Data Сleaning process should be automatized with reproducible scripts. Script runs once for each new document that gets uploaded to the system and then for each new version of that document.
+Data Cleaning process should be automated with reproducible scripts. Script runs once for each new document that gets uploaded to the system and then for each new version of that document.
 
-We don't perform duplicate removal neither for markdown nor for images.scans, considering that if the client uploaded several duplicating documents, he has the reason to do this, and this is as it should be.
+We don't perform duplicate removal for either markdown or images/scans, considering that if a client uploaded several duplicate documents, they have a reason to do so, and this is as it should be.
 
 Cleaned documents and images should be stored separately from the original files in a `cleaned_data` directory or database. This ensures keeping the original versions for reference and debugging.
 
 **iii.i. Markdown Documents:**
 
-**TODO**: update this part after the project'll start and data will be shared. 
+**TODO**: update this part after the project starts and data is shared.
 
 **iii.ii. Scanned/Image Documents:**
 - Enhance the quality of scans (e.g., adjusting brightness/contrast, removing noise).
 - Perform Optical Character Recognition (OCR) for scans. Store both initial scan and its recognized content.
 
-**TODO**: add more details/ideas how to do it 
+**TODO**: add more details/ideas how to do it
 
 **iii.iii. Quality Controls:**
 Introduce quality metrics and thresholds to indicate successfully cleaned documents. [Monitoring](#xi-monitoring)
@@ -295,7 +295,7 @@ Example:
 - Text length per OCR'ed page.
 - Processing errors raised and on which step.
 
-#### iv. Data Chunking Strategy
+### iv. Data Chunking Strategy
 
 Common approach to Document Chunking is:
 - a document `[level 0]`
@@ -306,7 +306,7 @@ Common approach to Document Chunking is:
 It allows to use the following path:
 - search without specifying a particular document -> `[level 0]`
 - user selects a document and asks if there is a particular section in it -> `[level 1]`
-... 
+...
 
 Large chunks can be an issue for Embedder.
 If a specific chunk exceeds size limit, there are following approaches:
@@ -317,7 +317,7 @@ If a specific chunk exceeds size limit, there are following approaches:
     - Restricted by size limit
 Such chunk alternatives should be treated as a proper chunk for RAG purposes, but should be indicated in metadata.
 
-#### v. Data Enhancing
+### v. Data Enhancing
 
 The purpose of Data Enhancing is to empower the context search, by allowing the use of vector databases, understand the structure and presence of special entities.
 
@@ -328,16 +328,16 @@ A good embedder should define the retrieval layer's ability to:
 - Store content representations efficiently
 - Encode the content and queries to be semantically similar
 - Capture nuanced details due to domain-specific content
-- Compare different levels on chunks between eachother
+- Compare different levels of chunks with each other
 
-Considering that the retrieval layer is the first step in the pipeline, we do believe it could become a bottleneck in performance. This is because if the context is provided incorrectly, there is less ability for the upstream generation model to improve upon the irrelevant context.
+Considering that the retrieval layer is the first step in the pipeline, we do believe it could become a bottleneck in performance. This is because if the context is provided incorrectly, there is less ability for the downstream generation model to improve upon the irrelevant context.
 
 Taking these factors into account, we might be ready to explore and evaluate the performance of various encoders at our disposal. We seek to avoid being restricted by any particular design solution, ensuring that there is room for continuous enhancement over time. With this perspective, we will consider the potential of implementing an in-house embedding solution.
 
 Here are the benefits we highlight:
 - Provides potential for improving this critical component without vendor lock-in
-- Provides control over versioning, determinism, availability (not going to be depricated)
-- Does not require us to provide per-token costs
+- Provides control over versioning, determinism, and availability (not going to be deprecated)
+- Does not incur per-token charges from an external vendor
 - Could potentially benefit from interaction data enhancements
 
 Drawbacks:
@@ -379,7 +379,7 @@ Example:
 - Text length per OCR'ed page.
 - Processing errors raised and on which step.
 
-#### vi. Metadata
+### vi. Metadata
 
 **Document Metadata:**
 - Document title
@@ -452,7 +452,7 @@ version_info:
 ---
 ```
 
-### **IV. Validation Schema**
+## IV. Validation Schema
 
 For validation purposes, we will use a data set generated from the original documents using the [RAGAS](https://docs.ragas.io/en/stable/)  functionality. This approach allows us to create a comprehensive validation set that closely mirrors the real-world usage of our system.
 
@@ -460,7 +460,7 @@ For validation purposes, we will use a data set generated from the original docu
 
 **TODO**: add complementary frameworks for better covering all important aspects
 
-#### i. Question Selection and Dataset Creation
+### i. Question Selection and Dataset Creation
 RAGAS takes the original documents and their associated metadata and generates a structured dataset with the following components
 
 * Question: Simulation of user queries
@@ -487,10 +487,10 @@ To create a comprehensive and representative validation dataset, we'll employ a 
 
 4. Question Diversity. Ensure a balanced distribution of question types:
     * Factual questions (e.g. "Who is the author of this document?")
-    * Inferential questions (e.g. "What are the implications of the findings in section 3?)
-    * Comparative questions (e.g. "How does the methodology in version 2 differ from that in version 1?)
-    * Multi-document questions (e.g. "Summarise the common themes across these three related documents.)
-    * Version-specific questions (e.g. "What changes have been made to the conclusion between versions 3 and 4?)
+    * Inferential questions (e.g. "What are the implications of the findings in section 3?")
+    * Comparative questions (e.g. "How does the methodology in version 2 differ from that in version 1?")
+    * Multi-document questions (e.g. "Summarise the common themes across these three related documents.")
+    * Version-specific questions (e.g. "What changes have been made to the conclusion between versions 3 and 4?")
 
 5. Context Selection
     * For each question, select a relevant context from the document(s).
@@ -511,7 +511,7 @@ To create a comprehensive and representative validation dataset, we'll employ a 
     * Include some questions that cannot be answered from the given context to test the system's ability to recognise when it doesn't have sufficient information.
 
 
-#### ii. Periodic Updates
+### ii. Periodic Updates
 The validation dataset will be updated periodically to maintain its relevance and comprehensiveness. This includes:
 
 * Addition of newly uploaded documents
@@ -520,7 +520,7 @@ The validation dataset will be updated periodically to maintain its relevance an
 
 We recommend updating the validation set monthly or whenever there's a significant influx of new documents or versions.
 
-#### iii. Stratified Sampling
+### iii. Stratified Sampling
 To ensure balanced representation, we'll use stratified sampling when creating the validation set. Strata may include:
 
 * Document length (short, medium, long)
@@ -529,26 +529,26 @@ To ensure balanced representation, we'll use stratified sampling when creating t
 * Query complexity (simple factual, multi-step reasoning, version comparison)
 
 
-### V. Baseline Solution
+## V. Baseline Solution
 
-#### Document Extraction Process 
+### Document Extraction Process
 
-##### Baseline extraction
+#### Baseline extraction
 
-This baseline pipeline might cover only textual formats like .txt, .doc, or .pdb for simplicity. This significantly simplifies the first iteration by avoiding the need to handle OCR, which contains a machine learning model and requires managing its lifecycle.
+This baseline pipeline might cover only textual formats like .txt, .doc, or .pdf for simplicity. This significantly simplifies the first iteration by avoiding the need to handle OCR, which contains a machine learning model and requires managing its lifecycle.
 
 1. Format Reader: Differentiate and handle file types accordingly
 2. Markdown Formatting: Ensure that the extracted content is formatted correctly according to markdown standards.
 3. Error Management & Spell Checking: This part ensures extraction logging and raises awareness for the maintainer that some documents might not be reliable.
 
-#### Retrieval-Augmented Generation Framework
+### Retrieval-Augmented Generation Framework
 
 The Retrieval-Augmented Generation (RAG) framework can be broken down into two main components:
 
 - Retrieval
 - Augmented Generation
 
-Augmented Generation is a recent advancement, while the concept of document retrieval is something that has been with us since the emergine of web search. While there is little to no sense in building the second part using solutions other than LLMs, it might make sense to implement a simple baseline for the retrieval.
+Augmented Generation is a recent advancement, while the concept of document retrieval is something that has been with us since the emergence of web search. While there is little to no sense in building the second part using solutions other than LLMs, it might make sense to implement a simple baseline for the retrieval.
 The high-level flow is depicted in the image below.
 
 ![Retrieval Baseline](docs/retrieval_baseline.png)
@@ -575,7 +575,7 @@ Below you will find the schemas describing three options of increased complexity
 
 ![RAG Reliable & Interactive](docs/rag_reliable_interactive.png)
 
-#### Retrieval Baseline: Sparse Encoded Solution
+### Retrieval Baseline: Sparse Encoded Solution
 
 Objectives:
 - Create a robust baseline with minimal effort.
@@ -596,7 +596,7 @@ Components:
     - Maintains a DB-represented corpus
     - Creates indexes for Term Frequency (TF) and Inverse Document Frequency (IDF)
 3. Inference Layer
-    - Given query passed trough the preprocessing layer, Executes parallelized scoring computations
+    - Given query passed through the preprocessing layer, Executes parallelized scoring computations
     - Manages ranking and retrieval of results
 4. Representation Layer
     - Highlights the top-k results for the user
@@ -604,7 +604,7 @@ Components:
 
 **TODO**: add criteria for irrelevant content and some examples
 
-##### Pros & Cons
+#### Pros & Cons
 
 Pros:
 + Simple to implement, debug, and analyze
@@ -618,11 +618,11 @@ Cons:
 - Bag-of-words approach: word order is not considered
 - Requires updates to accommodate new vocabulary
 
-#### RAG
+### RAG
 
-##### RAG: common functionality 
+#### RAG: common functionality
 
-A basic RAG system consists of the following components components:
+A basic RAG system consists of the following components:
 
 1. Ingestion Layer:
     - Embedder
@@ -636,12 +636,12 @@ A basic RAG system consists of the following components components:
     - Stores chat history
 4. Synthesis Component:
     - Utilizes an LLM for response generation
-6. Representation Layer:
+5. Representation Layer:
     - Provides a dialogue mode for user interaction.
     - User Feedback: Collects user input to continuously refine the system.
 
 
-##### RAG: Bridging the Qualitative Gap
+#### RAG: Bridging the Qualitative Gap
 
 Currently, the common functionality lacks modules to ensure the solution meets quality criteria, specifically in areas such as hallucination mitigation and tolerance against misuse. To address these gaps, we propose using guardrails for quality assurance. This includes a retry strategy and a fallback mechanism designed to enhance reliability and robustness. ([About Guardrails](https://docs.nvidia.com/nemo/guardrails/user_guides/guardrails-process.html))
 
@@ -658,14 +658,14 @@ The retrieval rails are designed to help reject non-relevant chunks or alter the
 
 The output rails are used to check the correctness of the answer. This is probably the right place where we might consider additional designs for tackling hallucination issues.
 
-###### Output rails example
+##### Output rails example
 
-Here is an example of an alogirthm we might utilise. 
+Here is an example of an algorithm we might use.
 The fallback strategy could involve calling another or multiple LLMs. The Guardrails would evaluate these answers to select the best one that meets quality standards. This approach increases the likelihood of obtaining a satisfactory response.
 
 The complexity might be increased or decreased depending on the metrics we obtain for the baseline, but this is something we need to keep in mind while choosing the framework in advance.
 
-*** Algorithm ***
+**Algorithm**
 
 **Input:** Request from user
 **Output:** Response to user
@@ -692,20 +692,20 @@ The complexity might be increased or decreased depending on the metrics we obtai
 **End Algorithm**
 
 
-##### Locating the components
+#### Locating the components
 
-###### Embedder
+##### Embedder
 
 **Granularity of embeddings**
 
-Surely enough, we could cover all the chunk levels [Data Chunking Strategy](#iv-data-chunking-strategy) by having separate embeddings for each levels and deciding which one to use based on the context, for example:
+Surely enough, we could cover all the chunk levels [Data Chunking Strategy](#iv-data-chunking-strategy) by having separate embeddings for each level and deciding which one to use based on the context, for example:
 - search without specifying a particular document -> `[level 0]`
 - user selects a document and asks if there is a particular section in it -> `[level 1]`
-... 
+...
 
 This approach might bring high accuracy, but it's complex and costly to implement. For the baseline solution, we would like to start with a single embedding representation. Based on the most common use case, this would be a paragraph encoding. Because according to our analysis, most of the problems' answers could be found given the context of a single paragraph.
 
-#### Framework Selection
+### Framework Selection
 
 When considering a framework, we would like it to support the following features:
 1. Document storage
@@ -735,14 +735,14 @@ Here are some resources that summarize the differences between the two framework
 | **Optimization**        | Optimization of LLM applications                 | Optimized for the retrieval of relevant data    |
 | **Ease of Use**         | Challenging                                      | Easy                                            |
 
-Given the pros and cons listed above, it appears that LlamaIndex provides all the features we are looking for, combined with an ease of use that could reduce development and maintenance costs. Additionally, LlamaIndex offers enterprise cloud versions of the platform. If our solution evolves towards a simpler design, we might want to move to the paid cloud version if it makes economical sense.
+Given the pros and cons listed above, it appears that LlamaIndex provides all the features we are looking for, combined with an ease of use that could reduce development and maintenance costs. Additionally, LlamaIndex offers enterprise cloud versions of the platform. If our solution evolves towards a simpler design, we might want to move to the paid cloud version if it makes economic sense.
 
 
-### **VI. Error analysis**
+## VI. Error analysis
 
-**TODO**: update this part after the project'll start and data will be shared.
+**TODO**: update this part after the project starts and data is shared.
 
-Given the multi-step nature of the solution, consider potential isuues on each of the steps:
+Given the multi-step nature of the solution, consider potential issues on each of the steps:
 
 **0. Intent classification**
 - "under" filtering: Irrelevant questions are treated as meaningful, pipeline's running for  nothing
@@ -765,26 +765,26 @@ Given the multi-step nature of the solution, consider potential isuues on each o
 - "over" filtering: guardrails might filter out correct, useful information, reducing the system's performance.
 
 
-As errors are inharitated from one stage to another. Use following approaches to diagnose them:
+As errors are inherited from one stage to another, Use following approaches to diagnose them:
 
 1. *Isolate Components:*
     - Test each component individually. For embeddings, manually inspect a sample of embeddings to check their quality. For retrieval, evaluate the retrieved documents separately from the generation step. [**Metrics and Losses**](#ii-metrics-and-losses)
 2. *Step-by-Step Analysis:*
     - Follow a query through the entire pipeline to catch where the first major difference from expected behaviour occurs.
 
-Corner-cases to check are mentioned in section 4. Validation Schema.
+Corner-cases to check are mentioned in [**IV. Validation Schema**](#iv-validation-schema).
 
 
-### **VII. Training Pipeline**
+## VII. Training Pipeline
 
-### **i. Overview**
+### i. Overview
 
 We are planning to use external/pretrained solutions for Embedding generation, OCR, and LLM components. [**Dataset**](#iii-dataset)
 Because of this, our Training Pipeline should focus on:
 - **Stable Data Preprocessing:** Should be executed regularly upon new document submission.
 - **Stable Context Selection:** Enabling robust Prompt Engineering.
 
-### **ii. Toolset**
+### ii. Toolset
 
 The suggested tools are:
 - Python
@@ -793,7 +793,7 @@ The suggested tools are:
 - Docker
 - Cloud LLM service (OpenAI / Azure OpenAI)
 
-### **iii. Data Preprocessing**
+### iii. Data Preprocessing
 
 The data preprocessing should include:
 
@@ -805,23 +805,23 @@ The data preprocessing should include:
 
 The main goal - document should be preprocessed within 1-2 hours after submission/new version being assigned.
 
-### **iv. Evaluations**
+### iv. Evaluations
 For Context, Prompt, and Chat E2E evaluations we would be using RAGAS tool as described in [**IV. Validation Schema**](#iv-validation-schema)
 
-### **v. Continuous Integration and Deployment**
+### v. Continuous Integration and Deployment
 
 The pipeline should be integrated into the existing CI/CD infrastructure. This includes setting up automated evaluation on a regular basis, ensuring that the latest data is used and pulled, and releasing changes to production with minimal manual intervention.
 
-### **vi. Monitoring and Maintenance**
+### vi. Monitoring and Maintenance
 
 We should monitor the model's performance in production and set up alerts for significant deviations from expected performance. This will enable us to catch issues early and trigger retraining or model updates when necessary. [**XI. Monitoring**](#xi-monitoring)
 
-### **vii. Future Work and Experimentation**
+### vii. Future Work and Experimentation
 
 Considering we would like more customised and/or on-premise models, we will need to extend this section to cover training for in-house models.
-The section lacks of testing approaches for the specific user needs, such as asking for more details.
+The section lacks testing approaches for the specific user needs, such as asking for more details.
 
-### **VIII. Features**
+## VIII. Features
 
 Our key criteria to select features:
 1. **Context selection flexibility:** Users may ask a variety of questions and features need to be adaptive enough to ensure that context may be selected for any question.
@@ -873,15 +873,15 @@ On the high level, all features could be classified into:
 
 The purpose of this features is to enable easier selection of documents by users.
 Either by using filters, or non-explicit mentioning in the chat.
-Such features are not explictly extracted or crafted, rather then translating the state of a document from other sources.
+Such features are not explicitly extracted or crafted, but rather translate the state of a document from other sources.
 
-As a side effect, they could be usefull for Prompt Engineering to represent some structure to the LLM. [**Metadata**](#vi-metadata)
+As a side effect, they could be useful for Prompt Engineering to represent some structure to the LLM. [**Metadata**](#vi-metadata)
 
 **ii. Text level features**
 
 Such features are targeting context selection for the Prompt. [Data Enhancing](#v-data-enhancing)
 They are split into 3 high level groups:
-1. **Metadata.** 
+1. **Metadata.**
     - Not extracted features. Represents high level state/statistics of text.
 2. **Explicit enriching.**
     - Features which are not explicitly available and should be extracted by models / regexp / other approaches.
@@ -892,36 +892,36 @@ They are split into 3 high level groups:
 
 This set of features further focusing the ability to select context and document selection. [Data Enhancing](#v-data-enhancing)
 
-**ix. Prompt templates**
+**iv. Prompt templates**
 
 Set of Prompt templates which would be able to cover different question types and intents.
 Each Prompt template would consist out of following component templates (not ordered):
 - Agent Role & Knowledge
 - Agent Task
-- Output Formating
+- Output Formatting
 - Output Restrictions
 - Input Metadata Context
 - Input Document Context
-- Input Documents Relations 
+- Input Documents Relations
 - (Optional) Task Knowledge Context
 - (Optional) Task & Role Examples
 
-Some component templates would be pre-created. 
-Some - constructed on the go from selected relevent documents according to the component template.
+Some component templates would be pre-created.
+Some - constructed on the go from selected relevant documents according to the component template.
 
-In the beggining component templates should be able to cover following conditions (from [**Expectations**](#iii-expectations)):
+In the beginning, component templates should be able to cover the following conditions (from [**Expectations**](#iii-expectations)):
 - General domain questions
 - Addressable questions
 - Non-addressable questions
 - Questions for 1 Document
 - Questions for multiple different Documents
 - Questions for 1 Document in multiple historical versions
-- Questions for multiple different Documents in their multiple historical versions 
+- Questions for multiple different Documents in their multiple historical versions
 
 
-### **IX. Measuring and reporting**
+## IX. Measuring and reporting
 
-#### i. Measuring Results
+### i. Measuring Results
 
 Understanding how to measure the system's performance precisely is essential for validating the effectiveness of the machine learning solution. Experiments must be well-designed to capture meaningful metrics that reflect real-world utility.
 
@@ -978,17 +978,17 @@ The settings can be adapted based on the budget, with potential increases to acc
 
 **Special Considerations for Niche Domains**: The evaluation approach works well for well-known domains. For specific domains, we can use local experts who are familiar with the context.
 
-#### ii. A/B Tests
+### ii. A/B Tests
 
 **Hypothesis**
  - **Primary Hypothesis**: We hypothesize that the new system enhancements will increase user retention rates by making the platform more engaging and responsive to user needs.
  - **Secondary Hypothesis**: We hypothesize that these enhancements will also lead to an increase in the subscription conversion rate, as the improved user experience encourages more users to commit to a paid subscription.
 
-**Termination Criteria.** 
+**Termination Criteria.**
 
- - The system must deliver responses within an average of 1.5 minutes. 
+ - The system must deliver responses within an average of 1.5 minutes.
  - The percentage of reports with offensive or improper responses must be below 1%.
- 
+
  If the termination criteria are met, the experiment will be paused and resumed after corrections.
 
 **Key Metrics**
@@ -1018,19 +1018,19 @@ The settings can be adapted based on the budget, with potential increases to acc
 
 **Splitting Strategy.** Users will be split into two groups by their IDs.
 
-**Experiment Duration.** 
+**Experiment Duration.**
 
-The experiment will last four month. After two month, groups will swap configurations to mitigate any biases introduced by variable user experiences and external factors.
+The experiment will last four months. After two months, groups will swap configurations to mitigate any biases introduced by variable user experiences and external factors.
 
 **TODO**: are there any seasonality concerns?
 
 **Statistical Criteria.** Statistical significance will be determined using Welch's t-test, with a significance level set at 5% and the type II error at 10%.
 
-**Future Steps for Experiment Improvement.** 
+**Future Steps for Experiment Improvement.**
 
 To further validate our experimental setup, we propose incorporating an A/A testing phase to ensure the reliability of our measurements, followed by A/B/C testing to compare multiple new solutions simultaneously.
 
-#### iii. Reporting Results
+### iii. Reporting Results
 
 At the end of the experiment, a comprehensive report will be generated. This will include:
 
@@ -1040,11 +1040,11 @@ At the end of the experiment, a comprehensive report will be generated. This wil
 - Detailed descriptions of each tested approach with links to full documentation.
 - Conclusive summary and recommendations for further steps.
 
-### **X. Integration**
+## X. Integration
 
 ![RAG Reliable & Interactive](docs/rag_reliable_interactive.png)
 
-### **i. Embeddings Database**
+### i. Embeddings Database
 
 This is one of the core components in the system for efficient document search and retrieval. [Data Enhancing](#v-data-enhancing)
 It consists of:
@@ -1074,17 +1074,17 @@ A cloud and scalable database, e.g., Pinecone. It is designed to scale horizonta
 - Should return top-10 nearest neighbors within 100ms for up to 1 million vectors.
 - Should support at least 1000 Queries Per Second for nearest neighbor searches on a dataset of 1 million vectors.
 
-### **ii. Documents Storage**
+### ii. Documents Storage
 
-A scalable cloud service (e.g. AWS S3) for scalable storage and files managment for original files uploaded by clients, including their versions. The service returns a URL (Document ID) for each uploaded file, which is stored in the embeddings database metadata.
+A scalable cloud service (e.g. AWS S3) for scalable storage and file management for original files uploaded by clients, including their versions. The service returns a URL (Document ID) for each uploaded file, which is stored in the embeddings database metadata.
 
-### **iii. Chat UI**
+### iii. Chat UI
 
 An intuitive and responsive interface for clients to query and receive results.
 
 **iii.i. Frameworks and Technologies**
 1. **Frontend.** React.js: A well-known framework for building user interfaces with a modular, component-based architecture.
-2. **Backend.** Redux or Context API: for managing application state.
+2. **State Management (Frontend).** Redux or Context API: for managing application state.
 3. **Backend integration.** Axios: for handling API requests and responses.
 4. **Real-Time Interaction.** Socket.io: For real-time, bi-directional communication between web clients and servers.
 5. **Styling.** CSS-in-JS libraries like styled-components or Emotion for component-based styling.
@@ -1095,11 +1095,11 @@ An intuitive and responsive interface for clients to query and receive results.
   3. Clients can report offensive or improper responses, which triggers another LLM as a fallback scenario.
   4. Allows to save a chat history and responses for future reference.
 
-### **iv. OCR**
+### iv. OCR
 
 MagicSharepoint utilizes Optical Character Recognition technology to convert text from image-based documents into machine-readable text. This offers users greater flexibility in input data formats. The algorithm takes an intermediate place between the user upload process and embeddings creation. [Data Cleaning](#iii-data-cleaning)
 
-MagicSharepoint leverages an existing OCR solution - AWS Textract, considering the complexitity and high-accuracy it requires. This choice also facilitates scalability, reducing development time and maintenance overhead.
+MagicSharepoint leverages an existing OCR solution - AWS Textract, considering the complexity and high accuracy it requires. This choice also facilitates scalability, reducing development time and maintenance overhead.
 
 **Features.**
 1. **Document upload.** The system automatically identifies the format of uploaded file and OCR gets triggered if image-based inputs.
@@ -1107,7 +1107,7 @@ MagicSharepoint leverages an existing OCR solution - AWS Textract, considering t
 3. **Storage.** Both the original image and the extracted text is stored in the Documents Storage, linked by the same Document ID.
 4. **Multi-language Support.** The OCR engine supports multiple languages to serve wide range of clients.
 
-### **v. Backend API Design**
+### v. Backend API Design
 
 Below are the events when a corresponding API action gets triggered while interacting with a user.
 
@@ -1139,13 +1139,13 @@ Below are the events when a corresponding API action gets triggered while intera
 - Real-time notifications for document processing status, e.g., "Your document is being uploaded. Please wait..." or "OCR processing started for your document"
 - Error Handling and Logging Events. Examples are "File upload failed due to network timeout", "Document size exceeds limit" or "Unsupported file format"
 
-### **vi. Parallel Processing**
+### vi. Parallel Processing
 To handle simultaneous queries and ensure document processing tasks do not slow down user interactions, we adopt a parallel processing strategy that separates asynchronous tasks (e.g., embedding generation) from synchronous tasks (e.g., real-time user interactions).
 
 - **Embedding Generation for Index Updating:** Asynchronous tasks, which are placed in an asynchronous task queue (e.g., Celery with RabbitMQ) and from there are taken for parallel processing. It is triggered upon Document upload, new version, or OCR completion. Processed by general workers.
 - **Real-time User Interaction:** Synchronous tasks, which are prioritized for low latency. Processed by reserved workers for entire chat sessions to maintain context and improve response relevance.
 
-### **vii. SLAs**
+### vii. SLAs
 
 **TODO**: separate SLA and Latency Expectations ideas
 
@@ -1180,7 +1180,7 @@ If Time Estimate is not met - we need to save related logs and highlight/mark th
 - Fast SSDs: For quick read/write operations during document processing and storing original files
 - High-speed Network: To ensure low latency between API services
 
-### **viii. Fallback Strategies**
+### viii. Fallback Strategies
 
 Fallbacks are crucial for maintaining operational efficiency in the face of unforeseen circumstances. MagicSharepoint uses a multi-tiered fallback system to ensure seamless service:
 
@@ -1188,16 +1188,16 @@ Fallbacks are crucial for maintaining operational efficiency in the face of unfo
 
 - **Primary fallback:** The primary model is served by the chosen vendor. It is used unless there is negative user feedback on the model outcome or if the latency is outside the accepted range.
 - **Secondary fallback:** Our next layer of fallback involves using a pretrained LLM from Hugging Face, installed locally. This approach addresses both potential issues.
-  
+
 The system has latency and feedback-based switching, which reroutes requests to the secondary model. Once conditions improve, it switches back to the primary model. To simplify management, each service within MagicSharepoint handles its fallback mechanisms independently.
 
-### **XI. Monitoring**
+## XI. Monitoring
 
 **TODO**: update this part with main metrics to be monitored for each system.
 
 **TODO**: select main metrics for each system.
 
-#### Engineering Logging & Monitoring
+### Engineering Logging & Monitoring
 
 1. **Ingestion Layer**
     - Process and I/O timings
@@ -1206,11 +1206,11 @@ The system has latency and feedback-based switching, which reroutes requests to 
 2. **Retrieval**
    - **Embedder**: Monitor preprocessing time, embedding model time, and utilization of embedding model instances.
    - **Database (DB)**: Monitor time taken for each retrieval operation and DB utilization.
-   
+
 3. **Generation**
    - **LLM**: Monitor latency, cost, error rates, uptime, and token volume for input and output to predict scaling needs.
 
-#### ML Logging & Monitoring
+### ML Logging & Monitoring
 
 1. **Ingestion Layer**
     - Every step of the ETL pipeline for document extraction must be fully logged to ensure the process is reproducible and help with issue resolution
@@ -1229,7 +1229,7 @@ The system has latency and feedback-based switching, which reroutes requests to 
 
 5. **Alerting Mechanisms**: Have alerting mechanisms for any anomalies or exceeded thresholds based on the metrics being monitored
 
-#### Tooling
+### Tooling
 
 1. **For RAG Operations - Langfuse Callback**
     - Integrates with LlamaIndex
@@ -1274,18 +1274,18 @@ The system has latency and feedback-based switching, which reroutes requests to 
     - We may choose between self-hosted versions and the paid cloud version in the future
 
 
-### **XII. Serving and inference**
+## XII. Serving and inference
 
 ![RAG Reliable & Interactive](docs/rag_reliable_interactive.png)
 
-The inference part of a system would contain from 3 major on-premise services:
+The inference part of the system would consist of 3 major on-premise services:
 - **Embedding service**
 - **OCR service**
 - **Chat service**
 
-Also on-remise we should have the following infrastructure services:
+Also on-premise we should have the following infrastructure services:
 - **Load Balancer service**
-- **Cacher service** 
+- **Cacher service**
 
 While following parts of a solution are considered as external cloud services:
 - **Vector database**
@@ -1293,14 +1293,14 @@ While following parts of a solution are considered as external cloud services:
 - **Metadata database**
 - **LLM**
 
-**TODO**: concider separating app nodes bs data nodes
+**TODO**: consider separating app nodes vs data nodes
 
-### **i. Serving architecture**
+### i. Serving architecture
 
-On-premise services would be hosted as REST API services hosted in Docker containers and orchestrated by Kubernetes cluster.
+On-premise services would be implemented as REST APIs running in Docker containers and orchestrated by a Kubernetes cluster.
 Chat service should support an option to stream a responce via https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events (default OpenAI tool to stream response).
 
-#### **Embedding service**
+#### Embedding service
 
 Invoked upon every document receiving a version.
 Should pull required metadata from other databases to enrich embeddings with metadata upon saving.
@@ -1313,7 +1313,7 @@ For every document:
     - on different aggregations - from document down to sentence level.
 - Import embeddings with corresponding metadata into the Vector database.
 
-#### **OCR service**
+#### OCR service
 
 Invoked from Embedding service.
 
@@ -1321,7 +1321,7 @@ For every image document:
 - Invoke OCR process.
 - Import text representation into the Document storage
 
-#### **Chat service**
+#### Chat service
 
 Invoked on every question.
 
@@ -1341,35 +1341,35 @@ For every question:
 - Invoke guardrails.
 - Calculate performance and consumption statistics.
 - Calculate automated quality metrics (if any).
-- Make decision and execute it: 
+- Make decision and execute it:
     - Return answer to the Chat UI.
     - Request more details from user on Chat UI.
     - Adjust response according to standards.
 - Save record to the internal cache.
 - Save chat history to Metadata database.
 
-### **ii. Infrastructure**
+### ii. Infrastructure
 
-**Load Balancer service** should be hosted on a regular node. It should be responsible for routing requests and start-stopping for **Embedding service** and **OCR service**. 
+**Load Balancer service** should be hosted on a regular node. It should be responsible for routing requests and start-stopping for **Embedding service** and **OCR service**.
 
-**LLM service** is an external service and already has auto-scaling functionality and load balancer. 
+**LLM service** is an external service and already has auto-scaling functionality and load balancer.
 
-**Cacher service** would have Redis under the hood, and to be hosted on a regular node. 
+**Cacher service** would have Redis under the hood, and to be hosted on a regular node.
 
 **Embedding service** and **OCR service** should be hosted on GPU nodes.
 As we expect around 500 new document versions per month, they could be hosted on Spot machines or be start-stopped on demand (if it will take less than 2 minutes).
 Both services would be stopped if they won't receive new requests within 30 (??) minutes.
 
-**Chat service** could be hosted on non-GPU node. More focus on the RAM to manage retrieved contexts and assemble prompts, then on CPU. Minimal RAM should be 4 gb. Will be connected with **Cacher service** to manage cached/frequently similar requests.
+**Chat service** could be hosted on non-GPU node. More focus on RAM to manage retrieved contexts and assemble prompts, than on CPU. Minimal RAM should be 4 gb. Will be connected with **Cacher service** to manage cached/frequently similar requests.
 
-### **iii. Monitoring**
+### iii. Monitoring
 
 Key **inference** metrics:
 - ~~Time to first token~~
-- Time to show full reponse.
+- Time to show full response.
 - % of questions covered by internal cache.
 - % of answers rejected by guardrail.
 - % of answers requested more details from user.
 - % of questions having empty context.
-- % of explicit 'we can not answer' answers. 
-- Average chat history lenght.
+- % of explicit 'we can not answer' answers.
+- Average chat history length.
