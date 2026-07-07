@@ -2,6 +2,8 @@
 
 What makes this a Stage-Gate process *for AI* is that value validation is never sufficient on its own. The source names four AI-specific characteristics: early-stage technical-validation emphasis, dual validation, ethics/alignment, and particular attention to data. This file expands each into gate-level checks, then adds drift and long-term monitoring, which the source raises specifically as a Scale-stage (Gate 6) concern. Load it whenever a gate hinges on the AI itself rather than the product story.
 
+**If the product uses an LLM, RAG, a foundation model, fine-tuning, agents, tool use, memory, or autonomous side effects, also load `modern-ai-overlay.md`.** The checks here (feasibility, data, alignment, metrics) are necessary but not sufficient for those systems: they fail in ways a generic gate misses — fluent-but-wrong output, retrieval that silently misses, tools that act with real consequence. The overlay adds RAG grounding, injection resistance, tool-permission gates, evals, traces, and bounded side effects as cross-gate items.
+
 ## Dual Validation
 
 Every gate must clear **two** axes, and the weaker one governs the decision:
@@ -54,7 +56,7 @@ From launch and especially at scale (Gate 6), the source requires a long-term mo
 
 In practice also watch for **concept drift** — the underlying reality the model predicts changes — which standard ML monitoring treats alongside data drift.
 
-A Scale gate without a long-term monitoring strategy for degradation, drift, and ethical compliance is missing a stage-critical deliverable.
+A Scale gate without a long-term monitoring strategy for degradation, drift, and ethical compliance is missing a required item; per the Gate 6 special case in `gate-decisions.md`, its absence blocks a 🟢 Continue Growth even though Gate 6 has no formal `[critical]` veto set — the monitoring strategy is the one item that behaves like a veto at that gate.
 
 ## How This Maps to Gate Findings
 

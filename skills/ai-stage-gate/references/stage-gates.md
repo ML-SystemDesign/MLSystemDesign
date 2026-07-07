@@ -4,6 +4,19 @@ The process has six stages across two tracks. Each stage has a goal, key questio
 
 Market sizing progresses across stages: **TAM** (total addressable market) → **SAM** (serviceable addressable market) → **SOM** (serviceable obtainable market), each refined as evidence grows.
 
+## Stage-Critical Criteria (the veto set)
+
+Not every criterion carries equal weight. Each gate has a small set of **stage-critical** criteria: if any one is Not met or Unknown, the gate cannot be 🟢 (see `gate-decisions.md` for the deterministic mapping). The rest are contributing criteria — weakness there pushes toward 🟡 but does not by itself veto a Go. Each stage below marks its stage-critical set explicitly with **[critical]**; this table is the summary.
+
+| Gate | Stage-critical criteria (any one Not met / Unknown → cannot be 🟢) |
+|---|---|
+| 1 Ideation | Strategic fit; AI adds substantial value; a meaningful market exists |
+| 2 Concept Validation | Problem confirmed by research; data availability/quality/volume confirmed; technical feasibility confirmed by experts |
+| 3 Prototype Development | Prototype hits minimum technical metrics; users confirm value; full-scale build feasible and economically justified |
+| 4 Beta Testing | AI stable/reliable in real conditions; meets ethical norms and interacts safely; economics show durable potential |
+| 5 MLP Launch | Consistent user+business value; reliable under load; safety/ethics confirmed; economics hold under scaling |
+| 6 Scale & Optimize | (No forward gate — a portfolio judgment, not a veto set; see the Gate 6 special case in `gate-decisions.md`) |
+
 ---
 
 ## Discovery Track
@@ -24,7 +37,7 @@ Market sizing progresses across stages: **TAM** (total addressable market) → *
 5. Research plan for the next stage.
 6. Preliminary technical-feasibility assessment of the AI capability.
 
-**Transition criteria:** idea fits company/AI-center strategic priorities; a meaningful potential market exists; the growth model shows enough potential to justify deeper work; clear differentiators from existing solutions; the AI component adds substantial value; a clear research plan exists to validate the concept; significant scaling potential in reach and technical capability.
+**Transition criteria:** idea fits company/AI-center strategic priorities **[critical]**; a meaningful potential market exists **[critical]**; the growth model shows enough potential to justify deeper work; clear differentiators from existing solutions; the AI component adds substantial value **[critical]**; a clear research plan exists to validate the concept; significant scaling potential in reach and technical capability.
 
 **Decision character:** little has been invested, so decisions can stay flexible. What matters most is strategic fit and a first read on AI feasibility.
 
@@ -49,7 +62,7 @@ Market sizing progresses across stages: **TAM** (total addressable market) → *
 10. Key use cases and test cases for AI safety verification.
 11. First assessment of key risks, flagging critical blockers.
 
-**Transition criteria:** problem existence confirmed by research; SAM shows enough investment potential; updated growth model confirms potential on the data; technical feasibility confirmed by AI experts; realistic prototype metrics defined and agreed; key use cases defined for later AI-safety checks; data availability, volume, quality, and representativeness confirmed sufficient to build an effective model.
+**Transition criteria:** problem existence confirmed by research **[critical]**; SAM shows enough investment potential; updated growth model confirms potential on the data; technical feasibility confirmed by AI experts **[critical]**; realistic prototype metrics defined and agreed; key use cases defined for later AI-safety checks; data availability, volume, quality, and representativeness confirmed sufficient to build an effective model **[critical]**.
 
 **Decision character:** research data and first technical expertise now exist. Confirm the concept holds on both user value and AI feasibility.
 
@@ -71,7 +84,7 @@ Market sizing progresses across stages: **TAM** (total addressable market) → *
 7. MVP scope, build plan, and key success metrics.
 8. Growth model updated with prototype results.
 
-**Transition criteria:** prototype meets minimum required technical metrics; users confirm the value; initial alignment mechanisms are effective on key use cases; full-scale technical implementation is feasible and economically justified; the team understands all technical challenges and paths to solve them; MVP success metrics defined and agreed; updated growth model shows enough potential to move to beta.
+**Transition criteria:** prototype meets minimum required technical metrics **[critical]**; users confirm the value **[critical]**; initial alignment mechanisms are effective on key use cases; full-scale technical implementation is feasible and economically justified **[critical]**; the team understands all technical challenges and paths to solve them; MVP success metrics defined and agreed; updated growth model shows enough potential to move to beta.
 
 **Decision character:** technical metrics dominate. If accuracy/speed/reliability targets are missed, expect a substantial technical rework or a return to concept.
 
@@ -95,7 +108,7 @@ Market sizing progresses across stages: **TAM** (total addressable market) → *
 5. Improvement plan before full launch.
 6. Growth model refined with a SOM estimate from beta data.
 
-**Transition criteria:** AI-system stability and reliability confirmed in real operating conditions; qualitative and quantitative real-world data and user feedback gathered toward the MLP; a clear strategy exists to fix gaps and grow into the MLP; the product meets ethical norms and interacts safely with users; the updated growth model, backed by economics, shows durable long-term potential.
+**Transition criteria:** AI-system stability and reliability confirmed in real operating conditions **[critical]**; qualitative and quantitative real-world data and user feedback gathered toward the MLP; a clear strategy exists to fix gaps and grow into the MLP; the product meets ethical norms and interacts safely with users **[critical]**; the updated growth model, backed by economics, shows durable long-term potential **[critical]**.
 
 **Decision character:** significant investment is now sunk, so Kill is reserved for serious problems. Focus on real usage metrics and technical performance in near-production conditions.
 
@@ -103,7 +116,7 @@ Market sizing progresses across stages: **TAM** (total addressable market) → *
 
 **Goal:** launch a full version that is not only functional but creates a positive user experience.
 
-**Key questions:** Does the product hit target product metrics? Do all components work together reliably? How does it integrate with existing bank systems? How reliably do AI safety and alignment systems work? What limits scaling?
+**Key questions:** Does the product hit target product metrics? Do all components work together reliably? How does it integrate with existing enterprise/product systems? How reliably do AI safety and alignment systems work? What limits scaling?
 
 **Market sizing:** detailed SOM with user segmentation and conversion potential.
 
@@ -114,7 +127,7 @@ Market sizing progresses across stages: **TAM** (total addressable market) → *
 4. Scaling and further-development plan.
 5. Growth model with a detailed scaling-potential analysis and key-metric forecast.
 
-**Transition criteria:** product consistently shows high user and business value; AI systems work reliably and efficiently under increased load; high safety and ethics indicators confirmed; a detailed scaling plan exists with technical and resource requirements; product economics hold under scaling; enough user feedback accumulated for confident development; the updated growth model shows durable long-term potential and a clear monetization strategy.
+**Transition criteria:** product consistently shows high user and business value **[critical]**; AI systems work reliably and efficiently under increased load **[critical]**; high safety and ethics indicators confirmed **[critical]**; a detailed scaling plan exists with technical and resource requirements; product economics hold under scaling **[critical]**; enough user feedback accumulated for confident development; the updated growth model shows durable long-term potential and a clear monetization strategy.
 
 **Decision character:** decisions lean on business and satisfaction metrics. Technical optimization of the AI becomes a lever for business results.
 

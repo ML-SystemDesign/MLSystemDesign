@@ -8,7 +8,19 @@ Every gate resolves to one of three lights. The decision is **read off the stage
 - 🟡 **Conditional** — core value exists, but specific gaps must be closed first. Always name the conditions and their owners.
 - 🔴 **Kill** — the problem/value is unconfirmed, economics or market do not hold, data is absent, or technical/ethical risk is insurmountable with no realistic path.
 
-Rule: if any stage-critical criterion is **Not met** or **Unknown**, the gate cannot be 🟢 — it is 🟡 (if the gap is closable) or 🔴 (if it is fatal). Enthusiasm, effort, and a polished deck do not lift a blocked gate.
+## Deterministic Decision Procedure
+
+The light is **computed** from the readiness table (`output-templates.md`), not chosen by feel. This is **veto logic, not an average** — a gate is a filter, so one fatal gap sinks it no matter how many items are green. Averaging letter grades (as a gradecard would) is explicitly wrong here: it would let a strong deck average away a missing value or feasibility criterion.
+
+Mark every required deliverable and criterion **Met / Partial / Not met / Unknown**, noting which are **stage-critical** (`stage-gates.md` marks them with `[critical]`). Then apply, in order:
+
+1. **Any stage-critical criterion Not met, and the gap is fatal** (problem/value disproven, data unobtainable, technical/ethical risk with no realistic path, economics that never close) → 🔴 **Kill**.
+2. **Any stage-critical criterion Not met or Unknown, but closable** → 🟡 **Conditional**. Unknown never counts as Met: missing evidence on a critical item blocks a 🟢. Pick the variant (below) that matches what must change.
+3. **Any stage-critical criterion Partial** → at most 🟡. A critical item that is only partially demonstrated is not a Go.
+4. **All stage-critical criteria Met**, and non-critical items are Met or only Partial → 🟢 **Go**. Note the Partial non-critical items as gaps to strengthen, but they do not block.
+5. **All stage-critical criteria Met, but a non-critical criterion is Not met/Unknown** → 🟢 **Go with a noted gap**, unless several such gaps together undermine the stage's intent, in which case drop to 🟡.
+
+Both axes gate independently: a stage-critical **technical** item Not met blocks a 🟢 even if every value item is Met, and vice versa (dual validation). Enthusiasm, effort, and a polished deck do not lift a blocked gate.
 
 ## Variants by Gate
 
@@ -20,6 +32,15 @@ Rule: if any stage-critical criterion is **Not met** or **Unknown**, the gate ca
 | 4 Beta Testing | MVP stable in the real environment; metrics and feedback are good; prepare full launch | **Conditional Go / Extended Beta / Scope Reduction / Return to Prototype** — value exists but gather more data, stabilize, simplify scope, or bring the prototype/AI to commercial grade | Market does not accept it, production metrics do not hold, or risk/harm outweighs benefit |
 | 5 MLP Launch | MLP stable, economics and satisfaction good; scale it | **Optimize First / Pivot / Sustain / Sunset Plan** — product is alive but needs optimization, a strategy change, limited sustaining, or a planned wind-down instead of scaling | Key metrics unmet with no realistic path to improve |
 | 6 Scale & Optimize | **Continue Growth / Extend Platform** — long-term value proven; keep growing or reuse as a platform | **Maintain & Optimize / Transfer / Sunset** — useful, but focus on sustaining, transferring to operations, or a planned shutdown | Long-term goals unmet; support does not pay for itself |
+
+## Gate 6 Special Case
+
+Gate 6 is different from Gates 1–5 and the deterministic procedure adapts:
+
+- **There is no next stage to fund**, so the decision is not "advance vs. not." It is a *portfolio judgment*: does this product keep earning its place — keep investing in growth (🟢 Continue Growth / Extend Platform), shift to lower-cost sustaining or hand-off (🟡 Maintain & Optimize / Transfer), or wind it down (🔴 / 🟡 Sunset)?
+- **The stage lists items *assessed*, not deliverables *defended*, and has no transition criteria** (`stage-gates.md`), so there is no `[critical]` veto set. Instead of veto logic, weigh two things: whether achieved results match the original goals, and whether the value generated exceeds the cost of continued support and development.
+- **The one item that behaves like a veto** is the long-term monitoring strategy for quality degradation, data drift, and ethical compliance (`ai-validation.md`): if it is Not met/Unknown, long-term viability cannot be confirmed, so 🟢 Continue Growth is not available until it exists — default to 🟡 Maintain & Optimize meanwhile.
+- **Map the outcome to a light** by economics and trajectory: value clearly exceeds cost and still growing → 🟢; value roughly covers cost or is flat → 🟡 (Maintain/Transfer); cost exceeds value with no path back → 🔴 (or 🟡 Sunset for an orderly wind-down).
 
 ## Investment Logic
 
