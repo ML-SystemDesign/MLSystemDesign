@@ -29,8 +29,8 @@ Also save the filled scorecard as a standalone markdown file so the team can sha
 
 ## AI Stage-Gate Decision: <product name> — Gate <N> (<stage name>)
 
-**Decision:** <🟢 Go / 🟡 Conditional (variant) / 🔴 Kill>
-**Stage / track:** <stage> · <Discovery / Delivery / Fast Track> · market stage <TAM / SAM / SOM>
+**Decision:** <🟢 Go / 🟡 Conditional (variant) / 🔴 Kill — at Gate 6 / FT-Gate 4 use the portfolio variants: 🟢 Continue Growth / Extend Platform, 🟡 Maintain & Optimize / Transfer / Sunset, 🔴 Kill>
+**Stage / track:** <stage> · <Discovery / Delivery / Fast Track> · market stage <TAM / SAM / SOM; at Gate 6 / FT-Gate 4 use actual penetration vs. SOM>
 **Evidence mode:** <gate-deck + repo / gate-deck only / repo-telemetry only> <+ modifiers: unattended / portfolio if any> — <what the decision rested on: deck-reported metrics, repo, telemetry, or inference; note any unverified claims>
 **Driven by:** <the blocker(s) behind a 🟡/🔴, or "all stage-critical criteria met" for a 🟢>
 
@@ -40,7 +40,7 @@ Also save the filled scorecard as a standalone markdown file so the team can sha
 
 **Top blocker:** <the single gap that most holds back a clean Go, or "none" for a 🟢>
 **Conditions to advance:** <for 🟡: the concrete conditions and owners that close the gaps; for 🟢: "none — proceed"; for 🔴: why no realistic path>
-**Recommended next-stage investment:** <the next stage's scope of spend only, scaled to remaining risk>
+**Recommended next-stage investment:** <the next stage's scope of spend only, scaled to remaining risk. At Gate 6 / FT-Gate 4 there is no next stage to fund — replace with **Investment posture / portfolio action**: continue-growth spend, sustain/maintain budget, transfer to operations, or wind-down.>
 ```
 
 ## Part 2: Comments
@@ -58,7 +58,7 @@ Gaps to strengthen (do not block, but weaken the case)
 - <criterion> - <gap>. Fix: <concrete action>.
 
 Strengths to carry forward
-- <specific proven result or good decision worth reusing at the next stage>.
+- <specific proven result or good decision worth reusing at the next stage, or — at Gate 6 / FT-Gate 4 — worth preserving or documenting for the portfolio>.
 
 Questions that change the decision
 - <question whose answer flips Met/Not-met on a stage-critical item>, recommended default: <answer>.
@@ -86,8 +86,8 @@ For a Fast Track review, use the same scorecard but with FT-Gate numbering and t
 ```markdown
 ## AI Stage-Gate Decision: <product name> — FT-Gate <N> (<Ideation | Discovery | Delivery | Scale>)
 
-**Decision:** <🟢 Go | 🟡 Conditional (<variant>) | 🔴 Kill>
-**Path / market stage:** Fast Track (collapsed 4-stage) · market stage <TAM | SAM | SOM | penetration>
+**Decision:** <🟢 Go | 🟡 Conditional (<variant>) | 🔴 Kill — at FT-Gate 4 use the portfolio variants: 🟢 Continue Growth / Extend Platform, 🟡 Maintain & Optimize / Transfer / Sunset, 🔴 Kill>
+**Path / market stage:** Fast Track (collapsed 4-stage) · market stage <TAM | SAM | SOM | penetration; at FT-Gate 4 use actual penetration vs. SOM>
 **Merged from:** <standard stages this FT gate consolidates>
 ```
 
@@ -102,9 +102,9 @@ For a portfolio triage (several products/ideas judged together), do not write a 
 
 ## AI Stage-Gate Portfolio Triage: <portfolio / batch name>
 
-| Product | Stage / gate | Decision | Top blocker | Next-stage ask |
-|---|---|---|---|---|
-| <name> | <Gate N or FT-Gate N> | <🟢 / 🟡 (variant) / 🔴> | <one blocker> | <scoped next-stage spend> |
+| Product | Stage / gate | Evidence mode | Decision | Top blocker | Next-stage ask |
+|---|---|---|---|---|---|
+| <name> | <Gate N or FT-Gate N> | <deck+repo / deck-only / repo-telemetry (+ modifiers); note unverified claims> | <🟢 / 🟡 (variant) / 🔴> | <one blocker> | <scoped next-stage spend (or portfolio action / investment posture for Gate 6 / FT-Gate 4)> |
 
 **Prioritization:** <which to fund now, which to recycle/hold, which to kill — applying incremental investment: concentrate resources on the highest-potential, lowest-remaining-risk products>.
 **Cross-cutting notes:** <shared risks, reusable components, or knowledge-transfer opportunities across the portfolio>.
@@ -122,15 +122,15 @@ When the user is *preparing* a gate defense rather than defending it (review mod
 ## AI Stage-Gate Readiness (prep): <product name> — Gate <N> (<stage name>)
 
 **Status:** preparing to defend — no gate decision issued
-**Stage / track:** <stage> · <Discovery / Delivery / Fast Track> · market stage <TAM / SAM / SOM>
+**Stage / track:** <stage> · <Discovery / Delivery / Fast Track> · market stage <TAM / SAM / SOM; at Gate 6 / FT-Gate 4 use actual penetration vs. SOM>
 **Evidence mode:** <gate-deck + repo / gate-deck only / repo-telemetry only — what is on hand so far>
 
 | Deliverable / criterion | Critical? | Status | Note |
 |---|---|---|---|
 | <one row per required deliverable and transition criterion> | <★ if stage-critical> | <Met / Partial / Not met / Unknown> | <what exists vs. what the committee will want> |
 
-**Not yet ready:** <the required deliverables and stage-critical criteria that are Partial / Not met / Unknown — these would block a Go if defended today>
-**Path to a clean Go:** <ordered steps + owners to turn each blocker Met before the defense>
+**Not yet ready:** <the required deliverables and stage-critical criteria that are Partial / Not met / Unknown — these would block a Go if defended today. At Gate 6 / FT-Gate 4 there is no forward Go: list instead what blocks a 🟢 Continue Growth (e.g. missing long-term monitoring or unmet modern-AI overlay veto).>
+**Path to a clean Go:** <ordered steps + owners to turn each blocker Met before the defense. At Gate 6 / FT-Gate 4, frame as the path to a defensible portfolio posture (continue-growth vs. sustain/transfer/sunset).>
 ```
 
 If (and only if) the user asks for a dry-run verdict, add the decision scorecard's Decision line and label it clearly as a rehearsal call, not a committee decision.
