@@ -4,7 +4,7 @@ Every gate resolves to one of three lights. The decision is **read off the stage
 
 ## The Traffic Light
 
-- 🟢 **Go** — required deliverables **fully Met** and transition criteria met on both the value and technical axes. Invest in the next stage.
+- 🟢 **Go** — required deliverables **fully Met** and all **stage-critical** criteria Met on both the value and technical axes (non-critical criteria handled per the procedure below). Invest in the next stage.
 - 🟡 **Conditional** — core value exists, but specific gaps must be closed first. Always name the conditions and their owners.
 - 🔴 **Kill** — the problem/value is unconfirmed, economics or market do not hold, data is absent, or technical/ethical risk is insurmountable with no realistic path.
 
