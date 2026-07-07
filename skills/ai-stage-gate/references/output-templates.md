@@ -16,7 +16,7 @@ The gate decision is **computed** from the readiness table via the deterministic
 - A fatal or unclosable gap — unconfirmed problem/value, absent data, insurmountable technical/ethical risk, economics that never close → 🔴 **Kill**.
 - Gate 6 has no veto set; use its special case in `gate-decisions.md`.
 
-Mark stage-critical rows in the readiness table (e.g. a `★` in the note) so the reader can see which items drove the light. Show which blocker(s) drove a 🟡 or 🔴 next to the decision. The decision summarizes the readiness table; it does not soften it.
+The readiness table lists **every required deliverable and transition criterion** for the gate — not only the critical ones — because non-critical Not-met/Unknown items can still downgrade the light (they turn a 🟢 into a 🟢-with-noted-gaps, or several together into a 🟡), and the saved scorecard must show all the state a reader needs to audit the decision. Flag the stage-critical rows with `★` in the Critical? column so the reader can see which items hold veto power. Show which blocker(s) drove a 🟡 or 🔴 next to the decision. The decision summarizes the readiness table; it does not soften it.
 
 ## Part 1: Gate Scorecard
 
@@ -29,13 +29,14 @@ Also save the filled scorecard as a standalone markdown file so the team can sha
 
 ## AI Stage-Gate Decision: <product name> — Gate <N> (<stage name>)
 
-**Decision:** <🟢 Go | 🟡 Conditional (<variant>) | 🔴 Kill>
-**Stage / track:** <stage> · <Discovery | Delivery | Fast Track> · market stage <TAM | SAM | SOM>
+**Decision:** <🟢 Go / 🟡 Conditional (variant) / 🔴 Kill>
+**Stage / track:** <stage> · <Discovery / Delivery / Fast Track> · market stage <TAM / SAM / SOM>
+**Evidence mode:** <gate-deck + repo / gate-deck only / repo-telemetry only / prep only / portfolio / unattended — with any unverified-claim caveat>
 **Driven by:** <the blocker(s) behind a 🟡/🔴, or "all stage-critical criteria met" for a 🟢>
 
-| Deliverable / criterion | Status | Note |
-|---|---|---|
-| <one row per required deliverable and stage-critical criterion for this gate> | <Met | Partial | Not met | Unknown> | <short evidence or gap> |
+| Deliverable / criterion | Critical? | Status | Note |
+|---|---|---|---|
+| <one row per required deliverable AND every transition criterion for this gate> | <★ if stage-critical, else blank> | <Met / Partial / Not met / Unknown> | <short evidence or gap> |
 
 **Top blocker:** <the single gap that most holds back a clean Go, or "none" for a 🟢>
 **Conditions to advance:** <for 🟡: the concrete conditions and owners that close the gaps; for 🟢: "none — proceed"; for 🔴: why no realistic path>
@@ -75,7 +76,7 @@ When the audience is the defending team rather than the gate committee, keep the
 When the product uses an LLM, RAG, a foundation model, fine-tuning, agents, tool use, memory, or autonomous side effects, add one overlay row to the readiness table and grade it per `modern-ai-overlay.md`. Mark it stage-critical (★) when the system can act autonomously/externally, touches regulated data, or answers users without a human in the loop.
 
 ```markdown
-| Modern-AI readiness (RAG grounding / tool permissions / evals / traces) | <Met | Partial | Not met | Unknown> | ★ <what is proven vs. missing for this stage> |
+| Modern-AI readiness (RAG grounding / tool permissions / evals / traces) | <★ when it can act autonomously/externally, touches regulated data, or answers users unsupervised> | <Met / Partial / Not met / Unknown> | <what is proven vs. missing for this stage> |
 ```
 
 ## Fast Track gate template
@@ -90,7 +91,7 @@ For a Fast Track review, use the same scorecard but with FT-Gate numbering and t
 **Merged from:** <standard stages this FT gate consolidates>
 ```
 
-The readiness table lists the union of the merged stages' deliverables and marks the union of their stage-critical criteria (★). State in the report that this is a Fast Track review so a reader never confuses FT-Gate 2 with standard Gate 2.
+The readiness table uses the same four columns as the standard template and lists the union of the merged stages' deliverables and transition criteria, flagging the union of their stage-critical items with `★`. State in the report that this is a Fast Track review so a reader never confuses FT-Gate 2 with standard Gate 2.
 
 ## Portfolio matrix template
 
@@ -103,7 +104,7 @@ For a portfolio triage (several products/ideas judged together), do not write a 
 
 | Product | Stage / gate | Decision | Top blocker | Next-stage ask |
 |---|---|---|---|---|
-| <name> | <Gate N or FT-Gate N> | <🟢 | 🟡 (variant) | 🔴> | <one blocker> | <scoped next-stage spend> |
+| <name> | <Gate N or FT-Gate N> | <🟢 / 🟡 (variant) / 🔴> | <one blocker> | <scoped next-stage spend> |
 
 **Prioritization:** <which to fund now, which to recycle/hold, which to kill — applying incremental investment: concentrate resources on the highest-potential, lowest-remaining-risk products>.
 **Cross-cutting notes:** <shared risks, reusable components, or knowledge-transfer opportunities across the portfolio>.

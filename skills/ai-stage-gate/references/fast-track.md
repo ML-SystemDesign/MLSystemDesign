@@ -28,7 +28,7 @@ Four consolidated stages instead of six, each ending in its own gate. Use **FT-G
 
 - **FT-Gate 2 (Discovery)** — critical: problem confirmed by research; data availability/quality/volume confirmed; technical feasibility confirmed by experts; **prototype hits minimum technical metrics; users confirm value**; full-scale build feasible and economically justified. (Concept's *and* Prototype's critical items — Fast Track shortens the path, not the bar.)
 - **FT-Gate 3 (Delivery)** — critical: AI stable/reliable in real conditions; meets ethical norms and interacts safely with users; high safety and ethics indicators confirmed; consistent user+business value; reliable under load; economics hold under scaling. (Carries both Gate 4's compliance threshold *and* Gate 5's elevated evidence bar.)
-- **FT-Gate 1** and **FT-Gate 4** are identical to standard Gate 1 and Gate 6 respectively (Gate 4's special case in `gate-decisions.md` applies unchanged).
+- **FT-Gate 1** and **FT-Gate 4** are identical to standard Gate 1 and Gate 6 respectively (the Gate 6 special case in `gate-decisions.md` applies unchanged to FT-Gate 4).
 
 **Allowed decision variants** at a consolidated gate are the union of the merged gates' variants — e.g. FT-Gate 2 may return Recycle, Pivot, Technical Pivot, Return to Concept, or Limited Go; FT-Gate 3 may return Extended Beta, Scope Reduction, Return to Prototype, Optimize First, Pivot, Sustain, or Sunset Plan. The deterministic procedure and dual-validation rule in `gate-decisions.md` apply exactly as on the full path: Fast Track reduces the *technical-investigation depth*, never the safety, data, or value bars.
 
