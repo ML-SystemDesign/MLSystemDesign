@@ -47,7 +47,7 @@ Critical red flags — treat as gate blockers for any stage where the agent can 
 
 ## Evaluation
 
-Evaluate behavior, not vibes — a demo is not gate evidence. Build task-specific evals with real or realistic artifacts; score retrieval separately from generation; check grounding, unsupported claims, contradiction, refusal quality, and usefulness; verify final system state for agents, not transcript wording; use repeated runs when outputs are stochastic; keep regression cases from production failures; calibrate any LLM-as-judge with human spot checks. Watch eval contamination: golden Q&A leaking into fine-tuning or few-shot examples, or the answer-bearing document indexed as a RAG source, makes scores meaningless; treat public-benchmark results as weak evidence when pretraining overlap is plausible.
+Evaluate behavior, not vibes — a demo is not gate evidence. Build task-specific evals with real or realistic artifacts; score retrieval separately from generation; check grounding, unsupported claims, contradiction, refusal quality, and usefulness; verify final system state for agents, not transcript wording; use repeated runs when outputs are stochastic; keep regression cases from production failures; calibrate any LLM-as-judge with human spot checks. Watch eval contamination: verbatim golden-set Q&A pairs in fine-tuning data or few-shot examples make scores meaningless. For RAG, retrieving the answer-bearing source document is the *point* — contamination is the eval **answer key itself** (the graded Q&A pairs) being indexed as a document, not the source content. Treat public-benchmark results as weak evidence when pretraining overlap is plausible.
 
 ## Observability and Operations
 

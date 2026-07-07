@@ -4,7 +4,7 @@ Every gate resolves to one of three lights. The decision is **read off the stage
 
 ## The Traffic Light
 
-- 🟢 **Go** — required deliverables present and transition criteria met on both the value and technical axes. Invest in the next stage.
+- 🟢 **Go** — required deliverables **fully Met** and transition criteria met on both the value and technical axes. Invest in the next stage.
 - 🟡 **Conditional** — core value exists, but specific gaps must be closed first. Always name the conditions and their owners.
 - 🔴 **Kill** — the problem/value is unconfirmed, economics or market do not hold, data is absent, or technical/ethical risk is insurmountable with no realistic path.
 
@@ -14,11 +14,11 @@ The light is **computed** from the readiness table (`output-templates.md`), not 
 
 Mark every required deliverable **and** every transition criterion **Met / Partial / Not met / Unknown**, noting which are **stage-critical** (`stage-gates.md` marks criteria with `[critical]`; a **required deliverable is treated as stage-critical by default** — the gate cannot certify a criterion whose supporting deliverable is absent). Then apply, in order:
 
-1. **Any required deliverable Not met or Unknown** → the gate cannot be 🟢. A gate defends deliverables; a missing one is a blocker even if the criteria it supports look Met (those "Met" marks are then unverifiable). Fatal/unobtainable → 🔴; closable → 🟡.
+1. **Any required deliverable not fully Met — i.e. Partial, Not met, or Unknown** → the gate cannot be 🟢. A gate defends deliverables; one that is absent (Not met/Unknown) or only partially present (Partial) is a blocker even if the criteria it supports look Met (those "Met" marks are then unverifiable). Fatal/unobtainable → 🔴; closable (including a Partial that needs completing) → 🟡. Every required deliverable must be **Met** for a 🟢.
 2. **Any stage-critical criterion Not met, and the gap is fatal** (problem/value disproven, data unobtainable, technical/ethical risk with no realistic path, economics that never close) → 🔴 **Kill**.
 3. **Any stage-critical criterion Not met or Unknown, but closable** → 🟡 **Conditional**. Unknown never counts as Met: missing evidence on a critical item blocks a 🟢. Pick the variant (below) that matches what must change.
 4. **Any stage-critical criterion Partial** → at most 🟡. A critical item that is only partially demonstrated is not a Go.
-5. **All required deliverables present and all stage-critical criteria Met**, and non-critical items are Met or only Partial → 🟢 **Go**. Note the Partial non-critical items as gaps to strengthen, but they do not block.
+5. **All required deliverables fully Met and all stage-critical criteria Met**, and non-critical *criteria* are Met or only Partial → 🟢 **Go**. Note the Partial non-critical criteria as gaps to strengthen, but they do not block.
 6. **All deliverables and stage-critical criteria Met, but a non-critical criterion is Not met/Unknown** → 🟢 **Go with a noted gap**, unless several such gaps together undermine the stage's intent, in which case drop to 🟡.
 
 Both axes gate independently: a stage-critical **technical** item Not met blocks a 🟢 even if every value item is Met, and vice versa (dual validation). Enthusiasm, effort, and a polished deck do not lift a blocked gate.

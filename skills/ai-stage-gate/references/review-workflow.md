@@ -4,7 +4,8 @@
 
 Before judging readiness, name:
 
-- **Evidence mode** (see SKILL.md Mandatory First Step for the full set): gate-deck + repo, gate-deck only, repo/telemetry only, prep only, portfolio, or unattended. The mode decides what you can conclude and what you must mark unverified.
+- **Evidence mode** — the artifact axis (see SKILL.md Mandatory First Step): gate-deck + repo, gate-deck only, or repo/telemetry only. It decides what you can conclude and what you must mark unverified, and it is always named on the scorecard so the reader knows whether the decision rested on deck, repo, telemetry, or inference.
+- **Review modifiers** — orthogonal to the evidence mode, not a replacement for it: prep-only, portfolio, and unattended. A review can be, e.g., "gate-deck + repo, unattended." Record the modifier *alongside* the evidence mode; never let "unattended" or "prep only" stand in for the artifact axis.
 - Stage and gate being defended: 1 Ideation, 2 Concept Validation, 3 Prototype Development, 4 Beta Testing, 5 MLP Launch, 6 Scale & Optimize.
 - Track: Discovery (1–3), Delivery (4–6), or Fast Track (collapsed 4-stage path; use FT-Gate numbering per `fast-track.md`).
 - Product and decision owners: who defends the gate, who decides, who is the accountable product owner.

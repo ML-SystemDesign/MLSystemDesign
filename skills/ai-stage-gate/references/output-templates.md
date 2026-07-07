@@ -11,8 +11,8 @@ For a decision review the decision is the product. For a prep-only review the re
 
 The gate decision is **computed** from the readiness table via the deterministic procedure in `gate-decisions.md` (veto logic, not an average); it is never chosen independently of the table. In short:
 
-- Every required **deliverable** present, and all **stage-critical criteria** Met on both value and technical axes → 🟢 **Go** (non-critical Partials become noted gaps, not blockers).
-- Any required deliverable **Not met / Unknown**, or any stage-critical criterion **Partial / Not met / Unknown**, but closable → 🟡 **Conditional** (name the variant and conditions). Unknown never counts as Met; a missing deliverable blocks a 🟢 even if the criteria it supports look Met.
+- Every required **deliverable fully Met**, and all **stage-critical criteria** Met on both value and technical axes → 🟢 **Go** (non-critical *criterion* Partials become noted gaps, not blockers; a Partial *deliverable* is not a Go).
+- Any required deliverable **Partial / Not met / Unknown**, or any stage-critical criterion **Partial / Not met / Unknown**, but closable → 🟡 **Conditional** (name the variant and conditions). Unknown never counts as Met; a missing or partial deliverable blocks a 🟢 even if the criteria it supports look Met.
 - A fatal or unclosable gap — unconfirmed problem/value, absent data, insurmountable technical/ethical risk, economics that never close → 🔴 **Kill**.
 - Gate 6 has no base veto set; use its special case in `gate-decisions.md`.
 
@@ -129,7 +129,7 @@ When the user is *preparing* a gate defense rather than defending it (review mod
 |---|---|---|---|
 | <one row per required deliverable and transition criterion> | <★ if stage-critical> | <Met / Partial / Not met / Unknown> | <what exists vs. what the committee will want> |
 
-**Not yet ready:** <the stage-critical items that are Partial / Not met / Unknown — these would block a Go if defended today>
+**Not yet ready:** <the required deliverables and stage-critical criteria that are Partial / Not met / Unknown — these would block a Go if defended today>
 **Path to a clean Go:** <ordered steps + owners to turn each blocker Met before the defense>
 ```
 
