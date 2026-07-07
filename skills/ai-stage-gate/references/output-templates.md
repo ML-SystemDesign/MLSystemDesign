@@ -2,19 +2,19 @@
 
 One template for every gate review, in two parts:
 
-1. **Gate Scorecard** — approximately one screenshot-friendly page carrying the decision. Every review produces it.
+1. **Gate Scorecard** — approximately one screenshot-friendly page. For a **decision review** it carries the traffic-light decision; for a **prep-only** review it carries the readiness state and path to a clean Go but **no** traffic-light call (see the prep-only scorecard below). Every review produces one or the other.
 2. **Comments** — findings, gaps, and the path to a clean Go, after the scorecard. A quick pass may stop at the scorecard.
 
-The decision is the product. Keep findings concrete and ordered by whether they block the gate.
+For a decision review the decision is the product. For a prep-only review the readiness map and the path to Go are the product — do **not** issue a Go/Conditional/Kill call the user did not ask for. Keep findings concrete and ordered by whether they block the gate.
 
 ## The Decision
 
 The gate decision is **computed** from the readiness table via the deterministic procedure in `gate-decisions.md` (veto logic, not an average); it is never chosen independently of the table. In short:
 
-- All **stage-critical** deliverables and criteria **Met** on both value and technical axes → 🟢 **Go** (non-critical Partials become noted gaps, not blockers).
-- Any stage-critical item **Partial / Not met / Unknown** but closable → 🟡 **Conditional** (name the variant and conditions). Unknown never counts as Met.
+- Every required **deliverable** present, and all **stage-critical criteria** Met on both value and technical axes → 🟢 **Go** (non-critical Partials become noted gaps, not blockers).
+- Any required deliverable **Not met / Unknown**, or any stage-critical criterion **Partial / Not met / Unknown**, but closable → 🟡 **Conditional** (name the variant and conditions). Unknown never counts as Met; a missing deliverable blocks a 🟢 even if the criteria it supports look Met.
 - A fatal or unclosable gap — unconfirmed problem/value, absent data, insurmountable technical/ethical risk, economics that never close → 🔴 **Kill**.
-- Gate 6 has no veto set; use its special case in `gate-decisions.md`.
+- Gate 6 has no base veto set; use its special case in `gate-decisions.md`.
 
 The readiness table lists **every required deliverable and transition criterion** for the gate — not only the critical ones — because non-critical Not-met/Unknown items can still downgrade the light (they turn a 🟢 into a 🟢-with-noted-gaps, or several together into a 🟡), and the saved scorecard must show all the state a reader needs to audit the decision. Flag the stage-critical rows with `★` in the Critical? column so the reader can see which items hold veto power. Show which blocker(s) drove a 🟡 or 🔴 next to the decision. The decision summarizes the readiness table; it does not soften it.
 
@@ -31,7 +31,7 @@ Also save the filled scorecard as a standalone markdown file so the team can sha
 
 **Decision:** <🟢 Go / 🟡 Conditional (variant) / 🔴 Kill>
 **Stage / track:** <stage> · <Discovery / Delivery / Fast Track> · market stage <TAM / SAM / SOM>
-**Evidence mode:** <gate-deck + repo / gate-deck only / repo-telemetry only / prep only / portfolio / unattended — with any unverified-claim caveat>
+**Evidence mode:** <gate-deck + repo / gate-deck only / repo-telemetry only> <+ modifiers: unattended / portfolio if any> — <what the decision rested on: deck-reported metrics, repo, telemetry, or inference; note any unverified claims>
 **Driven by:** <the blocker(s) behind a 🟡/🔴, or "all stage-critical criteria met" for a 🟢>
 
 | Deliverable / criterion | Critical? | Status | Note |
@@ -112,6 +112,25 @@ For a portfolio triage (several products/ideas judged together), do not write a 
 
 A portfolio row is a summary, not a full gate defense; when a single product needs a real decision, run the standard template for it.
 
-## Prep-only output
+## Prep-only scorecard (no decision)
 
-When the user is preparing a gate defense rather than defending it (evidence mode: prep only), output the readiness table and the **path to a clean Go**, but hold the traffic-light decision unless the user asks for a dry-run call. Frame it as "here is what your gate committee will test and where you are not yet ready," not as a verdict.
+When the user is *preparing* a gate defense rather than defending it (review modifier: prep only), produce this readiness scorecard instead of the decision scorecard. It holds **no** traffic-light call — issuing a Go/Conditional/Kill the user did not ask for is the defect this template exists to prevent. Frame it as "here is what your gate committee will test and where you are not yet ready." Offer a dry-run call only if the user asks.
+
+```markdown
+*Reviewed with [ai-stage-gate](https://github.com/ML-SystemDesign/MLSystemDesign/tree/main/skills)*
+
+## AI Stage-Gate Readiness (prep): <product name> — Gate <N> (<stage name>)
+
+**Status:** preparing to defend — no gate decision issued
+**Stage / track:** <stage> · <Discovery / Delivery / Fast Track> · market stage <TAM / SAM / SOM>
+**Evidence mode:** <gate-deck + repo / gate-deck only / repo-telemetry only — what is on hand so far>
+
+| Deliverable / criterion | Critical? | Status | Note |
+|---|---|---|---|
+| <one row per required deliverable and transition criterion> | <★ if stage-critical> | <Met / Partial / Not met / Unknown> | <what exists vs. what the committee will want> |
+
+**Not yet ready:** <the stage-critical items that are Partial / Not met / Unknown — these would block a Go if defended today>
+**Path to a clean Go:** <ordered steps + owners to turn each blocker Met before the defense>
+```
+
+If (and only if) the user asks for a dry-run verdict, add the decision scorecard's Decision line and label it clearly as a rehearsal call, not a committee decision.

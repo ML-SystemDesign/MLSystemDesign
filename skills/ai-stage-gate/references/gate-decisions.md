@@ -12,13 +12,14 @@ Every gate resolves to one of three lights. The decision is **read off the stage
 
 The light is **computed** from the readiness table (`output-templates.md`), not chosen by feel. This is **veto logic, not an average** — a gate is a filter, so one fatal gap sinks it no matter how many items are green. Averaging letter grades (as a gradecard would) is explicitly wrong here: it would let a strong deck average away a missing value or feasibility criterion.
 
-Mark every required deliverable and criterion **Met / Partial / Not met / Unknown**, noting which are **stage-critical** (`stage-gates.md` marks them with `[critical]`). Then apply, in order:
+Mark every required deliverable **and** every transition criterion **Met / Partial / Not met / Unknown**, noting which are **stage-critical** (`stage-gates.md` marks criteria with `[critical]`; a **required deliverable is treated as stage-critical by default** — the gate cannot certify a criterion whose supporting deliverable is absent). Then apply, in order:
 
-1. **Any stage-critical criterion Not met, and the gap is fatal** (problem/value disproven, data unobtainable, technical/ethical risk with no realistic path, economics that never close) → 🔴 **Kill**.
-2. **Any stage-critical criterion Not met or Unknown, but closable** → 🟡 **Conditional**. Unknown never counts as Met: missing evidence on a critical item blocks a 🟢. Pick the variant (below) that matches what must change.
-3. **Any stage-critical criterion Partial** → at most 🟡. A critical item that is only partially demonstrated is not a Go.
-4. **All stage-critical criteria Met**, and non-critical items are Met or only Partial → 🟢 **Go**. Note the Partial non-critical items as gaps to strengthen, but they do not block.
-5. **All stage-critical criteria Met, but a non-critical criterion is Not met/Unknown** → 🟢 **Go with a noted gap**, unless several such gaps together undermine the stage's intent, in which case drop to 🟡.
+1. **Any required deliverable Not met or Unknown** → the gate cannot be 🟢. A gate defends deliverables; a missing one is a blocker even if the criteria it supports look Met (those "Met" marks are then unverifiable). Fatal/unobtainable → 🔴; closable → 🟡.
+2. **Any stage-critical criterion Not met, and the gap is fatal** (problem/value disproven, data unobtainable, technical/ethical risk with no realistic path, economics that never close) → 🔴 **Kill**.
+3. **Any stage-critical criterion Not met or Unknown, but closable** → 🟡 **Conditional**. Unknown never counts as Met: missing evidence on a critical item blocks a 🟢. Pick the variant (below) that matches what must change.
+4. **Any stage-critical criterion Partial** → at most 🟡. A critical item that is only partially demonstrated is not a Go.
+5. **All required deliverables present and all stage-critical criteria Met**, and non-critical items are Met or only Partial → 🟢 **Go**. Note the Partial non-critical items as gaps to strengthen, but they do not block.
+6. **All deliverables and stage-critical criteria Met, but a non-critical criterion is Not met/Unknown** → 🟢 **Go with a noted gap**, unless several such gaps together undermine the stage's intent, in which case drop to 🟡.
 
 Both axes gate independently: a stage-critical **technical** item Not met blocks a 🟢 even if every value item is Met, and vice versa (dual validation). Enthusiasm, effort, and a polished deck do not lift a blocked gate.
 
@@ -38,8 +39,10 @@ Both axes gate independently: a stage-critical **technical** item Not met blocks
 Gate 6 is different from Gates 1–5 and the deterministic procedure adapts:
 
 - **There is no next stage to fund**, so the decision is not "advance vs. not." It is a *portfolio judgment*: does this product keep earning its place — keep investing in growth (🟢 Continue Growth / Extend Platform), shift to lower-cost sustaining or hand-off (🟡 Maintain & Optimize / Transfer), or wind it down (🔴 / 🟡 Sunset)?
-- **The stage lists items *assessed*, not deliverables *defended*, and has no transition criteria** (`stage-gates.md`), so there is no `[critical]` veto set. Instead of veto logic, weigh two things: whether achieved results match the original goals, and whether the value generated exceeds the cost of continued support and development.
-- **The one item that behaves like a veto** is the long-term monitoring strategy for quality degradation, data drift, and ethical compliance (`ai-validation.md`): if it is Not met/Unknown, long-term viability cannot be confirmed, so 🟢 Continue Growth is not available until it exists — default to 🟡 Maintain & Optimize meanwhile.
+- **The stage lists items *assessed*, not deliverables *defended*, and has no transition criteria** (`stage-gates.md`), so there is no *base* Stage-Gate `[critical]` veto set. Instead of base veto logic, weigh two things: whether achieved results match the original goals, and whether the value generated exceeds the cost of continued support and development.
+- **Two things still veto a 🟢 at Gate 6**, even though the base set is empty:
+  - The long-term monitoring strategy for quality degradation, data drift, and ethical compliance (`ai-validation.md`): if it is Not met/Unknown, long-term viability cannot be confirmed, so 🟢 Continue Growth is not available until it exists — default to 🟡 Maintain & Optimize meanwhile.
+  - **Modern-AI overlay vetoes still apply** (`modern-ai-overlay.md`): for a product that can act autonomously/externally, touches regulated data, or answers users unsupervised, the modern-AI readiness item is stage-critical at *every* gate including Gate 6. If it is Not met/Unknown at scale, that blocks 🟢 regardless of economics — an agentic product that is profitable but unsafe at scale is not a Continue Growth. Gate 6's empty base veto set never overrides an overlay veto.
 - **Map the outcome to a light** by economics and trajectory: value clearly exceeds cost and still growing → 🟢; value roughly covers cost or is flat → 🟡 (Maintain/Transfer); cost exceeds value with no path back → 🔴 (or 🟡 Sunset for an orderly wind-down).
 
 ## Investment Logic

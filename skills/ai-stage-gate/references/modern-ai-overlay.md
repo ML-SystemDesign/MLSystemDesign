@@ -8,6 +8,8 @@ Load this whenever the product uses an LLM, RAG, a foundation model, fine-tuning
 
 Modern AI systems are still ML systems, but the model is often a service, the context is part of the input distribution, the system can call tools, and failures can look fluent. Fold this into the gate as **one modern-AI readiness item**, graded Met / Partial / Not met / Unknown like any other, and treated as **stage-critical** whenever the product can take autonomous or external actions, handle regulated/sensitive data, or answer users without a human in the loop. When it is stage-critical and Not met/Unknown, it blocks a 🟢 exactly like any other critical criterion (`gate-decisions.md`).
 
+**This veto applies at every gate, including Gate 6.** Gate 6 has no *base* Stage-Gate veto set (`gate-decisions.md` Gate 6 Special Case), but the modern-AI overlay veto is not part of the base set and is not waived there: an agentic or sensitive-data product that is profitable at scale but whose safety/alignment readiness is Not met/Unknown is **not** a 🟢 Continue Growth. The empty base veto set never overrides an overlay veto.
+
 Escalate what the overlay demands by stage:
 
 | Gate | Modern-AI overlay expectation |

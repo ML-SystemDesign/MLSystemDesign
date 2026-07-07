@@ -29,7 +29,7 @@ Do not use for reviewing the internal quality of an ML system design (use `ml-sy
 
 ## Mandatory First Step
 
-Locate the product on the process before judging it, and name the evidence mode.
+Locate the product on the process before judging it, and name the evidence mode (which artifacts you have) plus any review modifiers (prep-only, portfolio, unattended).
 
 Name these first:
 
@@ -37,14 +37,17 @@ Name these first:
 - **Track.** Discovery (stages 1–3), Delivery (stages 4–6), or Fast Track (collapsed 4-stage path). If uncertain whether Fast Track applies, check `references/fast-track.md`.
 - **Investment already spent.** Early gates are cheap to reverse and should stay flexible; late gates carry large sunk investment, so a Kill needs serious cause. This changes how strict the decision is, not what the criteria are.
 
-Then name the **evidence mode** — it decides what you can conclude and what you must flag as unverified:
+Then name the **evidence mode** — which *artifacts* you have. It decides what you can conclude and what you must flag as unverified:
 
 - **Gate deck + repo.** A gate deck/product doc *and* an implementation are both available. Read them together; a claim in the deck the repo contradicts (or a repo behavior the deck never names) is a gate finding.
-- **Gate deck only.** A deck or product doc, no repo. Review claims as stated intent; mark technical-metric, data, and alignment claims as **unverified** rather than **Met**, and grade the uncertainty.
+- **Gate deck only.** A deck or product doc, no repo. Grade what the deck evidences: a claim **backed by evidence** (reported metrics with method/sample, a data assessment, an alignment test result) is gradeable **Met/Partial** with a "deck-reported, not independently reproduced" caveat; only claims asserted **without** supporting evidence are **Unknown/unverified**. Do not mark an evidence-backed metric Unknown merely because there is no repo — that would make normal gate decks unable to pass. Contradiction with a repo is a separate finding (that needs the repo).
 - **Repo / telemetry only.** Code, logs, dashboards, or metrics but no gate artifact. Do not fabricate a gate narrative from a scrape: apply the missing-artifact gate below, and if you proceed, label the inferred stage and every inferred criterion.
-- **Prep only.** The user is *preparing* a gate defense, not defending yet. Output the readiness table and the path to a clean Go; hold the traffic-light decision unless asked for a dry-run call.
-- **Portfolio.** Several products/ideas to triage or prioritize together. Use the portfolio path in `references/output-templates.md` (a per-product row), not a single deep gate report.
-- **Unattended.** A scheduled or CI review with no user to answer. Never block: infer the stage and mode from the evidence, put the inference and the missing-artifact caveat at the top of the report, and proceed.
+
+Then name two **review modifiers** — orthogonal to the evidence mode; a review can be, say, "gate deck + repo, unattended, portfolio":
+
+- **Prep only.** The user is *preparing* a gate defense, not defending yet — this is an intent, not an artifact set. Output the readiness table and the path to a clean Go; hold the traffic-light decision unless asked for a dry-run call (see the prep-only output in `references/output-templates.md`).
+- **Portfolio.** Several products/ideas to triage or prioritize together. Use the portfolio path in `references/output-templates.md` (a per-product row), not a single deep gate report — each row still records its own evidence mode.
+- **Unattended.** A scheduled or CI review with no user to answer. This is a *behavior modifier on top of* the evidence mode, not a replacement for it: still name whether the evidence is deck, repo, telemetry, or inference so the scorecard shows what the decision rested on. Never block: infer the stage, put the inference and the missing-artifact caveat at the top of the report, and proceed.
 
 **Missing-artifact gate.** When the artifact needed to judge the current gate is absent (e.g. repo/telemetry only, or a deck missing its technical-metric or data section), ask before grading — unless running unattended:
 
@@ -52,7 +55,7 @@ Then name the **evidence mode** — it decides what you can conclude and what yo
 I don't have the <gate deck / model metrics / data assessment / alignment evidence> needed to judge Gate <N>. Where does it live, or should I proceed from what's here and mark the missing pieces as unverified?
 ```
 
-Missing evidence is itself a gate finding: an Unknown on a stage-critical criterion blocks a 🟢 (see `references/gate-decisions.md`).
+Genuinely missing evidence is itself a gate finding: an Unknown on a stage-critical criterion blocks a 🟢 (see `references/gate-decisions.md`). But "no repo to reproduce it" is not the same as "no evidence" — a deck that reports the metric with its method is gradeable (with a caveat), not Unknown.
 
 ## Review Posture
 
@@ -99,7 +102,7 @@ The decision follows the criteria deterministically — it is veto logic, not an
 
 Format per `references/output-templates.md`: one template for every review, in two parts.
 
-1. **Gate Scorecard** — approximately one screenshot-friendly page: a small skill attribution line at the top, then the gate decision (🟢 Go | 🟡 Conditional | 🔴 Kill), the stage/track/market stage (TAM/SAM/SOM), the evidence mode, a readiness table covering **every** required deliverable and transition criterion (Met / Partial / Not met / Unknown per item, with stage-critical items flagged), the top blocker, the conditions to advance, and the recommended next-stage investment. For LLM/RAG/agent products, add the modern-AI overlay row from `references/modern-ai-overlay.md`. Also saved as a standalone shareable `.md` file per that template's save rule.
+1. **Gate Scorecard** — approximately one screenshot-friendly page: a small skill attribution line at the top, then the gate decision (🟢 Go | 🟡 Conditional | 🔴 Kill) — **decision reviews only; omit for prep-only, which uses the no-decision readiness scorecard** — the stage/track/market stage (TAM/SAM/SOM), the evidence mode, a readiness table covering **every** required deliverable and transition criterion (Met / Partial / Not met / Unknown per item, with stage-critical items flagged), the top blocker, the conditions to advance, and the recommended next-stage investment. For LLM/RAG/agent products, add the modern-AI overlay row from `references/modern-ai-overlay.md`. Also saved as a standalone shareable `.md` file per that template's save rule.
 2. **Comments** — evidence mode and evidence reviewed, stage inference, blocking findings, gaps to close before the gate, strengths worth carrying forward, questions whose answers change the decision, and a prioritized path to a clean Go.
 
 Alternate output modes (see `references/output-templates.md`): a **Fast Track gate** report uses the collapsed-gate numbering; a **portfolio** review uses the per-product matrix; a **prep-only** review outputs the readiness table and path to Go without a final light.

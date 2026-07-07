@@ -15,7 +15,7 @@ Not every criterion carries equal weight. Each gate has a small set of **stage-c
 | 3 Prototype Development | Prototype hits minimum technical metrics; users confirm value; full-scale build feasible and economically justified |
 | 4 Beta Testing | AI stable/reliable in real conditions; meets ethical norms and interacts safely; economics show durable potential |
 | 5 MLP Launch | Consistent user+business value; reliable under load; safety/ethics confirmed; economics hold under scaling |
-| 6 Scale & Optimize | (No forward gate — a portfolio judgment, not a veto set; see the Gate 6 special case in `gate-decisions.md`) |
+| 6 Scale & Optimize | (No forward gate — a portfolio judgment with no *base* veto set; long-term monitoring and any modern-AI overlay veto still apply. See the Gate 6 special case in `gate-decisions.md`) |
 
 ---
 
