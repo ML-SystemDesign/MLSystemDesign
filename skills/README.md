@@ -41,3 +41,23 @@ cp -r skills/ai-stage-gate ~/.claude/skills/
 ### Use
 
 Ask your agent to run or prepare a gate review, or to decide whether an AI initiative can advance: "run a stage-gate review", "are we ready for Gate 3?", "Go/Kill decision for this AI prototype", "triage this portfolio of AI ideas", "should this take the fast track?". The skill activates on gate-decision requests and routes itself through `SKILL.md`; the depth lives in `references/` (gate-review workflow, the six stages and their stage-critical criteria, deterministic gate-decision logic, AI-specific validation, a modern-AI/RAG/agent overlay, fast track, and output templates for standard gates, Fast Track gates, and portfolio triage).
+
+## lossless-doc-compress
+
+Losslessly compresses a design doc — a PRD, RFC, architecture note, or any prose/markdown document. Removes only provable redundancy (filler, hedging, LLM-slop, restated content) and never a fact, number, decision, or caveat; every judgment call is flagged for the author rather than cut. Returns three artifacts: the compressed document, a categorized removal log of everything that was cut, and a shareable scorecard (before/after word count, percent reduction, fidelity confirmation, flag count). Where `ml-system-design-review` grades substance and `ai-stage-gate` decides Go/Kill, this skill trims length without touching substance.
+
+### Install
+
+```bash
+npx skills add ML-SystemDesign/MLSystemDesign
+```
+
+Or copy the skill directory manually:
+
+```bash
+cp -r skills/lossless-doc-compress ~/.claude/skills/
+```
+
+### Use
+
+Ask your agent to compress, tighten, or de-slop a document: "compress this design doc without losing information", "tighten this RFC", "cut the slop from this PRD". The skill activates on compression requests and routes itself through `SKILL.md`; the depth lives in `references/` (fidelity rules, removal taxonomy, slop-and-hedging patterns, the compression workflow, and output templates for the compressed doc, removal log, and scorecard). It does not grade design quality (use `ml-system-design-review`) or make gate decisions (use `ai-stage-gate`).
