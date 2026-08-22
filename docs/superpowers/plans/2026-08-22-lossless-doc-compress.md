@@ -137,11 +137,11 @@ Run:
 ```bash
 cd "skills/lossless-doc-compress/references" && \
 f=fidelity-rules.md && \
-grep -q "when in doubt, flag — don't cut" "$f" && echo "OK hard-rule" && \
+grep -qi "when in doubt, flag — don't cut" "$f" && echo "OK hard-rule" && \
 grep -q "KEEP" "$f" && grep -q "REMOVE" "$f" && grep -q "FLAG" "$f" && echo "OK three-fates" && \
 grep -q "Contract Violation" "$f" && echo "OK contract-violation" && \
 grep -q "No-Paraphrase Boundary" "$f" && echo "OK no-paraphrase" && \
-grep -Eq "named entities" "$f" && echo "OK sacred-list" && \
+grep -Eqi "named entities" "$f" && echo "OK sacred-list" && \
 ! grep -Eq "TBD|TODO|FIXME|\?\?\?|XXX" "$f" && echo "OK no-placeholders"
 ```
 Expected: six `OK ...` lines, no missing checks.
@@ -305,10 +305,10 @@ grep -q "## Activation" "$f" && grep -q "ml-system-design-review" "$f" && grep -
 grep -q "## Mandatory First Step" "$f" && grep -q "word count" "$f" && echo "OK first-step" && \
 grep -q "when in doubt, flag — don't cut" "$f" && echo "OK hard-rule" && \
 for r in compression-workflow removal-taxonomy slop-and-hedging fidelity-rules output-templates; do grep -q "references/$r.md" "$f" || echo "MISSING route $r"; done && echo "OK routing-checked" && \
-grep -q "Kravchenko and Babushkin" "$f" && echo "OK attribution" && \
+tr '\n' ' ' < "$f" | grep -q "Kravchenko and Babushkin" && echo "OK attribution" && \
 ! grep -Eq "TBD|TODO|FIXME|\?\?\?|XXX" "$f" && echo "OK no-placeholders"
 ```
-Expected: `OK` lines for name, meta, activation+siblings, first-step, hard-rule, routing-checked, attribution, no-placeholders; no `MISSING route` line.
+Expected: `OK` lines for name, meta, activation+siblings, first-step, hard-rule, routing-checked, attribution, no-placeholders; no `MISSING route` line. (The attribution grep flattens newlines first, since "Kravchenko and Babushkin" may wrap across two lines.)
 
 - [ ] **Step 4: Commit**
 
@@ -406,7 +406,7 @@ Run:
 ```bash
 cd "skills/lossless-doc-compress/references" && f=removal-taxonomy.md && \
 for c in filler hedging slop restatement verbose-phrasing; do grep -q "\*\*$c\*\*" "$f" || echo "MISSING category $c"; done && echo "OK categories" && \
-grep -q "Never Remove" "$f" && grep -q "named entities" "$f" && echo "OK sacred" && \
+grep -qi "Never Remove" "$f" && grep -qi "named entities" "$f" && echo "OK sacred" && \
 grep -qi "ML design" "$f" && echo "OK ml-note" && \
 grep -q "REMOVE vs FLAG" "$f" && echo "OK remove-vs-flag" && \
 ! grep -Eq "TBD|TODO|FIXME|\?\?\?|XXX" "$f" && echo "OK no-placeholders"
@@ -616,7 +616,7 @@ cd "skills/lossless-doc-compress/references" && f=compression-workflow.md && \
 grep -qi "Establish The Baseline" "$f" && grep -qi "Classify Every Span" "$f" && grep -qi "Confirm Losslessness" "$f" && echo "OK procedure" && \
 grep -qi "When To Stop" "$f" && echo "OK stop-condition" && \
 grep -qi "same" "$f" && grep -qi "word count" "$f" && echo "OK consistent-count" && \
-grep -qi "contract violation" "$f" && echo "OK self-check" && \
+tr '\n' ' ' < "$f" | tr -s ' ' | grep -qi "contract violation" && echo "OK self-check" && \
 ! grep -Eq "TBD|TODO|FIXME|\?\?\?|XXX" "$f" && echo "OK no-placeholders"
 ```
 Expected: `OK procedure`, `OK stop-condition`, `OK consistent-count`, `OK self-check`, `OK no-placeholders`.
