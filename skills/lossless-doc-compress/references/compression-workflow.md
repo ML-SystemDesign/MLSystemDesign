@@ -37,8 +37,7 @@ choose KEEP (leave it, don't even flag) unless there is a concrete reason to rai
 
 Before producing output, verify:
 
-- Every sacred item (numbers, decisions, caveats, named entities, code — see
-  `removal-taxonomy.md`) present in the source is present in the compressed doc.
+- Every sacred item (see the Never Remove list in `removal-taxonomy.md`) present in the source is present in the compressed doc.
 - The word-count delta is fully explained by the removal log: `before − after`
   approximately equals the words accounted for across the logged categories.
 - No REMOVE was applied to a span that could plausibly carry information (zero contract

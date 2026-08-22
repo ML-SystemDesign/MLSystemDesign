@@ -66,7 +66,7 @@ Save to `<slug>-compression-scorecard.md`.
 
 Default to the three filenames above in the working directory. Do not commit them. Skip a
 file only when no writable filesystem is available or the user asks not to. Name every
-saved path at the end of the review.
+saved path at the end of the run.
 
 ## Note On The Verdict Line
 

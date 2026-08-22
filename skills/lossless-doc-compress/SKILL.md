@@ -46,7 +46,7 @@ Before removing a single word, establish the baseline and state the guarantee:
 
 1. Confirm the input document (a pasted body, a link, or a file path). If it is a link
    or path, read it fully first.
-2. Measure and record the starting word count. This is the denominator for the
+2. Measure and record the starting word count using the method in `references/compression-workflow.md`. This is the denominator for the
    scorecard's reduction figure.
 3. State the guarantee to the user in one line: this is a lossless compression — facts,
    numbers, decisions, and caveats are preserved; judgment calls are flagged, not cut.
@@ -65,7 +65,7 @@ of three fates:
 - **FLAG** — a judgment call; left in the document, marked for the author with a
   recommendation, never auto-removed.
 
-Facts, numbers, decisions, caveats, constraints, named entities, and code are sacred and
+Facts, numbers, decisions, caveats, constraints, named entities, code, and tables are sacred and
 never removed. Paraphrase that could drift meaning is disallowed. Full contract in
 `references/fidelity-rules.md`.
 

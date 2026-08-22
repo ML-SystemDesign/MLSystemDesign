@@ -32,7 +32,7 @@ Restated from `fidelity-rules.md` because it is the list you check every time:
 - Caveats, risks, limitations, open questions.
 - Constraints and requirements.
 - Named entities (people, teams, systems, products, datasets, endpoints).
-- Code, configuration, commands, and their values.
+- Code, configuration, commands, and their exact values.
 - Table data.
 
 ## REMOVE vs FLAG
@@ -43,6 +43,7 @@ Restated from `fidelity-rules.md` because it is the list you check every time:
   be low value, but cutting it is the author's call. Leave it; flag it with a recommend.
 - FLAG (possible duplication): §4.2's metric list looks like §2.1's. Do not merge — flag
   it and let the author confirm they are the same before either is touched.
+- Mixed span (slop wrapper around real content): "It is worth mentioning that the p95 latency is 200ms." → strip the wrapper as `filler`/`slop` and treat the inner content by its own fate — KEEP if it is information, FLAG if it might duplicate an earlier statement. Never let the wrapper's removability drag the inner fact out with it.
 
 ## Extra Care: ML Design Content
 
